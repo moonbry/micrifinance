@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Loan extends Model
+{
+    protected $fillable = [
+        'name',
+        'phone',
+        'amount',
+        'type',
+        'status',
+        'details',
+        'rejection_reason'
+    ];
+
+    protected $casts = [
+        'details' => 'array',
+    ];
+}
