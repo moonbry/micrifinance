@@ -1,0 +1,2 @@
+# micrifinance
+ni ya fedha
