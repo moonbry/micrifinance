@@ -197,7 +197,7 @@ function GroupLoan() {
           <div className="form-scroll-container">
             {/* ========== SEHEMU 1: TAARIFA ZA MWOMBAJI ========== */}
             {currentStep === 0 && (
-              <div className="form-grid-2cols">
+              <div className="form-grid-4cols">
                 <div className="input-box"><input type="text" name="jinaKamiliLaMwombaji" placeholder=" " value={form.jinaKamiliLaMwombaji} onChange={handleChange} /><label>Jina kamili la mwombaji</label></div>
                 <div className="input-box"><select name="jinsia" value={form.jinsia} onChange={handleChange}><option value="">Chagua</option><option>Me</option><option>Ke</option></select><label>Jinsia</label></div>
                 <div className="input-box"><input type="text" name="jinaMaarufu" placeholder=" " value={form.jinaMaarufu} onChange={handleChange} /><label>Jina maarufu</label></div>
@@ -219,7 +219,7 @@ function GroupLoan() {
 
             {/* ========== SEHEMU 2: TAARIFA ZA KIKUNDI ========== */}
             {currentStep === 1 && (
-              <div className="form-grid-2cols">
+              <div className="form-grid-4cols">
                 <div className="input-box"><input type="text" name="jinaLaMwenyekiti" placeholder=" " value={form.jinaLaMwenyekiti} onChange={handleChange} /><label>Jina la Mwenyekiti</label></div>
                 <div className="input-box"><input type="text" name="jinaLaKatibu" placeholder=" " value={form.jinaLaKatibu} onChange={handleChange} /><label>Jina la Katibu</label></div>
                 <div className="input-box"><input type="text" name="anuaniYaMakaziYaKikundi" placeholder=" " value={form.anuaniYaMakaziYaKikundi} onChange={handleChange} /><label>Anuani ya Makazi ya kikundi</label></div>
@@ -239,7 +239,7 @@ function GroupLoan() {
 
             {/* ========== SEHEMU 3: TAARIFA ZA MIRADI ========== */}
             {currentStep === 2 && (
-              <div className="form-grid-2cols">
+              <div className="form-grid-4cols">
                 <div className="input-box"><input type="text" name="jinaLaMradi" placeholder=" " value={form.jinaLaMradi} onChange={handleChange} /><label>Jina la Mradi</label></div>
                 <div className="input-box"><input type="text" name="ainaYaMradi" placeholder=" " value={form.ainaYaMradi} onChange={handleChange} /><label>Aina ya Mradi</label></div>
                 <div className="input-box"><input type="text" name="mahaliMradiUpoKata" placeholder=" " value={form.mahaliMradiUpoKata} onChange={handleChange} /><label>Mahali mradi upo (Kata)</label></div>
@@ -252,7 +252,7 @@ function GroupLoan() {
 
             {/* ========== SEHEMU 4: KIASI CHA MKOPO KINACHOOMBWA ========== */}
             {currentStep === 3 && (
-              <div className="form-grid-2cols">
+              <div className="form-grid-4cols">
                 <div className="input-box"><input type="text" name="kiasiChaMkopo" placeholder=" " value={form.kiasiChaMkopo} onChange={handleChange} /><label>Kiasi cha Mkopo</label></div>
                 <div className="input-box"><input type="text" name="mudaWaLipaMkopo" placeholder=" " value={form.mudaWaLipaMkopo} onChange={handleChange} /><label>Muda wa kulipa Mkopo</label></div>
                 <div className="input-box full-width"><input type="text" name="kiasiGaniChaRejeshoUnawezaKulipaBilaMatatizo" placeholder=" " value={form.kiasiGaniChaRejeshoUnawezaKulipaBilaMatatizo} onChange={handleChange} /><label>Ni kiasi gani cha rejesho unaweza kulipa bila matatizo?</label></div>
@@ -265,7 +265,7 @@ function GroupLoan() {
 
             {/* ========== SEHEMU 5: TAARIFA ZA MDHAMINI NO. 1 (MWENYEKITI) ========== */}
             {currentStep === 4 && (
-              <div className="form-grid-2cols">
+              <div className="form-grid-4cols">
                 <div className="input-box"><input type="text" name="mdhamini1JinaKamili" placeholder=" " value={form.mdhamini1JinaKamili} onChange={handleChange} /><label>Jina kamili la Mwenyekiti</label></div>
                 <div className="input-box"><input type="text" name="mdhamini1MahaliAnapoishi" placeholder=" " value={form.mdhamini1MahaliAnapoishi} onChange={handleChange} /><label>Mahali Anapoishi</label></div>
                 <div className="input-box"><input type="text" name="mdhamini1NambaYaNyumba" placeholder=" " value={form.mdhamini1NambaYaNyumba} onChange={handleChange} /><label>Namba ya nyumba</label></div>
@@ -279,7 +279,7 @@ function GroupLoan() {
 
             {/* ========== SEHEMU 6: TAARIFA ZA DHAMANA ========== */}
             {currentStep === 5 && (
-              <div className="form-grid-2cols">
+              <div className="form-grid-4cols">
                 <div className="input-box"><input type="text" name="dhamanaAinaYaDhamana" placeholder=" " value={form.dhamanaAinaYaDhamana} onChange={handleChange} /><label>Aina ya Dhamana</label></div>
                 <div className="input-box"><input type="text" name="dhamanaNambaYaUsajili" placeholder=" " value={form.dhamanaNambaYaUsajili} onChange={handleChange} /><label>Namba ya usajili</label></div>
                 <div className="input-box"><input type="text" name="dhamanaThamaniYaDhamana" placeholder=" " value={form.dhamanaThamaniYaDhamana} onChange={handleChange} /><label>Thamani ya dhamana</label></div>
@@ -341,7 +341,7 @@ function GroupLoan() {
         }
         .card {
           width: 100%;
-          max-width: 950px;
+          max-width: 1400px;
           background: rgba(255,255,255,0.08);
           backdrop-filter: blur(15px);
           padding: 25px;
@@ -364,7 +364,7 @@ function GroupLoan() {
         .form-scroll-container::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
         .form-scroll-container::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 10px; }
         
-        .form-grid-2cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .form-grid-4cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
         .full-width { grid-column: 1 / -1; }
         
         .input-box { position: relative; }
@@ -411,9 +411,11 @@ function GroupLoan() {
         button:hover { transform: translateY(-2px); opacity: 0.9; }
         button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
+        @media (max-width: 1200px) { .form-grid-4cols { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .form-grid-4cols { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 700px) {
-          .card { padding: 18px; }
-          .form-grid-2cols { grid-template-columns: 1fr; gap: 12px; }
+          .card { padding: 18px; max-width: 100%; }
+          .form-grid-4cols { grid-template-columns: 1fr; }
           .form-scroll-container { max-height: 50vh; }
           .step-dot { width: 30px; height: 30px; font-size: 12px; }
         }

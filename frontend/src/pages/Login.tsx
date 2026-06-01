@@ -12,427 +12,338 @@ function Login() {
   const navigate = useNavigate();
 
   const canSubmit = useMemo(() => {
-    const e = email.trim();
-    return e.length > 0 && password.length > 0 && !loading;
+    return email.trim() !== "" && password.trim() !== "" && !loading;
   }, [email, password, loading]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!canSubmit) return;
+
     setLoading(true);
     setError(null);
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/v1/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "http://127.0.0.1:8000/api/v1/login",
+        {
+          email: email.trim(),
+          password: password.trim(),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
 
-      // save token
-      localStorage.setItem("token", res.data.token);
+      console.log("LOGIN RESPONSE:", res.data);
 
-      // save user
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // SAVE TOKEN
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      }
 
-      navigate("/dashboard");
+      // SAVE USER
+      if (res.data.user) {
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
+
+      const role = res.data.user?.role;
+
+      // 🔥 REDIRECT BY ROLE - ZOTE ZINAENDA KWA DASHBOARD (/)
+      switch (role) {
+        case "admin":
+          navigate("/dashboard");
+          break;
+
+        case "loan_officer":
+          navigate("/dashboard");
+          break;
+
+        case "loan_manager":
+         navigate("/dashboard");
+          break;
+
+        case "general_manager":
+          navigate("/dashboard");
+          break;
+
+        case "managing_director":
+          navigate("/dashboard");
+          break;
+
+        default:
+          navigate("/dashboard");
+      }
     } catch (err: any) {
-      console.log(err.response);
-      setError(err.response?.data?.message || "Login failed");
+      console.error("LOGIN ERROR:", err);
+
+      if (err.response?.status === 401) {
+        setError("Invalid email or password");
+      } else if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Server error. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login">
-      <div className="login__bg" aria-hidden="true" />
+    <div className="login-modern">
+      <div className="animated-bg"></div>
 
-      <main className="login__wrap">
-        <section className="login__hero" aria-label="Welcome">
-          <div className="login__badge">Microfinance Platform</div>
-          <h1 className="login__title">Karibu tena</h1>
-          <p className="login__subtitle">
-            Ingia kwenye mfumo ili uendelee na usimamizi wa mikopo na taarifa za
-            wanachama.
+      <div className="login-container">
+        {/* LEFT */}
+        <div className="welcome-section">
+          <h1>
+            Welcome Back <span>Loan System</span>
+          </h1>
+
+          <p>
+            Login to continue managing loans, approvals and users.
           </p>
+        </div>
 
-          <div className="login__mini">
-            <div className="login__miniItem">
-              <div className="login__miniDot" aria-hidden="true" />
-              <span>Salama na rahisi kutumia</span>
-            </div>
-            <div className="login__miniItem">
-              <div className="login__miniDot" aria-hidden="true" />
-              <span>Ufuatiliaji wa malipo kwa haraka</span>
-            </div>
-          </div>
-        </section>
+        {/* RIGHT */}
+        <div className="login-card">
+          <h2>Sign In</h2>
 
-        <section className="login__panel" aria-label="Login form">
-          <form onSubmit={handleLogin} className="login__form">
-            <div className="login__panelHeader">
-              <div>
-                <div className="login__panelTitle">Login</div>
-                <div className="login__panelHint">
-                  Tumia barua pepe na nenosiri.
-                </div>
-              </div>
-              <Link to="/" className="login__back">
-                Home
-              </Link>
-            </div>
+          <form onSubmit={handleLogin}>
+            {error && <div className="error">{error}</div>}
 
-            {error && (
-              <div className="login__alert" role="alert">
-                {error}
-              </div>
-            )}
+            <div className="input-group">
+              <label>Email</label>
 
-            <label className="login__field">
-              <span className="login__label">Email</span>
               <input
-                className="login__input"
                 type="email"
-                placeholder="mfano: user@email.com"
+                placeholder="Enter email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                autoComplete="email"
                 required
               />
-            </label>
+            </div>
 
-            <label className="login__field">
-              <span className="login__label">Password</span>
-              <div className="login__passwordRow">
+            <div className="input-group">
+              <label>Password</label>
+
+              <div className="password-wrapper">
                 <input
-                  className="login__input login__input--password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Weka nenosiri"
+                  placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
                   required
                 />
+
                 <button
                   type="button"
-                  className="login__toggle"
-                  onClick={() => setShowPassword((v) => !v)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
-            </label>
+            </div>
 
-            <button className="login__btn" disabled={!canSubmit}>
-              {loading ? "Logging in..." : "Login"}
+            <button
+              type="submit"
+              className="login-btn"
+              disabled={!canSubmit}
+            >
+              {loading ? "Signing in..." : "Login"}
             </button>
 
-            <div className="login__footerText">
-              Huna akaunti?{" "}
-              <Link to="/register" className="login__link">
-                Register
-              </Link>
+            <div className="register-link">
+              Don&apos;t have account?{" "}
+              <Link to="/register">Register</Link>
             </div>
           </form>
-        </section>
-      </main>
+        </div>
+      </div>
 
       <style>{`
-        .login {
-          min-height: 100vh;
-          color: #e5e7eb;
-          position: relative;
-          overflow: hidden;
-          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
-            Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-          background: radial-gradient(1200px 700px at 10% 10%, #1d4ed8 0%, rgba(29, 78, 216, 0) 55%),
-            radial-gradient(900px 600px at 80% 20%, #10b981 0%, rgba(16, 185, 129, 0) 55%),
-            radial-gradient(1000px 700px at 60% 110%, #7c3aed 0%, rgba(124, 58, 237, 0) 55%),
-            linear-gradient(180deg, #0b1220 0%, #050816 100%);
+        *{
+          margin:0;
+          padding:0;
+          box-sizing:border-box;
         }
 
-        .login__bg {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          opacity: 0.35;
-          background-image:
-            radial-gradient(circle at 1px 1px, rgba(255,255,255,0.16) 1px, rgba(255,255,255,0) 0);
-          background-size: 22px 22px;
-          mask-image: radial-gradient(closest-side, rgba(0,0,0,1), rgba(0,0,0,0));
-          -webkit-mask-image: radial-gradient(closest-side, rgba(0,0,0,1), rgba(0,0,0,0));
-          transform: translateY(-8%) scale(1.05);
+        .login-modern{
+          min-height:100vh;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          padding:20px;
+          overflow:hidden;
+          position:relative;
+          font-family:Arial, Helvetica, sans-serif;
         }
 
-        .login__wrap {
-          position: relative;
-          min-height: 100vh;
-          display: grid;
-          grid-template-columns: 1.1fr 0.9fr;
-          gap: 28px;
-          align-items: center;
-          padding: 48px 20px;
-          max-width: 1080px;
-          margin: 0 auto;
+        .animated-bg{
+          position:fixed;
+          inset:0;
+          background:linear-gradient(135deg,#0f172a,#1e293b,#312e81);
+          z-index:-1;
         }
 
-        .login__hero {
-          padding: 10px 0;
+        .login-container{
+          width:100%;
+          max-width:1100px;
+          display:grid;
+          grid-template-columns:1fr 1fr;
+          gap:40px;
+          align-items:center;
         }
 
-        .login__badge {
-          display: inline-flex;
-          align-items: center;
-          padding: 8px 12px;
-          border-radius: 999px;
-          border: 1px solid rgba(255,255,255,0.14);
-          background: rgba(255,255,255,0.06);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          font-size: 12px;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: rgba(229,231,235,0.92);
+        .welcome-section{
+          color:white;
         }
 
-        .login__title {
-          margin: 14px 0 10px;
-          font-size: clamp(32px, 4vw, 44px);
-          line-height: 1.06;
-          letter-spacing: -0.02em;
-          color: #ffffff;
-          text-shadow: 0 12px 40px rgba(0,0,0,0.55);
+        .welcome-section h1{
+          font-size:52px;
+          margin-bottom:20px;
+          line-height:1.2;
         }
 
-        .login__subtitle {
-          margin: 0 0 18px;
-          max-width: 56ch;
-          font-size: 15px;
-          line-height: 1.65;
-          color: rgba(229,231,235,0.86);
+        .welcome-section span{
+          color:#a78bfa;
         }
 
-        .login__mini {
-          display: grid;
-          gap: 10px;
-          margin-top: 16px;
-          max-width: 520px;
+        .welcome-section p{
+          color:#cbd5e1;
+          font-size:18px;
+          line-height:1.7;
         }
 
-        .login__miniItem {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-          padding: 12px 14px;
-          border-radius: 16px;
-          border: 1px solid rgba(255,255,255,0.12);
-          background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          color: rgba(229,231,235,0.85);
-          box-shadow: 0 18px 50px rgba(0,0,0,0.25);
+        .login-card{
+          background:rgba(255,255,255,0.08);
+          border:1px solid rgba(255,255,255,0.1);
+          backdrop-filter:blur(15px);
+          border-radius:24px;
+          padding:40px;
+          color:white;
         }
 
-        .login__miniDot {
-          width: 10px;
-          height: 10px;
-          border-radius: 999px;
-          background: linear-gradient(180deg, #60a5fa, #34d399);
-          box-shadow: 0 0 0 4px rgba(96,165,250,0.18);
-          flex: none;
+        .login-card h2{
+          margin-bottom:30px;
+          font-size:32px;
         }
 
-        .login__panel {
-          border-radius: 22px;
-          border: 1px solid rgba(255,255,255,0.16);
-          background: rgba(255,255,255,0.07);
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
-          box-shadow: 0 28px 80px rgba(0,0,0,0.45);
-          padding: 22px;
+        form{
+          display:flex;
+          flex-direction:column;
+          gap:20px;
         }
 
-        .login__form {
-          display: grid;
-          gap: 12px;
+        .input-group{
+          display:flex;
+          flex-direction:column;
+          gap:8px;
         }
 
-        .login__panelHeader {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 14px;
-          margin-bottom: 2px;
+        .input-group label{
+          font-size:14px;
+          color:#e2e8f0;
         }
 
-        .login__panelTitle {
-          font-size: 18px;
-          font-weight: 800;
-          color: #ffffff;
-          letter-spacing: -0.01em;
+        .input-group input{
+          width:100%;
+          padding:14px;
+          border:none;
+          border-radius:12px;
+          background:rgba(255,255,255,0.1);
+          color:white;
+          font-size:15px;
+          outline:none;
         }
 
-        .login__panelHint {
-          margin-top: 6px;
-          font-size: 13px;
-          color: rgba(229,231,235,0.8);
-          line-height: 1.5;
+        .input-group input::placeholder{
+          color:#94a3b8;
         }
 
-        .login__back {
-          font-size: 13px;
-          text-decoration: none;
-          color: rgba(229,231,235,0.85);
-          border: 1px solid rgba(255,255,255,0.16);
-          padding: 8px 10px;
-          border-radius: 12px;
-          background: rgba(255,255,255,0.06);
-          transition: transform 160ms ease, filter 160ms ease;
+        .password-wrapper{
+          position:relative;
         }
 
-        .login__back:hover {
-          transform: translateY(-1px);
-          filter: brightness(1.05);
+        .toggle-btn{
+          position:absolute;
+          top:50%;
+          right:12px;
+          transform:translateY(-50%);
+          background:none;
+          border:none;
+          color:#a78bfa;
+          cursor:pointer;
+          font-size:13px;
         }
 
-        .login__alert {
-          padding: 10px 12px;
-          border-radius: 14px;
-          font-size: 13px;
-          line-height: 1.35;
-          color: rgba(254,243,199,0.95);
-          border: 1px solid rgba(245,158,11,0.25);
-          background: rgba(245,158,11,0.08);
+        .login-btn{
+          padding:14px;
+          border:none;
+          border-radius:12px;
+          background:linear-gradient(135deg,#6366f1,#8b5cf6);
+          color:white;
+          font-size:16px;
+          font-weight:bold;
+          cursor:pointer;
+          transition:0.3s;
         }
 
-        .login__field {
-          display: grid;
-          gap: 8px;
+        .login-btn:hover{
+          transform:translateY(-2px);
         }
 
-        .login__label {
-          font-size: 13px;
-          color: rgba(229,231,235,0.85);
-          font-weight: 700;
+        .login-btn:disabled{
+          opacity:0.6;
+          cursor:not-allowed;
         }
 
-        .login__input {
-          height: 44px;
-          border-radius: 14px;
-          border: 1px solid rgba(255,255,255,0.16);
-          background: rgba(2,6,23,0.35);
-          color: rgba(255,255,255,0.92);
-          padding: 0 12px;
-          outline: none;
-          transition: border-color 140ms ease, box-shadow 140ms ease;
+        .error{
+          background:rgba(239,68,68,0.15);
+          border:1px solid rgba(239,68,68,0.3);
+          color:#fca5a5;
+          padding:12px;
+          border-radius:10px;
+          font-size:14px;
         }
 
-        .login__input::placeholder {
-          color: rgba(229,231,235,0.55);
+        .register-link{
+          text-align:center;
+          font-size:14px;
+          color:#cbd5e1;
         }
 
-        .login__input:focus {
-          border-color: rgba(96,165,250,0.55);
-          box-shadow: 0 0 0 4px rgba(96,165,250,0.16);
+        .register-link a{
+          color:#a78bfa;
+          text-decoration:none;
+          font-weight:bold;
         }
 
-        .login__passwordRow {
-          display: grid;
-          grid-template-columns: 1fr auto;
-          gap: 10px;
-          align-items: center;
-        }
-
-        .login__input--password {
-          width: 100%;
-        }
-
-        .login__toggle {
-          height: 44px;
-          padding: 0 12px;
-          border-radius: 14px;
-          border: 1px solid rgba(255,255,255,0.16);
-          background: rgba(255,255,255,0.06);
-          color: rgba(255,255,255,0.9);
-          cursor: pointer;
-          font-weight: 800;
-          letter-spacing: 0.01em;
-          transition: transform 160ms ease, filter 160ms ease;
-        }
-
-        .login__toggle:hover {
-          transform: translateY(-1px);
-          filter: brightness(1.05);
-        }
-
-        .login__btn {
-          height: 44px;
-          border-radius: 14px;
-          border: none;
-          cursor: pointer;
-          font-weight: 900;
-          letter-spacing: 0.01em;
-          color: #0b1220;
-          background: linear-gradient(90deg, #60a5fa, #34d399);
-          box-shadow: 0 14px 40px rgba(52,211,153,0.18);
-          transition: transform 160ms ease, filter 160ms ease;
-          margin-top: 4px;
-        }
-
-        .login__btn:hover {
-          transform: translateY(-2px);
-          filter: brightness(1.02);
-        }
-
-        .login__btn:active {
-          transform: translateY(1px) scale(0.99);
-        }
-
-        .login__btn:disabled {
-          cursor: not-allowed;
-          opacity: 0.75;
-          filter: grayscale(0.1);
-          transform: none;
-        }
-
-        .login__footerText {
-          margin-top: 6px;
-          font-size: 13px;
-          color: rgba(229,231,235,0.75);
-          line-height: 1.5;
-        }
-
-        .login__link {
-          color: rgba(255,255,255,0.92);
-          text-decoration: none;
-          font-weight: 900;
-          border-bottom: 1px solid rgba(255,255,255,0.28);
-        }
-
-        .login__link:hover {
-          border-bottom-color: rgba(255,255,255,0.5);
-        }
-
-        @media (max-width: 900px) {
-          .login__wrap {
-            grid-template-columns: 1fr;
-            padding: 34px 16px;
+        @media(max-width:900px){
+          .login-container{
+            grid-template-columns:1fr;
           }
-          .login__panel {
-            padding: 18px;
+
+          .welcome-section{
+            text-align:center;
+          }
+
+          .welcome-section h1{
+            font-size:40px;
           }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-          .login__btn,
-          .login__btn:hover,
-          .login__btn:active,
-          .login__back,
-          .login__back:hover,
-          .login__toggle,
-          .login__toggle:hover {
-            transition: none;
-            transform: none;
+        @media(max-width:500px){
+          .login-card{
+            padding:25px;
+          }
+
+          .welcome-section h1{
+            font-size:32px;
           }
         }
       `}</style>

@@ -1,6 +1,32 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import type { FC } from "react";
+import { Bar, Pie } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  PointElement,
+  LineElement,
+} from "chart.js";
+
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  PointElement,
+  LineElement
+);
 
 interface LoanStats {
   manager_review: number;
@@ -101,6 +127,127 @@ const Dashboard: FC = () => {
     ? Math.round((data.loanStats.approved / data.loanStats.total) * 100) 
     : 0;
 
+  // Data for Bar Chart - Loan Distribution by Status
+  const barChartData = {
+    labels: ["Loan Manager", "General Manager", "Managing Director", "Approved"],
+    datasets: [
+      {
+        label: "Number of Loans",
+        data: [
+          data.loanStats.manager_review,
+          data.loanStats.gm_review,
+          data.loanStats.md_review,
+          data.loanStats.approved,
+        ],
+        backgroundColor: [
+          "rgba(251, 191, 36, 0.8)",   // Amber
+          "rgba(59, 130, 246, 0.8)",    // Blue
+          "rgba(139, 92, 246, 0.8)",    // Purple
+          "rgba(34, 197, 94, 0.8)",     // Green
+        ],
+        borderColor: [
+          "rgba(251, 191, 36, 1)",
+          "rgba(59, 130, 246, 1)",
+          "rgba(139, 92, 246, 1)",
+          "rgba(34, 197, 94, 1)",
+        ],
+        borderWidth: 1,
+        borderRadius: 8,
+      },
+    ],
+  };
+
+  // Data for Pie Chart - Loan Status Distribution
+  const pieChartData = {
+    labels: ["Manager Review", "GM Review", "MD Review", "Approved"],
+    datasets: [
+      {
+        data: [
+          data.loanStats.manager_review,
+          data.loanStats.gm_review,
+          data.loanStats.md_review,
+          data.loanStats.approved,
+        ],
+        backgroundColor: [
+          "rgba(251, 191, 36, 0.8)",
+          "rgba(59, 130, 246, 0.8)",
+          "rgba(139, 92, 246, 0.8)",
+          "rgba(34, 197, 94, 0.8)",
+        ],
+        borderColor: [
+          "rgba(251, 191, 36, 1)",
+          "rgba(59, 130, 246, 1)",
+          "rgba(139, 92, 246, 1)",
+          "rgba(34, 197, 94, 1)",
+        ],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  // Chart options
+  const barOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top" as const,
+        labels: {
+          color: "rgba(255,255,255,0.9)",
+          font: { size: 12 },
+        },
+      },
+      title: {
+        display: true,
+        text: "Loan Distribution by Status",
+        color: "rgba(255,255,255,0.9)",
+        font: { size: 14, weight: "bold" as const },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: "rgba(255,255,255,0.1)" },
+        ticks: { color: "rgba(255,255,255,0.8)" },
+      },
+      x: {
+        grid: { color: "rgba(255,255,255,0.1)" },
+        ticks: { color: "rgba(255,255,255,0.8)" },
+      },
+    },
+  };
+
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "bottom" as const,
+        labels: {
+          color: "rgba(255,255,255,0.9)",
+          font: { size: 11 },
+        },
+      },
+      title: {
+        display: true,
+        text: "Loan Status Distribution",
+        color: "rgba(255,255,255,0.9)",
+        font: { size: 14, weight: "bold" as const },
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context: any) {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            const total = data.loanStats.total;
+            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+            return `${label}: ${value} (${percentage}%)`;
+          }
+        }
+      }
+    },
+  };
+
   return (
     <div className="dashboard">
       <div className="header">
@@ -124,7 +271,7 @@ const Dashboard: FC = () => {
         </div>
       )}
 
-      {/* CARDS GRID - SASA NI SAFU 4 KWA ROW KWA COMPUTER */}
+      {/* CARDS GRID */}
       <div className="cards">
         {stats.map((s) => (
           <div key={s.key} className={`card card--${s.tone}`}>
@@ -148,6 +295,16 @@ const Dashboard: FC = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* CHARTS SECTION */}
+      <div className="charts-container">
+        <div className="chart-card">
+          <Bar data={barChartData} options={barOptions} height={250} />
+        </div>
+        <div className="chart-card">
+          <Pie data={pieChartData} options={pieOptions} height={250} />
+        </div>
       </div>
 
       {/* Quick Stats Section */}
@@ -287,7 +444,7 @@ const Dashboard: FC = () => {
           font-size: 12px;
         }
 
-        /* CARDS - SAFU 4 KWA ROW, UKUBWA UMEPUNGUA */
+        /* CARDS */
         .cards {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
@@ -299,7 +456,6 @@ const Dashboard: FC = () => {
           padding: 14px;
           border-radius: 20px;
           backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
           border: 1px solid rgba(255,255,255,0.14);
           background: rgba(255,255,255,0.06);
           box-shadow: 0 12px 35px rgba(0,0,0,0.3);
@@ -393,6 +549,29 @@ const Dashboard: FC = () => {
           transition: width 0.3s ease;
         }
 
+        /* CHARTS SECTION */
+        .charts-container {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+          margin-bottom: 24px;
+        }
+
+        .chart-card {
+          background: rgba(255,255,255,0.05);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 20px;
+          padding: 18px;
+          transition: transform 0.2s ease;
+        }
+
+        .chart-card:hover {
+          transform: translateY(-3px);
+          background: rgba(255,255,255,0.07);
+          border-color: rgba(255,255,255,0.2);
+        }
+
         /* Quick Stats */
         .quick-stats {
           display: grid;
@@ -450,6 +629,9 @@ const Dashboard: FC = () => {
           }
           .quick-stats {
             grid-template-columns: repeat(2, 1fr);
+          }
+          .charts-container {
+            grid-template-columns: 1fr;
           }
         }
 

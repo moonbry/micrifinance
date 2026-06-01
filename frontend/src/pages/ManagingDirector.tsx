@@ -20,6 +20,10 @@ const ManagingDirector = () => {
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
     fetchLoans();
@@ -36,16 +40,23 @@ const ManagingDirector = () => {
     }
   };
 
-  const approveLoan = async (id: number) => {
-    if (window.confirm("Final approval? This will mark loan as APPROVED.")) {
-      try {
-        await axios.post(`http://127.0.0.1:8000/api/v1/loans/${id}/approve`);
-        alert("✅ Loan FULLY APPROVED!");
-        fetchLoans();
-      } catch (err) {
-        console.log(err);
-        alert("Failed to approve loan");
-      }
+  const openApproveModal = (loan: Loan) => {
+    setSelectedLoan(loan);
+    setShowApproveModal(true);
+  };
+
+  const confirmApprove = async () => {
+    if (!selectedLoan) return;
+    try {
+      await axios.post(`http://127.0.0.1:8000/api/v1/loans/${selectedLoan.id}/approve`);
+      setShowApproveModal(false);
+      setModalMessage("✅ Loan FULLY APPROVED!");
+      setShowSuccessModal(true);
+      fetchLoans();
+    } catch (err) {
+      console.log(err);
+      setModalMessage("❌ Failed to approve loan");
+      setShowErrorModal(true);
     }
   };
 
@@ -57,7 +68,8 @@ const ManagingDirector = () => {
 
   const submitRejection = async () => {
     if (!rejectReason.trim()) {
-      alert("Please provide rejection reason");
+      setModalMessage("Please provide rejection reason");
+      setShowErrorModal(true);
       return;
     }
 
@@ -65,18 +77,29 @@ const ManagingDirector = () => {
       await axios.post(`http://127.0.0.1:8000/api/v1/loans/${selectedLoan?.id}/reject`, {
         reason: rejectReason,
       });
-      alert("❌ Loan rejected and returned to General Manager");
       setShowRejectModal(false);
+      setModalMessage("❌ Loan rejected and returned to General Manager");
+      setShowSuccessModal(true);
       fetchLoans();
     } catch (err) {
       console.log(err);
-      alert("Failed to reject loan");
+      setModalMessage("Failed to reject loan");
+      setShowErrorModal(true);
     }
   };
 
   const viewDetails = (loan: Loan) => {
     setSelectedLoan(loan);
     setShowDetailsModal(true);
+  };
+
+  // Function to format key names (sio regex)
+  const formatKeyName = (key: string): string => {
+    return key
+      .replace(/_/g, " ")
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
   return (
@@ -156,7 +179,7 @@ const ManagingDirector = () => {
                     </td>
                     <td>
                       <div className="action-buttons">
-                        <button className="approve-btn" onClick={() => approveLoan(loan.id)}>
+                        <button className="approve-btn" onClick={() => openApproveModal(loan)}>
                           ✔ Approve
                         </button>
                         <button className="reject-btn" onClick={() => openRejectModal(loan)}>
@@ -172,14 +195,39 @@ const ManagingDirector = () => {
         )}
       </div>
 
+      {/* APPROVE MODAL */}
+      {showApproveModal && selectedLoan && (
+        <div className="modal-overlay" onClick={() => setShowApproveModal(false)}>
+          <div className="modal approve-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-icon approve-icon">✅</div>
+            <h2>Confirm Approval</h2>
+            <p>Are you sure you want to approve this loan?</p>
+            <div className="modal-info">
+              <p><strong>Client:</strong> {selectedLoan.name}</p>
+              <p><strong>Amount:</strong> TZS {Number(selectedLoan.amount).toLocaleString()}</p>
+            </div>
+            <p className="warning-text">This action will mark the loan as FULLY APPROVED.</p>
+            <div className="modal-actions">
+              <button className="cancel-btn" onClick={() => setShowApproveModal(false)}>
+                Cancel
+              </button>
+              <button className="approve-confirm-btn" onClick={confirmApprove}>
+                Yes, Approve
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* REJECT MODAL */}
-      {showRejectModal && (
+      {showRejectModal && selectedLoan && (
         <div className="modal-overlay" onClick={() => setShowRejectModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>❌ Reject Loan</h2>
+            <div className="modal-icon reject-icon">❌</div>
+            <h2>Reject Loan</h2>
             <div className="modal-info">
-              <p><strong>Client:</strong> {selectedLoan?.name}</p>
-              <p><strong>Amount:</strong> TZS {Number(selectedLoan?.amount).toLocaleString()}</p>
+              <p><strong>Client:</strong> {selectedLoan.name}</p>
+              <p><strong>Amount:</strong> TZS {Number(selectedLoan.amount).toLocaleString()}</p>
             </div>
             <textarea
               placeholder="Enter rejection reason..."
@@ -192,6 +240,38 @@ const ManagingDirector = () => {
               </button>
               <button className="danger-btn" onClick={submitRejection}>
                 Confirm Rejection
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUCCESS MODAL */}
+      {showSuccessModal && (
+        <div className="modal-overlay" onClick={() => setShowSuccessModal(false)}>
+          <div className="modal success-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-icon success-icon">🎉</div>
+            <h2>Success!</h2>
+            <p>{modalMessage}</p>
+            <div className="modal-actions">
+              <button className="success-close-btn" onClick={() => setShowSuccessModal(false)}>
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ERROR MODAL */}
+      {showErrorModal && (
+        <div className="modal-overlay" onClick={() => setShowErrorModal(false)}>
+          <div className="modal error-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-icon error-icon">⚠️</div>
+            <h2>Error</h2>
+            <p>{modalMessage}</p>
+            <div className="modal-actions">
+              <button className="error-close-btn" onClick={() => setShowErrorModal(false)}>
+                Close
               </button>
             </div>
           </div>
@@ -252,7 +332,7 @@ const ManagingDirector = () => {
                 <div className="application-grid">
                   {Object.entries(selectedLoan.details).map(([key, value]) => (
                     <div className="application-card" key={key}>
-                      <span>{key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</span>
+                      <span>{formatKeyName(key)}</span>
                       <strong>
                         {typeof value === "object" ? JSON.stringify(value) : String(value || "-")}
                       </strong>
@@ -500,6 +580,10 @@ const ManagingDirector = () => {
           padding: 25px;
         }
 
+        .approve-modal, .success-modal, .error-modal {
+          width: 450px;
+        }
+
         .details-modal {
           width: 950px;
           max-width: 100%;
@@ -507,9 +591,33 @@ const ManagingDirector = () => {
           overflow-y: auto;
         }
 
+        .modal-icon {
+          font-size: 50px;
+          text-align: center;
+          margin-bottom: 10px;
+        }
+
         .modal h2 {
           margin-top: 0;
+          margin-bottom: 10px;
           color: #0f172a;
+          text-align: center;
+        }
+
+        .modal p {
+          color: #475569;
+          text-align: center;
+          margin-bottom: 15px;
+        }
+
+        .warning-text {
+          color: #dc2626;
+          font-size: 13px;
+          background: #fef2f2;
+          padding: 8px;
+          border-radius: 8px;
+          margin-top: 10px;
+          text-align: center;
         }
 
         .modal-info {
@@ -517,10 +625,12 @@ const ManagingDirector = () => {
           padding: 15px;
           border-radius: 12px;
           margin: 15px 0;
+          text-align: left;
         }
 
         .modal-info p {
           margin: 5px 0;
+          text-align: left;
         }
 
         .modal textarea {
@@ -541,7 +651,7 @@ const ManagingDirector = () => {
 
         .modal-actions {
           display: flex;
-          justify-content: flex-end;
+          justify-content: center;
           gap: 12px;
           margin-top: 20px;
         }
@@ -549,7 +659,7 @@ const ManagingDirector = () => {
         .cancel-btn {
           border: none;
           background: #e2e8f0;
-          padding: 10px 18px;
+          padding: 10px 20px;
           border-radius: 10px;
           cursor: pointer;
           font-weight: 500;
@@ -563,7 +673,7 @@ const ManagingDirector = () => {
           border: none;
           background: #ef4444;
           color: white;
-          padding: 10px 18px;
+          padding: 10px 20px;
           border-radius: 10px;
           cursor: pointer;
           font-weight: 500;
@@ -571,6 +681,40 @@ const ManagingDirector = () => {
 
         .danger-btn:hover {
           background: #dc2626;
+        }
+
+        .approve-confirm-btn {
+          border: none;
+          background: #22c55e;
+          color: white;
+          padding: 10px 20px;
+          border-radius: 10px;
+          cursor: pointer;
+          font-weight: 500;
+        }
+
+        .approve-confirm-btn:hover {
+          background: #16a34a;
+        }
+
+        .success-close-btn {
+          border: none;
+          background: #10b981;
+          color: white;
+          padding: 10px 30px;
+          border-radius: 10px;
+          cursor: pointer;
+          font-weight: 500;
+        }
+
+        .error-close-btn {
+          border: none;
+          background: #3b82f6;
+          color: white;
+          padding: 10px 30px;
+          border-radius: 10px;
+          cursor: pointer;
+          font-weight: 500;
         }
 
         .details-header {
@@ -720,6 +864,11 @@ const ManagingDirector = () => {
 
           th, td {
             padding: 10px;
+          }
+
+          .modal {
+            width: 95%;
+            padding: 20px;
           }
         }
       `}</style>
