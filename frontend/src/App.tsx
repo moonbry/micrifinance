@@ -20,6 +20,8 @@ import LoanManager from "./pages/LoanManager";
 import GeneralManager from "./pages/GeneralManager";
 import ManagingDirector from "./pages/ManagingDirector";
 
+import RepaymentTracker from "./pages/RepaymentTracker";
+
 // =========================
 // AXIOS INTERCEPTORS
 // =========================
@@ -933,6 +935,8 @@ function App() {
             </MainLayout>
           }
         />
+
+        <Route path="/repayment-tracker" element={<MainLayout><RepaymentTracker /></MainLayout>} />
       </Routes>
     </BrowserRouter>
   );

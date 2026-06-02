@@ -63,8 +63,16 @@ const Dashboard: FC = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const usersRes = await axios.get("http://127.0.0.1:8000/api/v1/users/count");
-      const loansRes = await axios.get("http://127.0.0.1:8000/api/v1/loans/stats");
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      console.log("Token being used:", token ? "Yes" : "No");
+      
+      const usersRes = await axios.get("http://127.0.0.1:8000/api/v1/users/count", { headers });
+      const loansRes = await axios.get("http://127.0.0.1:8000/api/v1/loans/stats", { headers });
+      
+      console.log("Users data:", usersRes.data);
+      console.log("Loans data:", loansRes.data);
       
       setData({
         usersCount: usersRes.data.count || 0,
@@ -72,12 +80,13 @@ const Dashboard: FC = () => {
         isLoading: false,
         error: null,
       });
-    } catch (error) {
-      console.error("Error fetching dashboard data:", error);
+    } catch (error: any) {
+      console.error("Error status:", error.response?.status);
+      console.error("Error data:", error.response?.data);
       setData((prev) => ({
         ...prev,
         isLoading: false,
-        error: "Failed to load dashboard data. Please refresh the page.",
+        error: error.response?.data?.message || "Failed to load dashboard data. Please refresh the page.",
       }));
     }
   };
@@ -140,10 +149,10 @@ const Dashboard: FC = () => {
           data.loanStats.approved,
         ],
         backgroundColor: [
-          "rgba(251, 191, 36, 0.8)",   // Amber
-          "rgba(59, 130, 246, 0.8)",    // Blue
-          "rgba(139, 92, 246, 0.8)",    // Purple
-          "rgba(34, 197, 94, 0.8)",     // Green
+          "rgba(251, 191, 36, 0.8)",
+          "rgba(59, 130, 246, 0.8)",
+          "rgba(139, 92, 246, 0.8)",
+          "rgba(34, 197, 94, 0.8)",
         ],
         borderColor: [
           "rgba(251, 191, 36, 1)",
@@ -341,7 +350,7 @@ const Dashboard: FC = () => {
 
       <style>{`
         .dashboard {
-          padding: 24px;
+          padding: 80px 24px 24px 24px;
           min-height: 100vh;
           background: radial-gradient(1200px 700px at 10% 10%, rgba(29, 78, 216, 0.18), rgba(29, 78, 216, 0) 55%),
             radial-gradient(900px 600px at 80% 20%, rgba(16, 185, 129, 0.14), rgba(16, 185, 129, 0) 55%),
@@ -637,7 +646,7 @@ const Dashboard: FC = () => {
 
         @media (max-width: 768px) {
           .dashboard {
-            padding: 15px;
+            padding: 70px 15px 15px 15px;
           }
           .cards {
             grid-template-columns: 1fr;

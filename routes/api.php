@@ -22,6 +22,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
     });
 
+    // Repayment routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/loans/active', [LoanController::class, 'activeLoans']);
+    Route::get('/loans/{id}/repayments', [LoanController::class, 'repaymentHistory']);
+    Route::post('/loans/{id}/repay', [LoanController::class, 'recordRepayment']);
+    Route::get('/repayments/summary', [LoanController::class, 'repaymentSummary']);
+});
+
     // ========== PUBLIC ROUTES ==========
     Route::get('/users/count', function () {
         return response()->json([
@@ -54,5 +62,10 @@ Route::prefix('v1')->group(function () {
         Route::post('/users', [UserController::class, 'store']);
         Route::put('/users/{id}', [UserController::class, 'update']);
         Route::delete('/users/{id}', [UserController::class, 'destroy']);
+
+
+
+
+        
     });
 });

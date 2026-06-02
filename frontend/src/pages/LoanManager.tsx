@@ -26,8 +26,11 @@ const LoanManager = () => {
   }, []);
 
   const fetchLoans = () => {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    
     axios
-      .get("http://127.0.0.1:8000/api/v1/loans/manager")
+      .get("http://127.0.0.1:8000/api/v1/loans/manager", { headers })
       .then((res) => {
         setLoans(res.data);
       })
@@ -37,8 +40,11 @@ const LoanManager = () => {
 
   const approveLoan = (id: number) => {
     if (window.confirm("Approve this loan and send to General Manager?")) {
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
       axios
-        .post(`http://127.0.0.1:8000/api/v1/loans/${id}/approve`)
+        .post(`http://127.0.0.1:8000/api/v1/loans/${id}/approve`, {}, { headers })
         .then(() => {
           alert("✅ Loan approved and sent to General Manager");
           fetchLoans();
@@ -62,10 +68,13 @@ const LoanManager = () => {
       return;
     }
 
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
     axios
       .post(`http://127.0.0.1:8000/api/v1/loans/${selectedLoan?.id}/reject`, {
         reason: rejectReason,
-      })
+      }, { headers })
       .then(() => {
         alert("❌ Loan rejected and returned to Loan Officer");
         setShowRejectModal(false);
@@ -288,7 +297,7 @@ const LoanManager = () => {
         }
 
         .lm-page {
-          padding: 30px;
+          padding: 80px 30px 30px 30px;
           min-height: 100vh;
           background: #f8fafc;
         }
@@ -691,7 +700,7 @@ const LoanManager = () => {
 
         @media (max-width: 768px) {
           .lm-page {
-            padding: 15px;
+            padding: 70px 15px 15px 15px;
           }
 
           .top-header {

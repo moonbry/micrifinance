@@ -18,6 +18,7 @@ const Sidebar: FC = () => {
   const [showLoanManager, setShowLoanManager] = useState(false);
   const [showGeneralManager, setShowGeneralManager] = useState(false);
   const [showManagingManager, setShowManagingManager] = useState(false);
+  const [showRepayment, setShowRepayment] = useState(false);
   const [userCount, setUserCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -70,6 +71,7 @@ const Sidebar: FC = () => {
   const canAccessGeneralManager = userRole === "admin" || userRole === "general_manager";
   const canAccessManagingDirector = userRole === "admin" || userRole === "managing_director";
   const canAccessUsers = userRole === "admin";
+  const canAccessRepayment = userRole === "admin" || userRole === "loan_manager" || userRole === "general_manager";
 
   return (
     <div className="sidebar">
@@ -155,6 +157,21 @@ const Sidebar: FC = () => {
             {showManagingManager && (
               <ul className="dropdown">
                 <li className="sub" onClick={() => navigate("/managing-director")}>View</li>
+              </ul>
+            )}
+          </>
+        )}
+
+        {/* REPAYMENT TRACKER MENU */}
+        {canAccessRepayment && (
+          <>
+            <li onClick={() => setShowRepayment(!showRepayment)}>
+              <span>💰 Repayment Tracker</span>
+              <span className={`chev ${showRepayment ? "open" : ""}`}>▾</span>
+            </li>
+            {showRepayment && (
+              <ul className="dropdown">
+                <li className="sub" onClick={() => navigate("/repayment-tracker")}>View</li>
               </ul>
             )}
           </>

@@ -541,7 +541,7 @@ const GeneralManager = () => {
         }
 
         .gm-page{
-          padding:30px;
+           padding: 80px 30px 30px 30px;
           min-height:100vh;
           background:#f8fafc;
         }
