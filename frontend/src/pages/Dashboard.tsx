@@ -11,11 +11,8 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-  PointElement,
-  LineElement,
 } from "chart.js";
 
-// Register ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,9 +20,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement,
-  PointElement,
-  LineElement
+  ArcElement
 );
 
 interface LoanStats {
@@ -66,13 +61,8 @@ const Dashboard: FC = () => {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
       
-      console.log("Token being used:", token ? "Yes" : "No");
-      
       const usersRes = await axios.get("http://127.0.0.1:8000/api/v1/users/count", { headers });
       const loansRes = await axios.get("http://127.0.0.1:8000/api/v1/loans/stats", { headers });
-      
-      console.log("Users data:", usersRes.data);
-      console.log("Loans data:", loansRes.data);
       
       setData({
         usersCount: usersRes.data.count || 0,
@@ -81,12 +71,11 @@ const Dashboard: FC = () => {
         error: null,
       });
     } catch (error: any) {
-      console.error("Error status:", error.response?.status);
-      console.error("Error data:", error.response?.data);
+      console.error("Error:", error);
       setData((prev) => ({
         ...prev,
         isLoading: false,
-        error: error.response?.data?.message || "Failed to load dashboard data. Please refresh the page.",
+        error: "Failed to load dashboard data",
       }));
     }
   };
@@ -94,49 +83,44 @@ const Dashboard: FC = () => {
   const stats = [
     {
       key: "users",
-      label: "Users",
+      label: "Total Users",
       value: data.usersCount,
-      icon: "👥",
       hint: "Registered members",
-      tone: "cyan",
+      color: "#3b82f6",
       progress: data.usersCount > 0 ? Math.min(100, Math.round((data.usersCount / 200) * 100)) : 0,
     },
     {
       key: "loans",
       label: "Total Loans",
       value: data.loanStats.total,
-      icon: "💳",
       hint: "All loan applications",
-      tone: "violet",
+      color: "#8b5cf6",
       progress: data.loanStats.total > 0 ? Math.min(100, Math.round((data.loanStats.total / 100) * 100)) : 0,
     },
     {
       key: "approved",
       label: "Approved Loans",
       value: data.loanStats.approved,
-      icon: "✅",
       hint: "Successfully approved",
-      tone: "green",
+      color: "#10b981",
       progress: data.loanStats.total > 0 ? Math.round((data.loanStats.approved / data.loanStats.total) * 100) : 0,
     },
     {
       key: "pending",
       label: "Pending Requests",
       value: data.loanStats.manager_review + data.loanStats.gm_review + data.loanStats.md_review,
-      icon: "⏳",
       hint: "Awaiting approval",
-      tone: "amber",
+      color: "#f59e0b",
       progress: data.loanStats.total > 0 
         ? Math.round(((data.loanStats.manager_review + data.loanStats.gm_review + data.loanStats.md_review) / data.loanStats.total) * 100) 
         : 0,
     },
-  ] as const;
+  ];
 
   const approvalRate = data.loanStats.total > 0 
     ? Math.round((data.loanStats.approved / data.loanStats.total) * 100) 
     : 0;
 
-  // Data for Bar Chart - Loan Distribution by Status
   const barChartData = {
     labels: ["Loan Manager", "General Manager", "Managing Director", "Approved"],
     datasets: [
@@ -148,25 +132,12 @@ const Dashboard: FC = () => {
           data.loanStats.md_review,
           data.loanStats.approved,
         ],
-        backgroundColor: [
-          "rgba(251, 191, 36, 0.8)",
-          "rgba(59, 130, 246, 0.8)",
-          "rgba(139, 92, 246, 0.8)",
-          "rgba(34, 197, 94, 0.8)",
-        ],
-        borderColor: [
-          "rgba(251, 191, 36, 1)",
-          "rgba(59, 130, 246, 1)",
-          "rgba(139, 92, 246, 1)",
-          "rgba(34, 197, 94, 1)",
-        ],
-        borderWidth: 1,
-        borderRadius: 8,
+        backgroundColor: ["#f59e0b", "#3b82f6", "#8b5cf6", "#10b981"],
+        borderRadius: 6,
       },
     ],
   };
 
-  // Data for Pie Chart - Loan Status Distribution
   const pieChartData = {
     labels: ["Manager Review", "GM Review", "MD Review", "Approved"],
     datasets: [
@@ -177,488 +148,296 @@ const Dashboard: FC = () => {
           data.loanStats.md_review,
           data.loanStats.approved,
         ],
-        backgroundColor: [
-          "rgba(251, 191, 36, 0.8)",
-          "rgba(59, 130, 246, 0.8)",
-          "rgba(139, 92, 246, 0.8)",
-          "rgba(34, 197, 94, 0.8)",
-        ],
-        borderColor: [
-          "rgba(251, 191, 36, 1)",
-          "rgba(59, 130, 246, 1)",
-          "rgba(139, 92, 246, 1)",
-          "rgba(34, 197, 94, 1)",
-        ],
-        borderWidth: 2,
+        backgroundColor: ["#f59e0b", "#3b82f6", "#8b5cf6", "#10b981"],
+        borderWidth: 0,
       },
     ],
   };
 
-  // Chart options
   const barOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: "top" as const,
-        labels: {
-          color: "rgba(255,255,255,0.9)",
-          font: { size: 12 },
-        },
-      },
-      title: {
-        display: true,
-        text: "Loan Distribution by Status",
-        color: "rgba(255,255,255,0.9)",
-        font: { size: 14, weight: "bold" as const },
-      },
+      legend: { position: "top" as const, labels: { font: { size: 11 } } },
+      tooltip: { callbacks: { label: (ctx: any) => `${ctx.dataset.label}: ${ctx.raw}` } },
     },
-    scales: {
-      y: {
-        beginAtZero: true,
-        grid: { color: "rgba(255,255,255,0.1)" },
-        ticks: { color: "rgba(255,255,255,0.8)" },
-      },
-      x: {
-        grid: { color: "rgba(255,255,255,0.1)" },
-        ticks: { color: "rgba(255,255,255,0.8)" },
-      },
-    },
+    scales: { y: { beginAtZero: true, grid: { color: "#e2e8f0" } } },
   };
 
   const pieOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: "bottom" as const,
-        labels: {
-          color: "rgba(255,255,255,0.9)",
-          font: { size: 11 },
-        },
-      },
-      title: {
-        display: true,
-        text: "Loan Status Distribution",
-        color: "rgba(255,255,255,0.9)",
-        font: { size: 14, weight: "bold" as const },
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context: any) {
-            const label = context.label || '';
-            const value = context.raw || 0;
-            const total = data.loanStats.total;
-            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-            return `${label}: ${value} (${percentage}%)`;
-          }
-        }
-      }
+      legend: { position: "bottom" as const, labels: { font: { size: 11 } } },
+      tooltip: { callbacks: { label: (ctx: any) => `${ctx.label}: ${ctx.raw}` } },
     },
   };
 
   return (
     <div className="dashboard">
-      <div className="header">
+      <div className="dashboard-header">
         <div>
-          <h1>Dashboard Overview</h1>
+          <h1>Dashboard</h1>
           <p>Welcome to Microfinance Management System</p>
         </div>
-        <div className="header-actions">
-          <button className="refresh-btn" onClick={fetchDashboardData} disabled={data.isLoading}>
-            🔄 {data.isLoading ? "Loading..." : "Refresh"}
-          </button>
-          <div className="chip chip-live">Live</div>
-          <div className="chip chip-muted">{new Date().getFullYear()}</div>
-        </div>
+        <button className="refresh-button" onClick={fetchDashboardData} disabled={data.isLoading}>
+          {data.isLoading ? "Loading..." : "Refresh"}
+        </button>
       </div>
 
       {data.error && (
-        <div className="error-banner">
-          <span>⚠️</span> {data.error}
-          <button onClick={fetchDashboardData}>Try Again</button>
+        <div className="error-message">
+          {data.error}
+          <button onClick={fetchDashboardData}>Retry</button>
         </div>
       )}
 
-      {/* CARDS GRID */}
-      <div className="cards">
+      <div className="stats-grid">
         {stats.map((s) => (
-          <div key={s.key} className={`card card--${s.tone}`}>
-            <div className="card-top">
-              <div className="icon" aria-hidden="true">
-                {s.icon}
-              </div>
-              <div className="label-wrap">
-                <div className="label">{s.label}</div>
-                <div className="hint">{s.hint}</div>
-              </div>
+          <div key={s.key} className="stat-card" style={{ borderTopColor: s.color }}>
+            <div className="stat-card-header">
+              <span className="stat-label">{s.label}</span>
+              <span className="stat-hint">{s.hint}</span>
             </div>
-
-            <div className="value-row">
-              <div className="value">{data.isLoading ? "..." : s.value}</div>
-              <div className="tone-pill">{s.tone}</div>
-            </div>
-
-            <div className="bar" aria-label={`${s.progress}%`}>
-              <div className="bar-fill" style={{ width: `${s.progress}%` }} />
+            <div className="stat-value">{data.isLoading ? "..." : s.value.toLocaleString()}</div>
+            <div className="stat-progress">
+              <div className="stat-progress-bar" style={{ width: `${s.progress}%`, backgroundColor: s.color }}></div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* CHARTS SECTION */}
-      <div className="charts-container">
-        <div className="chart-card">
-          <Bar data={barChartData} options={barOptions} height={250} />
+      <div className="charts-row">
+        <div className="chart-container">
+          <h3>Loan Distribution by Status</h3>
+          <div className="chart-wrapper">
+            <Bar data={barChartData} options={barOptions} />
+          </div>
         </div>
-        <div className="chart-card">
-          <Pie data={pieChartData} options={pieOptions} height={250} />
+        <div className="chart-container">
+          <h3>Loan Status Distribution</h3>
+          <div className="chart-wrapper">
+            <Pie data={pieChartData} options={pieOptions} />
+          </div>
         </div>
       </div>
 
-      {/* Quick Stats Section */}
       <div className="quick-stats">
-        <div className="quick-card">
-          <div className="quick-icon">📊</div>
-          <div className="quick-info">
-            <span>Approval Rate</span>
-            <strong>{data.isLoading ? "..." : `${approvalRate}%`}</strong>
-          </div>
+        <div className="quick-stat">
+          <div className="quick-stat-value">{data.isLoading ? "..." : `${approvalRate}%`}</div>
+          <div className="quick-stat-label">Approval Rate</div>
         </div>
-        <div className="quick-card">
-          <div className="quick-icon">👔</div>
-          <div className="quick-info">
-            <span>Manager Review</span>
-            <strong>{data.isLoading ? "..." : data.loanStats.manager_review}</strong>
-          </div>
+        <div className="quick-stat">
+          <div className="quick-stat-value">{data.isLoading ? "..." : data.loanStats.manager_review}</div>
+          <div className="quick-stat-label">Manager Review</div>
         </div>
-        <div className="quick-card">
-          <div className="quick-icon">🏦</div>
-          <div className="quick-info">
-            <span>GM Review</span>
-            <strong>{data.isLoading ? "..." : data.loanStats.gm_review}</strong>
-          </div>
+        <div className="quick-stat">
+          <div className="quick-stat-value">{data.isLoading ? "..." : data.loanStats.gm_review}</div>
+          <div className="quick-stat-label">GM Review</div>
         </div>
-        <div className="quick-card">
-          <div className="quick-icon">👑</div>
-          <div className="quick-info">
-            <span>MD Review</span>
-            <strong>{data.isLoading ? "..." : data.loanStats.md_review}</strong>
-          </div>
+        <div className="quick-stat">
+          <div className="quick-stat-value">{data.isLoading ? "..." : data.loanStats.md_review}</div>
+          <div className="quick-stat-label">MD Review</div>
         </div>
       </div>
 
       <style>{`
         .dashboard {
-          padding: 80px 24px 24px 24px;
+          padding: 80px 28px 28px 28px;
           min-height: 100vh;
-          background: radial-gradient(1200px 700px at 10% 10%, rgba(29, 78, 216, 0.18), rgba(29, 78, 216, 0) 55%),
-            radial-gradient(900px 600px at 80% 20%, rgba(16, 185, 129, 0.14), rgba(16, 185, 129, 0) 55%),
-            radial-gradient(1000px 700px at 60% 110%, rgba(124, 58, 237, 0.14), rgba(124, 58, 237, 0) 55%),
-            linear-gradient(180deg, #0b1220 0%, #050816 100%);
-          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
-            Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-          color: rgba(255,255,255,0.92);
+          background: #f1f5f9;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        .header {
-          margin-bottom: 20px;
+        .dashboard-header {
           display: flex;
-          align-items: flex-start;
           justify-content: space-between;
-          gap: 14px;
+          align-items: center;
+          margin-bottom: 28px;
           flex-wrap: wrap;
+          gap: 16px;
         }
 
-        .header h1 {
+        .dashboard-header h1 {
           font-size: 24px;
+          font-weight: 700;
+          color: #0f172a;
+          margin: 0 0 4px 0;
+        }
+
+        .dashboard-header p {
+          color: #64748b;
+          font-size: 14px;
           margin: 0;
-          font-weight: 900;
-          letter-spacing: -0.02em;
-          color: rgba(255,255,255,0.96);
         }
 
-        .header p {
-          opacity: 0.75;
-          font-size: 13px;
-          margin-top: 4px;
-        }
-
-        .header-actions {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          flex: none;
-        }
-
-        .refresh-btn {
+        .refresh-button {
+          background: #0f172a;
           border: none;
-          background: rgba(59, 130, 246, 0.8);
-          color: white;
-          padding: 6px 12px;
+          padding: 8px 20px;
           border-radius: 30px;
+          color: white;
+          font-size: 13px;
+          font-weight: 500;
           cursor: pointer;
-          font-weight: 600;
-          font-size: 12px;
+          transition: background 0.2s;
         }
 
-        .refresh-btn:hover {
-          background: rgba(59, 130, 246, 1);
+        .refresh-button:hover {
+          background: #1e293b;
         }
 
-        .refresh-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .chip {
-          font-size: 11px;
-          font-weight: 900;
-          padding: 5px 8px;
-          border-radius: 999px;
-          border: 1px solid rgba(255,255,255,0.14);
-          background: rgba(255,255,255,0.06);
-        }
-        .chip-live {
-          border-color: rgba(52,211,153,0.35);
-          background: rgba(52,211,153,0.12);
-          color: rgba(167,243,208,0.95);
-        }
-        .chip-muted {
-          color: rgba(229,231,235,0.78);
-          background: rgba(2,6,23,0.3);
-        }
-
-        .error-banner {
-          background: rgba(239, 68, 68, 0.15);
-          border: 1px solid rgba(239, 68, 68, 0.3);
+        .error-message {
+          background: #fef2f2;
+          border: 1px solid #fecaca;
           border-radius: 12px;
-          padding: 10px 16px;
+          padding: 12px 16px;
           margin-bottom: 20px;
           display: flex;
-          align-items: center;
           justify-content: space-between;
-          flex-wrap: wrap;
-          gap: 10px;
+          align-items: center;
+          color: #dc2626;
           font-size: 13px;
         }
 
-        .error-banner button {
-          background: #ef4444;
+        .error-message button {
+          background: #dc2626;
           border: none;
-          color: white;
           padding: 4px 12px;
-          border-radius: 16px;
+          border-radius: 20px;
+          color: white;
           cursor: pointer;
           font-size: 12px;
         }
 
-        /* CARDS */
-        .cards {
+        .stats-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 16px;
-          margin-bottom: 24px;
-        }
-
-        .card {
-          padding: 14px;
-          border-radius: 20px;
-          backdrop-filter: blur(16px);
-          border: 1px solid rgba(255,255,255,0.14);
-          background: rgba(255,255,255,0.06);
-          box-shadow: 0 12px 35px rgba(0,0,0,0.3);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .card::before {
-          content: "";
-          position: absolute;
-          inset: -1px;
-          opacity: 0.5;
-          pointer-events: none;
-          background: radial-gradient(600px 200px at 20% 10%, rgba(255,255,255,0.1), rgba(255,255,255,0) 55%);
-        }
-
-        .card-top {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          position: relative;
-        }
-
-        .icon {
-          width: 40px;
-          height: 40px;
-          border-radius: 14px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(255,255,255,0.08);
-          border: 1px solid rgba(255,255,255,0.14);
-          flex: none;
-          font-size: 18px;
-        }
-
-        .label {
-          font-weight: 800;
-          letter-spacing: -0.01em;
-          font-size: 14px;
-          color: rgba(255,255,255,0.95);
-        }
-
-        .hint {
-          font-size: 10px;
-          margin-top: 2px;
-          color: rgba(229,231,235,0.7);
-        }
-
-        .value-row {
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-          gap: 8px;
-          margin-top: 12px;
-          position: relative;
-        }
-
-        .value {
-          font-size: 28px;
-          font-weight: 950;
-          letter-spacing: -0.02em;
-        }
-
-        .tone-pill {
-          font-size: 10px;
-          font-weight: 900;
-          padding: 4px 8px;
-          border-radius: 999px;
-          border: 1px solid rgba(255,255,255,0.14);
-          background: rgba(2,6,23,0.28);
-          color: rgba(229,231,235,0.82);
-          text-transform: capitalize;
-          flex: none;
-        }
-
-        .bar {
-          height: 6px;
-          border-radius: 999px;
-          margin-top: 12px;
-          background: rgba(255,255,255,0.08);
-          border: 1px solid rgba(255,255,255,0.1);
-          overflow: hidden;
-          position: relative;
-        }
-
-        .bar-fill {
-          height: 100%;
-          border-radius: 999px;
-          background: linear-gradient(90deg, rgba(96,165,250,0.9), rgba(52,211,153,0.9));
-          transition: width 0.3s ease;
-        }
-
-        /* CHARTS SECTION */
-        .charts-container {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
           gap: 20px;
-          margin-bottom: 24px;
+          margin-bottom: 28px;
         }
 
-        .chart-card {
-          background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255,255,255,0.12);
-          border-radius: 20px;
+        .stat-card {
+          background: white;
+          border-radius: 16px;
           padding: 18px;
-          transition: transform 0.2s ease;
+          border-top: 3px solid;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+          border: 1px solid #e2e8f0;
+          border-top-width: 3px;
         }
 
-        .chart-card:hover {
-          transform: translateY(-3px);
-          background: rgba(255,255,255,0.07);
-          border-color: rgba(255,255,255,0.2);
+        .stat-card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          margin-bottom: 12px;
+          flex-wrap: wrap;
         }
 
-        /* Quick Stats */
+        .stat-label {
+          font-size: 13px;
+          font-weight: 600;
+          color: #334155;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .stat-hint {
+          font-size: 11px;
+          color: #94a3b8;
+        }
+
+        .stat-value {
+          font-size: 32px;
+          font-weight: 700;
+          color: #0f172a;
+          margin-bottom: 12px;
+        }
+
+        .stat-progress {
+          background: #e2e8f0;
+          border-radius: 20px;
+          height: 6px;
+          overflow: hidden;
+        }
+
+        .stat-progress-bar {
+          height: 6px;
+          border-radius: 20px;
+          transition: width 0.3s;
+        }
+
+        .charts-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+          margin-bottom: 28px;
+        }
+
+        .chart-container {
+          background: white;
+          border-radius: 16px;
+          padding: 20px;
+          border: 1px solid #e2e8f0;
+        }
+
+        .chart-container h3 {
+          font-size: 15px;
+          font-weight: 600;
+          color: #0f172a;
+          margin: 0 0 16px 0;
+        }
+
+        .chart-wrapper {
+          height: 260px;
+        }
+
         .quick-stats {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 16px;
+          gap: 20px;
         }
 
-        .quick-card {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.1);
+        .quick-stat {
+          background: white;
           border-radius: 16px;
-          padding: 14px;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          backdrop-filter: blur(12px);
+          padding: 16px;
+          text-align: center;
+          border: 1px solid #e2e8f0;
         }
 
-        .quick-icon {
-          font-size: 24px;
-          background: rgba(255,255,255,0.05);
-          width: 45px;
-          height: 45px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 14px;
+        .quick-stat-value {
+          font-size: 28px;
+          font-weight: 700;
+          color: #0f172a;
         }
 
-        .quick-info {
-          display: flex;
-          flex-direction: column;
+        .quick-stat-label {
+          font-size: 12px;
+          color: #64748b;
+          margin-top: 6px;
         }
 
-        .quick-info span {
-          font-size: 11px;
-          color: rgba(255,255,255,0.65);
-        }
-
-        .quick-info strong {
-          font-size: 18px;
-          font-weight: 800;
-          color: white;
-        }
-
-        /* Tone variants */
-        .card--cyan .value { color: #22d3ee; }
-        .card--violet .value { color: #a78bfa; }
-        .card--green .value { color: #34d399; }
-        .card--amber .value { color: #fbbf24; }
-
-        @media (max-width: 1200px) {
-          .cards {
+        @media (max-width: 1100px) {
+          .stats-grid, .quick-stats {
             grid-template-columns: repeat(2, 1fr);
           }
-          .quick-stats {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .charts-container {
+          .charts-row {
             grid-template-columns: 1fr;
           }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 700px) {
           .dashboard {
-            padding: 70px 15px 15px 15px;
+            padding: 70px 16px 16px 16px;
           }
-          .cards {
+          .stats-grid, .quick-stats {
             grid-template-columns: 1fr;
           }
-          .quick-stats {
-            grid-template-columns: 1fr;
-          }
-          .header {
+          .dashboard-header {
             flex-direction: column;
-          }
-          .header h1 {
-            font-size: 20px;
+            align-items: flex-start;
           }
         }
       `}</style>

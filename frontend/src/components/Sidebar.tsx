@@ -75,142 +75,286 @@ const Sidebar: FC = () => {
 
   return (
     <div className="sidebar">
-      <div className="logo-container">
-        <img src="/logo.png" alt="Logo" className="logo" />
-        <div className="brand">
-          <div className="brand-title">Microfinance</div>
-          <div className="brand-sub">Management</div>
+      <div className="logo-area">
+        <div className="logo-placeholder"></div>
+        <div className="logo-text">
+          <div className="logo-title">Microfinance</div>
+          <div className="logo-sub">Management System</div>
         </div>
       </div>
 
       {user && (
-        <div className="user-info">
+        <div className="user-profile">
           <div className="user-name">{user.name}</div>
           <div className="user-role">{user.role?.replace("_", " ").toUpperCase()}</div>
         </div>
       )}
 
-      <ul>
+      <div className="nav-menu">
         {canAccessUsers && (
-          <>
-            <li onClick={handleUsersClick}>
-              <span>👥 Users</span>
-              {userCount !== null && <span className="pill">{userCount}</span>}
-            </li>
+          <div className="nav-item">
+            <div className="nav-header" onClick={handleUsersClick}>
+              <span>Users</span>
+              {userCount !== null && <span className="nav-badge">{userCount}</span>}
+              <span className={`nav-arrow ${showUsers ? "open" : ""}`}>▼</span>
+            </div>
             {showUsers && (
-              <ul className="dropdown">
-                <li className="sub" onClick={() => navigate("/users")}>View Users</li>
-              </ul>
+              <div className="nav-submenu">
+                <div className="nav-link" onClick={() => navigate("/users")}>View Users</div>
+              </div>
             )}
-          </>
+          </div>
         )}
 
         {canAccessLoansForm && (
-          <>
-            <li onClick={() => setShowLoans(!showLoans)}>
-              <span>📝 Loans form</span>
-              <span className={`chev ${showLoans ? "open" : ""}`}>▾</span>
-            </li>
+          <div className="nav-item">
+            <div className="nav-header" onClick={() => setShowLoans(!showLoans)}>
+              <span>Loans Form</span>
+              <span className={`nav-arrow ${showLoans ? "open" : ""}`}>▼</span>
+            </div>
             {showLoans && (
-              <ul className="dropdown">
-                <li className="sub" onClick={() => navigate("/personal-loan")}>👤 Personal form</li>
-                <li className="sub" onClick={() => navigate("/group-loan")}>👥 Group form</li>
-              </ul>
+              <div className="nav-submenu">
+                <div className="nav-link" onClick={() => navigate("/personal-loan")}>Personal Loan</div>
+                <div className="nav-link" onClick={() => navigate("/group-loan")}>Group Loan</div>
+              </div>
             )}
-          </>
+          </div>
         )}
 
         {canAccessLoanManager && (
-          <>
-            <li onClick={() => setShowLoanManager(!showLoanManager)}>
-              <span>📊 Loan Manager</span>
-              <span className={`chev ${showLoanManager ? "open" : ""}`}>▾</span>
-            </li>
+          <div className="nav-item">
+            <div className="nav-header" onClick={() => setShowLoanManager(!showLoanManager)}>
+              <span>Loan Manager</span>
+              <span className={`nav-arrow ${showLoanManager ? "open" : ""}`}>▼</span>
+            </div>
             {showLoanManager && (
-              <ul className="dropdown">
-                <li className="sub" onClick={() => navigate("/loan-manager")}>View</li>
-              </ul>
+              <div className="nav-submenu">
+                <div className="nav-link" onClick={() => navigate("/loan-manager")}>Dashboard</div>
+              </div>
             )}
-          </>
+          </div>
         )}
 
         {canAccessGeneralManager && (
-          <>
-            <li onClick={() => setShowGeneralManager(!showGeneralManager)}>
-              <span>👔 General Manager</span>
-              <span className={`chev ${showGeneralManager ? "open" : ""}`}>▾</span>
-            </li>
+          <div className="nav-item">
+            <div className="nav-header" onClick={() => setShowGeneralManager(!showGeneralManager)}>
+              <span>General Manager</span>
+              <span className={`nav-arrow ${showGeneralManager ? "open" : ""}`}>▼</span>
+            </div>
             {showGeneralManager && (
-              <ul className="dropdown">
-                <li className="sub" onClick={() => navigate("/general-manager")}>View</li>
-              </ul>
+              <div className="nav-submenu">
+                <div className="nav-link" onClick={() => navigate("/general-manager")}>Dashboard</div>
+              </div>
             )}
-          </>
+          </div>
         )}
 
         {canAccessManagingDirector && (
-          <>
-            <li onClick={() => setShowManagingManager(!showManagingManager)}>
-              <span>👑 Managing Director</span>
-              <span className={`chev ${showManagingManager ? "open" : ""}`}>▾</span>
-            </li>
+          <div className="nav-item">
+            <div className="nav-header" onClick={() => setShowManagingManager(!showManagingManager)}>
+              <span>Managing Director</span>
+              <span className={`nav-arrow ${showManagingManager ? "open" : ""}`}>▼</span>
+            </div>
             {showManagingManager && (
-              <ul className="dropdown">
-                <li className="sub" onClick={() => navigate("/managing-director")}>View</li>
-              </ul>
+              <div className="nav-submenu">
+                <div className="nav-link" onClick={() => navigate("/managing-director")}>Dashboard</div>
+              </div>
             )}
-          </>
+          </div>
         )}
 
-        {/* REPAYMENT TRACKER MENU */}
         {canAccessRepayment && (
-          <>
-            <li onClick={() => setShowRepayment(!showRepayment)}>
-              <span>💰 Repayment Tracker</span>
-              <span className={`chev ${showRepayment ? "open" : ""}`}>▾</span>
-            </li>
+          <div className="nav-item">
+            <div className="nav-header" onClick={() => setShowRepayment(!showRepayment)}>
+              <span>Repayment Tracker</span>
+              <span className={`nav-arrow ${showRepayment ? "open" : ""}`}>▼</span>
+            </div>
             {showRepayment && (
-              <ul className="dropdown">
-                <li className="sub" onClick={() => navigate("/repayment-tracker")}>View</li>
-              </ul>
+              <div className="nav-submenu">
+                <div className="nav-link" onClick={() => navigate("/repayment-tracker")}>View</div>
+              </div>
             )}
-          </>
+          </div>
         )}
-      </ul>
+      </div>
 
-      <div className="bottom">
-        <button className="bottom-btn" onClick={handleLogout}>🚪 Logout</button>
+      <div className="nav-footer">
+        <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </div>
 
       <style>{`
-        .sidebar { 
-          width: 260px; 
-          height: 100vh; 
-          background: radial-gradient(900px 600px at 40% 0%, rgba(29,78,216,0.22), rgba(29,78,216,0) 55%), linear-gradient(180deg, #0b1220 0%, #050816 100%); 
-          color: rgba(255,255,255,0.92); 
-          position: fixed; 
-          top: 0; 
-          left: 0; 
-          overflow-y: auto; 
-          border-right: 1px solid rgba(255,255,255,0.08);
+        .sidebar {
+          width: 260px;
+          height: 100vh;
+          background: #0a0f1a;
+          color: #e2e8f0;
+          position: fixed;
+          top: 0;
+          left: 0;
+          overflow-y: auto;
+          border-right: 1px solid #1e293b;
           z-index: 100;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-        .logo-container { padding: 18px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
-        .logo { width: 40px; height: 40px; object-fit: contain; border-radius: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 6px; }
-        .brand-title { font-weight: 900; color: rgba(255,255,255,0.96); }
-        .brand-sub { font-size: 12px; margin-top: 2px; color: rgba(229,231,235,0.72); }
-        .user-info { padding: 12px 16px; margin: 10px; background: rgba(255,255,255,0.05); border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); }
-        .user-name { font-weight: bold; font-size: 14px; }
-        .user-role { font-size: 11px; color: #22d3ee; margin-top: 4px; }
-        ul { list-style: none; padding: 0 10px 12px; }
-        li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; cursor: pointer; }
-        .dropdown { margin-left: 12px; margin-bottom: 10px; }
-        .sub { background: rgba(2,6,23,0.3); border-color: rgba(255,255,255,0.1); font-size: 13px; font-weight: 700; }
-        .pill { font-size: 12px; font-weight: 900; padding: 4px 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.14); background: rgba(2,6,23,0.35); }
-        .chev { opacity: 0.85; transition: none; }
-        .chev.open { transform: rotate(180deg); }
-        .bottom { position: sticky; bottom: 0; padding: 12px 10px 14px; background: linear-gradient(180deg, rgba(5,8,22,0), rgba(5,8,22,0.95) 45%, rgba(5,8,22,1)); border-top: 1px solid rgba(255,255,255,0.08); }
-        .bottom-btn { width: 100%; height: 42px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); cursor: pointer; font-weight: 900; }
+
+        .logo-area {
+          padding: 20px 18px;
+          border-bottom: 1px solid #1e293b;
+          margin-bottom: 16px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .logo-placeholder {
+          width: 36px;
+          height: 36px;
+          background: #1e293b;
+          border-radius: 10px;
+          border: 1px solid #334155;
+        }
+
+        .logo-title {
+          font-weight: 700;
+          font-size: 16px;
+          color: #f1f5f9;
+          letter-spacing: -0.3px;
+        }
+
+        .logo-sub {
+          font-size: 11px;
+          color: #94a3b8;
+          margin-top: 2px;
+        }
+
+        .user-profile {
+          padding: 12px 16px;
+          margin: 0 12px 16px 12px;
+          background: #111827;
+          border-radius: 12px;
+          border: 1px solid #1e293b;
+        }
+
+        .user-name {
+          font-weight: 600;
+          font-size: 14px;
+          color: #f1f5f9;
+          margin-bottom: 4px;
+        }
+
+        .user-role {
+          font-size: 11px;
+          color: #22d3ee;
+          letter-spacing: 0.3px;
+        }
+
+        .nav-menu {
+          padding: 0 12px;
+        }
+
+        .nav-item {
+          margin-bottom: 6px;
+        }
+
+        .nav-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 12px;
+          background: #111827;
+          border-radius: 10px;
+          border: 1px solid #1e293b;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          color: #e2e8f0;
+          transition: background 0.2s;
+        }
+
+        .nav-header:hover {
+          background: #1a2332;
+        }
+
+        .nav-badge {
+          background: #1e293b;
+          padding: 2px 8px;
+          border-radius: 30px;
+          font-size: 11px;
+          font-weight: 600;
+          color: #94a3b8;
+        }
+
+        .nav-arrow {
+          font-size: 10px;
+          color: #64748b;
+          transition: transform 0.2s;
+        }
+
+        .nav-arrow.open {
+          transform: rotate(180deg);
+        }
+
+        .nav-submenu {
+          margin-top: 4px;
+          margin-left: 12px;
+          padding-left: 8px;
+          border-left: 2px solid #1e293b;
+        }
+
+        .nav-link {
+          padding: 8px 12px;
+          margin: 2px 0;
+          border-radius: 8px;
+          font-size: 13px;
+          font-weight: 400;
+          color: #94a3b8;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+          background: #111827;
+          color: #f1f5f9;
+        }
+
+        .nav-footer {
+          position: sticky;
+          bottom: 0;
+          margin-top: 20px;
+          padding: 16px 12px;
+          background: #0a0f1a;
+          border-top: 1px solid #1e293b;
+        }
+
+        .logout-btn {
+          width: 100%;
+          padding: 10px;
+          background: #1e293b;
+          border: 1px solid #334155;
+          border-radius: 10px;
+          color: #e2e8f0;
+          font-size: 13px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+          background: #2d3a4e;
+        }
+
+        ::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: #334155;
+          border-radius: 4px;
+        }
       `}</style>
     </div>
   );
