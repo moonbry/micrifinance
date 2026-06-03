@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\V1\LoanController;
 
 Route::prefix('v1')->group(function () {
 
-    // TEST
+    // ========== TEST ROUTES ==========
     Route::get('/test', [TestController::class, 'index']);
 
     // ========== AUTH ROUTES ==========
@@ -22,34 +22,36 @@ Route::prefix('v1')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
     });
 
-    // Repayment routes
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/loans/active', [LoanController::class, 'activeLoans']);
-    Route::get('/loans/{id}/repayments', [LoanController::class, 'repaymentHistory']);
-    Route::post('/loans/{id}/repay', [LoanController::class, 'recordRepayment']);
-    Route::get('/repayments/summary', [LoanController::class, 'repaymentSummary']);
-});
-
-    // ========== PUBLIC ROUTES ==========
+    // ========== PUBLIC ROUTES (No authentication required) ==========
+    
+    // User count
     Route::get('/users/count', function () {
         return response()->json([
             'count' => User::count()
         ]);
     });
     
-    // ✅ LOAN STATS - PUBLIC
+    // Loan statistics
     Route::get('/loans/stats', [LoanController::class, 'getStats']);
     
-    // ✅ ALL LOANS - PUBLIC
+    // All loans
     Route::get('/loans/all', [LoanController::class, 'allLoans']);
     
-    // ✅ ROUTES MAALUM ZA LEVEL - ZIWE KABLA YA /loans/{id}
+    // ✅ ROUTES MAALUM ZIWE KABLA YA PARAMETER
+    Route::get('/loans/active', [LoanController::class, 'activeLoans']);
     Route::get('/loans/manager', [LoanController::class, 'managerLoans']);
     Route::get('/loans/gm', [LoanController::class, 'gmLoans']);
     Route::get('/loans/md', [LoanController::class, 'mdLoans']);
     
-    // ✅ ROUTE YA PARAMETER - IWE MWISHO (KWA AJILI YA SHOW SINGLE LOAN)
+    // ✅ ROUTE YA PARAMETER - IWE MWISHO
     Route::get('/loans/{id}', [LoanController::class, 'show']);
+    
+    // ========== REPAYMENT ROUTES (Protected) ==========
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/loans/{id}/repayments', [LoanController::class, 'repaymentHistory']);
+        Route::post('/loans/{id}/repay', [LoanController::class, 'recordRepayment']);
+        Route::get('/repayments/summary', [LoanController::class, 'repaymentSummary']);
+    });
     
     // ========== LOAN SUBMISSION & ACTIONS (Protected) ==========
     Route::middleware('auth:sanctum')->group(function () {
@@ -62,10 +64,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/users', [UserController::class, 'store']);
         Route::put('/users/{id}', [UserController::class, 'update']);
         Route::delete('/users/{id}', [UserController::class, 'destroy']);
-
-
-
-
-        
     });
 });
+
+// ========== ADD THIS FALLBACK ROUTE FOR AUTH REDIRECTS ==========
+// Hii inazuia error "Route [login] not defined"
+Route::get('/login', function() {
+    return response()->json([
+        'message' => 'Unauthorized. Please login first.'
+    ], 401);
+})->name('login');

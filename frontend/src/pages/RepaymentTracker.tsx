@@ -43,17 +43,21 @@ const RepaymentTracker = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const headers = { Authorization: `Bearer ${token}` };
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
       
-      const [activeRes, summaryRes] = await Promise.all([
+      // Fetch all approved loans for repayment tracker
+      const [loansRes, summaryRes] = await Promise.all([
         axios.get("http://127.0.0.1:8000/api/v1/loans/active", { headers }),
         axios.get("http://127.0.0.1:8000/api/v1/repayments/summary", { headers })
       ]);
       
-      setActiveLoans(activeRes.data);
+      console.log("Active loans data:", loansRes.data);
+      console.log("Summary data:", summaryRes.data);
+      
+      setActiveLoans(loansRes.data);
       setSummary(summaryRes.data);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -172,7 +176,7 @@ const RepaymentTracker = () => {
         ) : activeLoans.length === 0 ? (
           <div className="rt-empty">
             <h3>No Active Loans</h3>
-            <p>No active loans found</p>
+            <p>No approved loans found. Please approve loans first.</p>
           </div>
         ) : (
           <div className="rt-table-wrapper">
@@ -180,10 +184,10 @@ const RepaymentTracker = () => {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Borrower</th>
-                  <th>Loan Amount</th>
-                  <th>Total Paid</th>
-                  <th>Remaining</th>
+                  <th>Borrower Name</th>
+                  <th>Loan Amount (TZS)</th>
+                  <th>Total Paid (TZS)</th>
+                  <th>Remaining (TZS)</th>
                   <th>Progress</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -195,24 +199,35 @@ const RepaymentTracker = () => {
                   return (
                     <tr key={loan.id}>
                       <td>{index + 1}</td>
-                      <td>{loan.name}</td>
-                      <td>TZS {loan.amount.toLocaleString()}</td>
-                      <td className="rt-paid">TZS {loan.total_paid?.toLocaleString() || 0}</td>
-                      <td className="rt-remaining">TZS {loan.remaining_balance?.toLocaleString() || loan.amount.toLocaleString()}</td>
+                      <td>
+                        <div className="rt-borrower-info">
+                          <strong>{loan.name}</strong>
+                          <span className="rt-loan-id">ID: {loan.id}</span>
+                        </div>
+                      </td>
+                      <td className="rt-amount">TZS {loan.amount.toLocaleString()}</td>
+                      <td className="rt-paid">TZS {(loan.total_paid || 0).toLocaleString()}</td>
+                      <td className="rt-remaining">TZS {(loan.remaining_balance || loan.amount).toLocaleString()}</td>
                       <td>
                         <div className="rt-progress-bar">
                           <div className="rt-progress-fill" style={{ width: `${progress}%` }}></div>
-                          <span>{Math.round(progress)}%</span>
+                          <span className="rt-progress-text">{Math.round(progress)}%</span>
                         </div>
                       </td>
                       <td>
-                        <span className={`rt-status-badge rt-${loan.payment_status}`}>
-                          {getStatusBadge(loan.payment_status)}
+                        <span className={`rt-status-badge rt-${loan.payment_status || 'pending'}`}>
+                          {getStatusBadge(loan.payment_status || 'pending')}
                         </span>
                       </td>
                       <td>
-                        <button className="rt-btn-view" onClick={() => viewRepayments(loan)}>📋 History</button>
-                        <button className="rt-btn-pay" onClick={() => openRepaymentModal(loan)}>💰 Pay</button>
+                        <div className="rt-action-buttons">
+                          <button className="rt-btn-view" onClick={() => viewRepayments(loan)}>
+                            📋 History
+                          </button>
+                          <button className="rt-btn-pay" onClick={() => openRepaymentModal(loan)}>
+                            💰 Pay
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -228,24 +243,29 @@ const RepaymentTracker = () => {
         <div className="rt-modal-overlay" onClick={() => setSelectedLoan(null)}>
           <div className="rt-modal rt-modal-large" onClick={(e) => e.stopPropagation()}>
             <div className="rt-modal-header">
-              <h2>📋 Repayment History - {selectedLoan.name}</h2>
+              <h2>📋 Repayment History</h2>
+              <div className="rt-modal-borrower">
+                <strong>Borrower:</strong> {selectedLoan.name}
+              </div>
               <button className="rt-close-btn" onClick={() => setSelectedLoan(null)}>✖</button>
             </div>
             <div className="rt-loan-summary">
               <div><strong>Total Loan:</strong> TZS {selectedLoan.amount.toLocaleString()}</div>
-              <div><strong>Total Paid:</strong> TZS {selectedLoan.total_paid?.toLocaleString() || 0}</div>
-              <div><strong>Remaining:</strong> TZS {selectedLoan.remaining_balance?.toLocaleString() || selectedLoan.amount.toLocaleString()}</div>
+              <div><strong>Total Paid:</strong> TZS {(selectedLoan.total_paid || 0).toLocaleString()}</div>
+              <div><strong>Remaining:</strong> TZS {(selectedLoan.remaining_balance || selectedLoan.amount).toLocaleString()}</div>
             </div>
             {repayments.length === 0 ? (
-              <p className="rt-no-data">No repayments recorded yet</p>
+              <div className="rt-no-data">
+                <p>📭 No repayments recorded yet</p>
+              </div>
             ) : (
               <div className="rt-table-wrapper">
                 <table className="rt-repayment-table">
                   <thead>
                     <tr>
                       <th>Date</th>
-                      <th>Amount</th>
-                      <th>Method</th>
+                      <th>Amount (TZS)</th>
+                      <th>Payment Method</th>
                       <th>Receipt #</th>
                     </tr>
                   </thead>
@@ -254,7 +274,7 @@ const RepaymentTracker = () => {
                       <tr key={repayment.id}>
                         <td>{new Date(repayment.payment_date).toLocaleDateString()}</td>
                         <td>TZS {repayment.amount.toLocaleString()}</td>
-                        <td>{repayment.payment_method}</td>
+                        <td>{repayment.payment_method?.toUpperCase() || 'N/A'}</td>
                         <td>{repayment.receipt_number}</td>
                       </tr>
                     ))}
@@ -276,11 +296,16 @@ const RepaymentTracker = () => {
             <h2>💰 Record Repayment</h2>
             <div className="rt-loan-info">
               <p><strong>Borrower:</strong> {selectedLoanForRepayment.name}</p>
-              <p><strong>Remaining Balance:</strong> TZS {selectedLoanForRepayment.remaining_balance?.toLocaleString() || selectedLoanForRepayment.amount.toLocaleString()}</p>
+              <p><strong>Remaining Balance:</strong> TZS {(selectedLoanForRepayment.remaining_balance || selectedLoanForRepayment.amount).toLocaleString()}</p>
             </div>
             <div className="rt-form-group">
               <label>Amount *</label>
-              <input type="number" placeholder="Enter amount" value={repaymentAmount} onChange={(e) => setRepaymentAmount(e.target.value)} />
+              <input 
+                type="number" 
+                placeholder="Enter amount" 
+                value={repaymentAmount} 
+                onChange={(e) => setRepaymentAmount(e.target.value)} 
+              />
             </div>
             <div className="rt-form-group">
               <label>Payment Date *</label>
@@ -289,9 +314,9 @@ const RepaymentTracker = () => {
             <div className="rt-form-group">
               <label>Payment Method *</label>
               <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-                <option value="cash">Cash</option>
-                <option value="bank_transfer">Bank Transfer</option>
-                <option value="mobile_money">Mobile Money</option>
+                <option value="cash">💵 Cash</option>
+                <option value="bank_transfer">🏦 Bank Transfer</option>
+                <option value="mobile_money">📱 Mobile Money</option>
               </select>
             </div>
             <div className="rt-form-group">
@@ -441,6 +466,22 @@ const RepaymentTracker = () => {
           background: #f8fafc;
         }
 
+        .rt-borrower-info {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .rt-loan-id {
+          font-size: 11px;
+          color: #64748b;
+        }
+
+        .rt-amount {
+          font-weight: 700;
+          color: #0f172a;
+        }
+
         .rt-paid {
           color: #10b981;
           font-weight: 600;
@@ -466,7 +507,7 @@ const RepaymentTracker = () => {
           border-radius: 10px;
         }
 
-        .rt-progress-bar span {
+        .rt-progress-text {
           font-size: 11px;
           position: absolute;
           right: 5px;
@@ -501,12 +542,17 @@ const RepaymentTracker = () => {
           color: #dc2626;
         }
 
+        .rt-action-buttons {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
         .rt-btn-view, .rt-btn-pay {
           padding: 6px 12px;
           border-radius: 8px;
           font-size: 12px;
           cursor: pointer;
-          margin-right: 5px;
           border: none;
           transition: 0.2s;
         }
@@ -563,7 +609,7 @@ const RepaymentTracker = () => {
         }
 
         .rt-modal-large {
-          width: 800px;
+          width: 750px;
           max-width: 95%;
         }
 
@@ -574,12 +620,21 @@ const RepaymentTracker = () => {
           margin-bottom: 20px;
           padding-bottom: 15px;
           border-bottom: 1px solid #e2e8f0;
+          flex-wrap: wrap;
+          gap: 10px;
         }
 
         .rt-modal-header h2 {
           margin: 0;
           color: #0f172a;
           font-size: 20px;
+        }
+
+        .rt-modal-borrower {
+          background: #f1f5f9;
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-size: 13px;
         }
 
         .rt-close-btn {
@@ -711,6 +766,12 @@ const RepaymentTracker = () => {
           .rt-loan-summary, .rt-loan-info {
             flex-direction: column;
             gap: 10px;
+          }
+          .rt-action-buttons {
+            flex-direction: column;
+          }
+          .rt-modal-large {
+            width: 95%;
           }
         }
       `}</style>
