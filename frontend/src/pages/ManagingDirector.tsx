@@ -25,13 +25,21 @@ const ManagingDirector = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   useEffect(() => {
     fetchLoans();
   }, []);
 
   const fetchLoans = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/v1/loans/md");
+      const res = await axios.get(
+        "http://127.0.0.1:8000/api/v1/loans/md",
+        { headers: getAuthHeaders() }
+      );
       setLoans(res.data);
     } catch (err) {
       console.log(err);
@@ -48,14 +56,18 @@ const ManagingDirector = () => {
   const confirmApprove = async () => {
     if (!selectedLoan) return;
     try {
-      await axios.post(`http://127.0.0.1:8000/api/v1/loans/${selectedLoan.id}/approve`);
+      await axios.post(
+        `http://127.0.0.1:8000/api/v1/loans/${selectedLoan.id}/approve`,
+        {},
+        { headers: getAuthHeaders() }
+      );
       setShowApproveModal(false);
-      setModalMessage("✅ Loan FULLY APPROVED!");
+      setModalMessage("Loan Fully Approved Successfully");
       setShowSuccessModal(true);
       fetchLoans();
     } catch (err) {
       console.log(err);
-      setModalMessage("❌ Failed to approve loan");
+      setModalMessage("Failed to approve loan");
       setShowErrorModal(true);
     }
   };
@@ -74,11 +86,13 @@ const ManagingDirector = () => {
     }
 
     try {
-      await axios.post(`http://127.0.0.1:8000/api/v1/loans/${selectedLoan?.id}/reject`, {
-        reason: rejectReason,
-      });
+      await axios.post(
+        `http://127.0.0.1:8000/api/v1/loans/${selectedLoan?.id}/reject`,
+        { reason: rejectReason },
+        { headers: getAuthHeaders() }
+      );
       setShowRejectModal(false);
-      setModalMessage("❌ Loan rejected and returned to General Manager");
+      setModalMessage("Loan rejected and returned to General Manager");
       setShowSuccessModal(true);
       fetchLoans();
     } catch (err) {
@@ -93,7 +107,6 @@ const ManagingDirector = () => {
     setShowDetailsModal(true);
   };
 
-  // Function to format key names (sio regex)
   const formatKeyName = (key: string): string => {
     return key
       .replace(/_/g, " ")
@@ -104,15 +117,14 @@ const ManagingDirector = () => {
 
   return (
     <div className="md-page">
-
       {/* HEADER */}
       <div className="top-header">
         <div>
-          <h1>👑 Managing Director Dashboard</h1>
+          <h1>Managing Director Dashboard</h1>
           <p>Final stage of loan approval and authorization</p>
         </div>
         <button className="refresh-btn" onClick={fetchLoans}>
-          🔄 Refresh
+          Refresh
         </button>
       </div>
 
@@ -166,7 +178,7 @@ const ManagingDirector = () => {
                       <div className="client-box">
                         <strong>{loan.name}</strong>
                         <button className="details-btn" onClick={() => viewDetails(loan)}>
-                          👁 View Details
+                          View Details
                         </button>
                       </div>
                     </td>
@@ -180,10 +192,10 @@ const ManagingDirector = () => {
                     <td>
                       <div className="action-buttons">
                         <button className="approve-btn" onClick={() => openApproveModal(loan)}>
-                          ✔ Approve
+                          Approve
                         </button>
                         <button className="reject-btn" onClick={() => openRejectModal(loan)}>
-                          ✖ Reject
+                          Reject
                         </button>
                       </div>
                     </td>
@@ -199,14 +211,13 @@ const ManagingDirector = () => {
       {showApproveModal && selectedLoan && (
         <div className="modal-overlay" onClick={() => setShowApproveModal(false)}>
           <div className="modal approve-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-icon approve-icon">✅</div>
             <h2>Confirm Approval</h2>
             <p>Are you sure you want to approve this loan?</p>
             <div className="modal-info">
               <p><strong>Client:</strong> {selectedLoan.name}</p>
               <p><strong>Amount:</strong> TZS {Number(selectedLoan.amount).toLocaleString()}</p>
             </div>
-            <p className="warning-text">This action will mark the loan as FULLY APPROVED.</p>
+            <p className="warning-text">This action will mark the loan as Fully Approved.</p>
             <div className="modal-actions">
               <button className="cancel-btn" onClick={() => setShowApproveModal(false)}>
                 Cancel
@@ -223,7 +234,6 @@ const ManagingDirector = () => {
       {showRejectModal && selectedLoan && (
         <div className="modal-overlay" onClick={() => setShowRejectModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-icon reject-icon">❌</div>
             <h2>Reject Loan</h2>
             <div className="modal-info">
               <p><strong>Client:</strong> {selectedLoan.name}</p>
@@ -250,8 +260,7 @@ const ManagingDirector = () => {
       {showSuccessModal && (
         <div className="modal-overlay" onClick={() => setShowSuccessModal(false)}>
           <div className="modal success-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-icon success-icon">🎉</div>
-            <h2>Success!</h2>
+            <h2>Success</h2>
             <p>{modalMessage}</p>
             <div className="modal-actions">
               <button className="success-close-btn" onClick={() => setShowSuccessModal(false)}>
@@ -266,7 +275,6 @@ const ManagingDirector = () => {
       {showErrorModal && (
         <div className="modal-overlay" onClick={() => setShowErrorModal(false)}>
           <div className="modal error-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-icon error-icon">⚠️</div>
             <h2>Error</h2>
             <p>{modalMessage}</p>
             <div className="modal-actions">
@@ -284,17 +292,17 @@ const ManagingDirector = () => {
           <div className="modal details-modal" onClick={(e) => e.stopPropagation()}>
             <div className="details-header">
               <div>
-                <h2>📄 Loan Application Details</h2>
+                <h2>Loan Application Details</h2>
                 <p>Complete information submitted by applicant</p>
               </div>
               <button className="close-btn" onClick={() => setShowDetailsModal(false)}>
-                ✖
+                ×
               </button>
             </div>
 
             {/* BASIC DETAILS */}
             <div className="details-section">
-              <h3>👤 Applicant Information</h3>
+              <h3>Applicant Information</h3>
               <div className="details-grid">
                 <div className="detail-card">
                   <span>Full Name</span>
@@ -328,7 +336,7 @@ const ManagingDirector = () => {
             {/* FULL FORM DATA */}
             {selectedLoan.details && (
               <div className="details-section">
-                <h3>📑 Complete Application Data</h3>
+                <h3>Complete Application Data</h3>
                 <div className="application-grid">
                   {Object.entries(selectedLoan.details).map(([key, value]) => (
                     <div className="application-card" key={key}>
@@ -345,7 +353,7 @@ const ManagingDirector = () => {
             {/* REJECTION REASON */}
             {selectedLoan.rejection_reason && (
               <div className="reason-box">
-                <h3>❌ Rejection Reason</h3>
+                <h3>Rejection Reason</h3>
                 <p>{selectedLoan.rejection_reason}</p>
               </div>
             )}
@@ -365,74 +373,81 @@ const ManagingDirector = () => {
         }
 
         .md-page {
-           padding: 80px 30px 30px 30px;
+          padding: 80px 30px 30px 30px;
           min-height: 100vh;
-          background: #f8fafc;
+          background: #f1f5f9;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         .top-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 25px;
+          margin-bottom: 28px;
           gap: 20px;
+          flex-wrap: wrap;
         }
 
         .top-header h1 {
           margin: 0;
           color: #0f172a;
-          font-size: 32px;
+          font-size: 28px;
+          font-weight: 700;
         }
 
         .top-header p {
-          margin-top: 8px;
-          color: #64748b;
-        }
-
-        .refresh-btn {
-          border: none;
-          background: #7c3aed;
-          color: white;
-          padding: 12px 20px;
-          border-radius: 12px;
-          cursor: pointer;
-          font-weight: 600;
-        }
-
-        .refresh-btn:hover {
-          background: #6d28d9;
-        }
-
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 20px;
-          margin-bottom: 25px;
-        }
-
-        .stats-card {
-          background: white;
-          padding: 25px;
-          border-radius: 20px;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-        }
-
-        .stats-card span {
+          margin-top: 6px;
           color: #64748b;
           font-size: 14px;
         }
 
+        .refresh-btn {
+          border: none;
+          background: #0f172a;
+          color: white;
+          padding: 10px 24px;
+          border-radius: 30px;
+          cursor: pointer;
+          font-weight: 500;
+          font-size: 13px;
+          transition: background 0.2s;
+        }
+
+        .refresh-btn:hover {
+          background: #1e293b;
+        }
+
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          margin-bottom: 28px;
+        }
+
+        .stats-card {
+          background: white;
+          padding: 20px;
+          border-radius: 16px;
+          border: 1px solid #e2e8f0;
+        }
+
+        .stats-card span {
+          color: #64748b;
+          font-size: 13px;
+        }
+
         .stats-card h2 {
-          margin-top: 10px;
+          margin-top: 8px;
           color: #0f172a;
-          font-size: 30px;
+          font-size: 32px;
+          font-weight: 700;
         }
 
         .table-card {
           background: white;
-          border-radius: 20px;
-          padding: 25px;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+          border-radius: 16px;
+          padding: 24px;
+          border: 1px solid #e2e8f0;
         }
 
         .table-header {
@@ -442,6 +457,8 @@ const ManagingDirector = () => {
         .table-header h2 {
           margin: 0;
           color: #0f172a;
+          font-size: 18px;
+          font-weight: 600;
         }
 
         .table-wrapper {
@@ -454,37 +471,41 @@ const ManagingDirector = () => {
         }
 
         th {
-          background: #0f172a;
-          color: white;
-          padding: 15px;
+          background: #f8fafc;
+          color: #334155;
+          padding: 14px 12px;
           text-align: left;
-          font-size: 14px;
-        }
-
-        td {
-          padding: 16px;
+          font-size: 13px;
+          font-weight: 600;
           border-bottom: 1px solid #e2e8f0;
         }
 
+        td {
+          padding: 14px 12px;
+          border-bottom: 1px solid #f1f5f9;
+          font-size: 14px;
+          color: #1e293b;
+        }
+
         tr:hover {
-          background: #f8fafc;
+          background: #fafcff;
         }
 
         .client-box {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
         }
 
         .details-btn {
           border: none;
           background: none;
-          color: #7c3aed;
+          color: #3b82f6;
           cursor: pointer;
           text-align: left;
           padding: 0;
-          font-size: 13px;
-          font-weight: 600;
+          font-size: 12px;
+          font-weight: 500;
         }
 
         .details-btn:hover {
@@ -492,23 +513,26 @@ const ManagingDirector = () => {
         }
 
         .amount {
-          color: #16a34a;
-          font-weight: 700;
+          color: #10b981;
+          font-weight: 600;
         }
 
         .loan-type {
           background: #e2e8f0;
-          padding: 6px 12px;
-          border-radius: 999px;
+          padding: 4px 12px;
+          border-radius: 30px;
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 500;
+          color: #475569;
+          display: inline-block;
         }
 
         .status {
-          padding: 6px 14px;
-          border-radius: 999px;
+          padding: 4px 12px;
+          border-radius: 30px;
           font-size: 12px;
-          font-weight: 700;
+          font-weight: 500;
+          display: inline-block;
         }
 
         .status.md {
@@ -518,31 +542,33 @@ const ManagingDirector = () => {
 
         .action-buttons {
           display: flex;
-          gap: 10px;
+          gap: 8px;
         }
 
         .approve-btn {
           border: none;
-          background: #22c55e;
+          background: #10b981;
           color: white;
-          padding: 10px 14px;
-          border-radius: 10px;
+          padding: 6px 14px;
+          border-radius: 8px;
           cursor: pointer;
-          font-weight: 600;
+          font-weight: 500;
+          font-size: 12px;
         }
 
         .approve-btn:hover {
-          background: #16a34a;
+          background: #059669;
         }
 
         .reject-btn {
           border: none;
           background: #ef4444;
           color: white;
-          padding: 10px 14px;
-          border-radius: 10px;
+          padding: 6px 14px;
+          border-radius: 8px;
           cursor: pointer;
-          font-weight: 600;
+          font-weight: 500;
+          font-size: 12px;
         }
 
         .reject-btn:hover {
@@ -558,13 +584,18 @@ const ManagingDirector = () => {
         .empty-box h3 {
           margin-bottom: 8px;
           color: #0f172a;
+          font-weight: 500;
+        }
+
+        .empty-box p {
+          font-size: 14px;
         }
 
         /* MODALS */
         .modal-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.7);
+          background: rgba(0, 0, 0, 0.5);
           display: flex;
           justify-content: center;
           align-items: center;
@@ -576,8 +607,8 @@ const ManagingDirector = () => {
           background: white;
           width: 500px;
           max-width: 100%;
-          border-radius: 20px;
-          padding: 25px;
+          border-radius: 24px;
+          padding: 28px;
         }
 
         .approve-modal, .success-modal, .error-modal {
@@ -585,22 +616,18 @@ const ManagingDirector = () => {
         }
 
         .details-modal {
-          width: 950px;
+          width: 900px;
           max-width: 100%;
-          max-height: 92vh;
+          max-height: 90vh;
           overflow-y: auto;
-        }
-
-        .modal-icon {
-          font-size: 50px;
-          text-align: center;
-          margin-bottom: 10px;
         }
 
         .modal h2 {
           margin-top: 0;
           margin-bottom: 10px;
           color: #0f172a;
+          font-size: 22px;
+          font-weight: 700;
           text-align: center;
         }
 
@@ -614,7 +641,7 @@ const ManagingDirector = () => {
           color: #dc2626;
           font-size: 13px;
           background: #fef2f2;
-          padding: 8px;
+          padding: 10px;
           border-radius: 8px;
           margin-top: 10px;
           text-align: center;
@@ -622,31 +649,31 @@ const ManagingDirector = () => {
 
         .modal-info {
           background: #f8fafc;
-          padding: 15px;
+          padding: 16px;
           border-radius: 12px;
-          margin: 15px 0;
-          text-align: left;
+          margin: 16px 0;
         }
 
         .modal-info p {
-          margin: 5px 0;
+          margin: 6px 0;
           text-align: left;
         }
 
         .modal textarea {
           width: 100%;
-          min-height: 130px;
+          min-height: 120px;
           margin-top: 10px;
-          padding: 15px;
+          padding: 12px;
           border-radius: 12px;
           border: 1px solid #cbd5e1;
-          resize: none;
+          resize: vertical;
           outline: none;
           font-size: 14px;
+          font-family: inherit;
         }
 
         .modal textarea:focus {
-          border-color: #7c3aed;
+          border-color: #3b82f6;
         }
 
         .modal-actions {
@@ -659,7 +686,7 @@ const ManagingDirector = () => {
         .cancel-btn {
           border: none;
           background: #e2e8f0;
-          padding: 10px 20px;
+          padding: 10px 18px;
           border-radius: 10px;
           cursor: pointer;
           font-weight: 500;
@@ -673,7 +700,7 @@ const ManagingDirector = () => {
           border: none;
           background: #ef4444;
           color: white;
-          padding: 10px 20px;
+          padding: 10px 18px;
           border-radius: 10px;
           cursor: pointer;
           font-weight: 500;
@@ -685,16 +712,16 @@ const ManagingDirector = () => {
 
         .approve-confirm-btn {
           border: none;
-          background: #22c55e;
+          background: #10b981;
           color: white;
-          padding: 10px 20px;
+          padding: 10px 18px;
           border-radius: 10px;
           cursor: pointer;
           font-weight: 500;
         }
 
         .approve-confirm-btn:hover {
-          background: #16a34a;
+          background: #059669;
         }
 
         .success-close-btn {
@@ -722,25 +749,32 @@ const ManagingDirector = () => {
           justify-content: space-between;
           align-items: flex-start;
           border-bottom: 1px solid #e2e8f0;
-          padding-bottom: 18px;
-          margin-bottom: 25px;
+          padding-bottom: 16px;
+          margin-bottom: 24px;
+        }
+
+        .details-header h2 {
+          text-align: left;
+          margin-bottom: 6px;
         }
 
         .details-header p {
           color: #64748b;
-          margin-top: 8px;
-          font-size: 14px;
+          margin-top: 6px;
+          font-size: 13px;
+          text-align: left;
         }
 
         .close-btn {
           border: none;
           background: #ef4444;
           color: white;
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
           cursor: pointer;
           font-weight: bold;
+          font-size: 20px;
         }
 
         .close-btn:hover {
@@ -748,127 +782,118 @@ const ManagingDirector = () => {
         }
 
         .details-section {
-          margin-bottom: 25px;
+          margin-bottom: 24px;
         }
 
         .details-section h3 {
-          margin-bottom: 18px;
+          margin-bottom: 16px;
           color: #0f172a;
+          font-size: 16px;
+          font-weight: 600;
+          padding-bottom: 8px;
+          border-bottom: 1px solid #e2e8f0;
         }
 
         .details-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 15px;
         }
 
         .detail-card {
           background: #f8fafc;
-          padding: 18px;
-          border-radius: 16px;
+          padding: 16px;
+          border-radius: 12px;
           border: 1px solid #e2e8f0;
         }
 
         .detail-card span {
           display: block;
           color: #64748b;
-          font-size: 13px;
-          margin-bottom: 8px;
+          font-size: 12px;
+          margin-bottom: 6px;
         }
 
         .detail-card strong {
           color: #0f172a;
+          font-size: 14px;
         }
 
         .application-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 15px;
         }
 
         .application-card {
           background: #f8fafc;
           border: 1px solid #e2e8f0;
-          border-radius: 16px;
-          padding: 18px;
-          transition: 0.2s;
-        }
-
-        .application-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+          border-radius: 12px;
+          padding: 14px;
         }
 
         .application-card span {
           display: block;
           color: #64748b;
-          font-size: 13px;
-          margin-bottom: 8px;
+          font-size: 11px;
+          margin-bottom: 6px;
         }
 
         .application-card strong {
           color: #0f172a;
-          line-height: 1.6;
+          font-size: 13px;
           word-break: break-word;
         }
 
         .reason-box {
-          margin-top: 25px;
+          margin-top: 24px;
           background: #fef2f2;
           border: 1px solid #fecaca;
-          padding: 20px;
-          border-radius: 16px;
+          padding: 16px;
+          border-radius: 12px;
         }
 
         .reason-box h3 {
           margin-top: 0;
           color: #dc2626;
+          font-size: 14px;
+          font-weight: 600;
         }
 
         .reason-box p {
           color: #7f1d1d;
-          line-height: 1.7;
+          margin-top: 8px;
+          font-size: 13px;
+          text-align: left;
         }
 
         @media (max-width: 768px) {
           .md-page {
-            padding: 15px;
+            padding: 70px 16px 16px 16px;
           }
-
           .top-header {
             flex-direction: column;
             align-items: flex-start;
           }
-
           .action-buttons {
             flex-direction: column;
           }
-
-          .details-grid,
-          .application-grid {
-            grid-template-columns: 1fr;
-          }
-
           .stats-grid {
             grid-template-columns: 1fr;
             gap: 12px;
           }
-
+          .details-grid,
+          .application-grid {
+            grid-template-columns: 1fr;
+          }
           .stats-card {
-            padding: 18px;
+            padding: 16px;
           }
-
           .stats-card h2 {
-            font-size: 24px;
+            font-size: 28px;
           }
-
           th, td {
-            padding: 10px;
-          }
-
-          .modal {
-            width: 95%;
-            padding: 20px;
+            padding: 10px 8px;
           }
         }
       `}</style>

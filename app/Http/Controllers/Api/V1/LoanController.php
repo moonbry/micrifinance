@@ -77,7 +77,7 @@ class LoanController extends Controller
         return Loan::findOrFail($id);
     }
 
-    // APPROVE LOAN (moves to next level) - ILIYOREKEBISHWA
+    // APPROVE LOAN (moves to next level)
     public function approve(Request $request, $id)
     {
         $loan = Loan::findOrFail($id);
@@ -90,7 +90,7 @@ class LoanController extends Controller
             $loan->status = 'approved';
             $loan->approved_at = now();
             
-            // ✅ ONGEZA HIZI - SET PAYMENT STATUS KWA LOAN ILIYO APPROVED
+            // Set payment status for approved loan
             $loan->payment_status = 'pending';
             $loan->remaining_balance = $loan->amount;
             $loan->total_paid = 0;
@@ -149,12 +149,43 @@ class LoanController extends Controller
 
     // ========== REPAYMENT METHODS ==========
     
-    // GET LOANS WITH REPAYMENT STATUS (Active Loans) - ILIYOREKEBISHWA
+    // GET ACTIVE LOANS
     public function activeLoans()
-{
-    $loans = Loan::where('status', 'approved')->get();
-    return response()->json($loans);
-}
+    {
+        $loans = Loan::where('status', 'approved')
+            ->where(function($query) {
+                $query->where('payment_status', '!=', 'completed')
+                      ->orWhereNull('payment_status');
+            })
+            ->get();
+        
+        // Round numbers to remove decimals
+        foreach ($loans as $loan) {
+            $loan->amount = round($loan->amount);
+            $loan->total_paid = round($loan->total_paid ?? 0);
+            $loan->remaining_balance = round($loan->remaining_balance ?? $loan->amount);
+        }
+        
+        return response()->json($loans);
+    }
+
+    // GET COMPLETED LOANS
+    public function completedLoans()
+    {
+        $loans = Loan::where('payment_status', 'completed')
+            ->orWhere('remaining_balance', '<=', 0)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+        
+        // Round numbers to remove decimals
+        foreach ($loans as $loan) {
+            $loan->amount = round($loan->amount);
+            $loan->total_paid = round($loan->total_paid ?? $loan->amount);
+            $loan->remaining_balance = 0;
+        }
+        
+        return response()->json($loans);
+    }
 
     // GET LOAN REPAYMENT HISTORY
     public function repaymentHistory($id)
@@ -170,8 +201,8 @@ class LoanController extends Controller
             return response()->json([
                 'loan' => $loan,
                 'repayments' => $loan->repayments()->orderBy('payment_date', 'desc')->get(),
-                'total_paid' => $loan->total_paid ?? 0,
-                'remaining_balance' => $loan->remaining_balance ?? $loan->amount,
+                'total_paid' => round($loan->total_paid ?? 0),
+                'remaining_balance' => round($loan->remaining_balance ?? $loan->amount),
                 'progress_percentage' => $progressPercentage,
             ]);
         } catch (\Exception $e) {
@@ -183,7 +214,7 @@ class LoanController extends Controller
         }
     }
 
-    // RECORD A REPAYMENT
+    // RECORD A REPAYMENT - FIXED DECIMAL ISSUE
     public function recordRepayment(Request $request, $id)
     {
         try {
@@ -197,8 +228,12 @@ class LoanController extends Controller
 
             $loan = Loan::findOrFail($id);
             
-            $remaining = $loan->remaining_balance ?? ($loan->amount - ($loan->total_paid ?? 0));
-            if ($request->amount > $remaining) {
+            // FIX: Round amount to remove decimals
+            $amount = round($request->amount);
+            $currentPaid = round($loan->total_paid ?? 0);
+            $remaining = round($loan->remaining_balance ?? ($loan->amount - $currentPaid));
+            
+            if ($amount > $remaining) {
                 return response()->json([
                     'error' => 'Payment amount exceeds remaining balance',
                     'remaining_balance' => $remaining
@@ -207,7 +242,7 @@ class LoanController extends Controller
 
             $repayment = Repayment::create([
                 'loan_id' => $loan->id,
-                'amount' => $request->amount,
+                'amount' => $amount,
                 'payment_date' => $request->payment_date,
                 'payment_method' => $request->payment_method,
                 'transaction_id' => $request->transaction_id,
@@ -217,12 +252,14 @@ class LoanController extends Controller
                 'recorded_by' => auth()->id(),
             ]);
 
-            $loan->total_paid = ($loan->total_paid ?? 0) + $request->amount;
-            $loan->remaining_balance = $loan->amount - $loan->total_paid;
+            // FIX: Round all calculations
+            $loan->total_paid = round(($loan->total_paid ?? 0) + $amount);
+            $loan->remaining_balance = round($loan->amount - $loan->total_paid);
             
             if ($loan->remaining_balance <= 0) {
                 $loan->payment_status = 'completed';
                 $loan->status = 'completed';
+                $loan->completed_at = now();
             } else {
                 $loan->payment_status = 'partial';
             }
@@ -243,40 +280,40 @@ class LoanController extends Controller
         }
     }
 
-    // GET REPAYMENT SUMMARY (DASHBOARD)
+    // GET REPAYMENT SUMMARY - FIXED DECIMAL ISSUE
     public function repaymentSummary()
-{
-    try {
-        $totalDisbursed = Loan::where('status', 'approved')->sum('amount');
-        $totalRepaid = Loan::where('status', 'approved')->sum('total_paid');
-        $outstanding = $totalDisbursed - $totalRepaid;
-        
-        $activeLoans = Loan::where('status', 'approved')
-            ->whereIn('payment_status', ['pending', 'partial'])
-            ->count();
-        
-        $completedLoans = Loan::where('payment_status', 'completed')->count();
-        
-        return response()->json([
-            'total_disbursed' => (float)$totalDisbursed,
-            'total_repaid' => (float)$totalRepaid,
-            'outstanding' => (float)$outstanding,
-            'repayment_rate' => $totalDisbursed > 0 ? round(($totalRepaid / $totalDisbursed) * 100, 2) : 0,
-            'active_loans' => $activeLoans,
-            'completed_loans' => $completedLoans,
-            'overdue_loans' => 0,
-        ]);
-    } catch (\Exception $e) {
-        \Log::error('repaymentSummary error: ' . $e->getMessage());
-        return response()->json([
-            'total_disbursed' => 0,
-            'total_repaid' => 0,
-            'outstanding' => 0,
-            'repayment_rate' => 0,
-            'active_loans' => 0,
-            'completed_loans' => 0,
-            'overdue_loans' => 0,
-        ]);
+    {
+        try {
+            $totalDisbursed = round(Loan::where('status', 'approved')->sum('amount'));
+            $totalRepaid = round(Loan::where('status', 'approved')->sum('total_paid'));
+            $outstanding = $totalDisbursed - $totalRepaid;
+            
+            $activeLoans = Loan::where('status', 'approved')
+                ->whereIn('payment_status', ['pending', 'partial'])
+                ->count();
+            
+            $completedLoans = Loan::where('payment_status', 'completed')->count();
+            
+            return response()->json([
+                'total_disbursed' => (float)$totalDisbursed,
+                'total_repaid' => (float)$totalRepaid,
+                'outstanding' => (float)$outstanding,
+                'repayment_rate' => $totalDisbursed > 0 ? round(($totalRepaid / $totalDisbursed) * 100, 2) : 0,
+                'active_loans' => $activeLoans,
+                'completed_loans' => $completedLoans,
+                'overdue_loans' => 0,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('repaymentSummary error: ' . $e->getMessage());
+            return response()->json([
+                'total_disbursed' => 0,
+                'total_repaid' => 0,
+                'outstanding' => 0,
+                'repayment_rate' => 0,
+                'active_loans' => 0,
+                'completed_loans' => 0,
+                'overdue_loans' => 0,
+            ]);
+        }
     }
-}
 }
