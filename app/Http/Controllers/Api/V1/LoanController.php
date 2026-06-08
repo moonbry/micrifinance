@@ -316,4 +316,21 @@ class LoanController extends Controller
             ]);
         }
     }
+
+
+    public function uploadPassport(Request $request)
+{
+    $request->validate([
+        'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        'applicant_name' => 'nullable|string'
+    ]);
+    
+    $file = $request->file('photo');
+    $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9]/', '_', $request->applicant_name ?? 'applicant') . '.' . $file->getClientOriginalExtension();
+    $path = $file->storeAs('passports', $filename, 'public');
+    
+    return response()->json([
+        'photo_url' => Storage::url($path)
+    ]);
+}
 }

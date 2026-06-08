@@ -52,6 +52,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/loans/gm', [LoanController::class, 'gmLoans']);
     Route::get('/loans/md', [LoanController::class, 'mdLoans']);
     
+    // ✅ ROUTE YA UPLOAD PASSPORT PHOTO - Kwa ajili ya kupakia picha ya passport
+    Route::post('/upload/passport', [LoanController::class, 'uploadPassport']);
+    
     // ✅ ROUTE YA PARAMETER - IWE MWISHO (HII INACHUKUA ID YOYOTE)
     Route::get('/loans/{id}', [LoanController::class, 'show']);
     
@@ -84,6 +87,8 @@ Route::prefix('v1')->group(function () {
         Route::put('/users/{id}', [UserController::class, 'update']);
         Route::delete('/users/{id}', [UserController::class, 'destroy']);
     });
+
+    
 });
 
 // ========== FALLBACK ROUTE FOR AUTH REDIRECTS ==========
