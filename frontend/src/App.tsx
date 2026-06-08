@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import Login from "./pages/Login";
@@ -49,194 +49,197 @@ axios.interceptors.response.use(
   }
 );
 
-/* =========================
-   HOME PAGE (ULTRA MODERN - REDESIGNED)
-========================= */
-function Home() {
-  const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+// =========================
+// MICROFINANCE CALCULATOR COMPONENT
+// =========================
+function MicrofinanceCalculator() {
+  const [loanAmount, setLoanAmount] = useState<number>(1000000);
+  const [loanPeriod, setLoanPeriod] = useState<number>(12);
+  const [repaymentFrequency, setRepaymentFrequency] = useState<string>("Monthly");
+  const [interestType, setInterestType] = useState<string>("Declining Balance");
+  const [interestRate, setInterestRate] = useState<number>(3);
+  const [processingFee, setProcessingFee] = useState<number>(2);
+  const [startDate, setStartDate] = useState<string>("2026-06-27");
+  const [monthlyPayment, setMonthlyPayment] = useState<number>(0);
+  const [totalPayment, setTotalPayment] = useState<number>(0);
+  const [totalInterest, setTotalInterest] = useState<number>(0);
+  const [totalFee, setTotalFee] = useState<number>(0);
 
   useEffect(() => {
-    setStatus("loading");
-    axios
-      .get("http://127.0.0.1:8000/api/test")
-      .then((res) => {
-        setMessage(res.data.message);
-        setStatus("success");
-      })
-      .catch((err) => {
-        console.log(err);
-        setStatus("error");
-      });
-  }, []);
+    calculateLoan();
+  }, [loanAmount, loanPeriod, interestRate, processingFee, interestType]);
+
+  const calculateLoan = () => {
+    let monthlyRate = interestRate / 100;
+    let monthly = 0;
+    
+    if (interestType === "Declining Balance") {
+      monthlyRate = interestRate / 100;
+      if (monthlyRate > 0) {
+        monthly = loanAmount * monthlyRate * Math.pow(1 + monthlyRate, loanPeriod) / (Math.pow(1 + monthlyRate, loanPeriod) - 1);
+      } else {
+        monthly = loanAmount / loanPeriod;
+      }
+    } else {
+      const totalInterestFlat = loanAmount * (interestRate / 100) * loanPeriod;
+      monthly = (loanAmount + totalInterestFlat) / loanPeriod;
+    }
+    
+    const totalLoanPayment = monthly * loanPeriod;
+    const interest = totalLoanPayment - loanAmount;
+    const fee = (loanAmount * processingFee) / 100;
+    
+    setMonthlyPayment(monthly);
+    setTotalPayment(totalLoanPayment + fee);
+    setTotalInterest(interest);
+    setTotalFee(fee);
+  };
+
+  const formatMoney = (value: number) => {
+    return new Intl.NumberFormat('sw-TZ', {
+      style: 'currency',
+      currency: 'TZS',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value);
+  };
+
+  const exportToPDF = () => {
+    alert("PDF Export feature will be available soon!");
+  };
 
   return (
-    <div className="home">
-      {/* Animated gradient background */}
-      <div className="animated-bg"></div>
+    <div className="main-calculator">
+      <div className="calc-header">
+        <h1>MICROFINANCE CALCULATOR</h1>
+      </div>
       
-      {/* Floating particles */}
-      <div className="particles">
-        {[...Array(20)].map((_, i) => (
-          <div key={i} className="particle" style={{ animationDelay: `${i * 1.5}s` }}></div>
-        ))}
+      <div className="calc-form">
+        <div className="form-grid">
+          <div className="field-group">
+            <label>Loan Amount (TZS)</label>
+            <input 
+              type="text" 
+              value={formatMoney(loanAmount)} 
+              onChange={(e) => {
+                const val = e.target.value.replace(/[^0-9]/g, '');
+                setLoanAmount(Number(val) || 0);
+              }}
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Loan Period</label>
+            <input 
+              type="number" 
+              value={loanPeriod} 
+              onChange={(e) => setLoanPeriod(Number(e.target.value))}
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Repayment Frequency</label>
+            <select value={repaymentFrequency} onChange={(e) => setRepaymentFrequency(e.target.value)}>
+              <option>Monthly</option>
+              <option>Weekly</option>
+              <option>Bi-Weekly</option>
+              <option>Quarterly</option>
+            </select>
+          </div>
+
+          <div className="field-group">
+            <label>Interest Type</label>
+            <select value={interestType} onChange={(e) => setInterestType(e.target.value)}>
+              <option>Declining Balance</option>
+              <option>Flat Rate</option>
+            </select>
+          </div>
+
+          <div className="field-group">
+            <label>Interest Rate (% per month)</label>
+            <input 
+              type="number" 
+              step="0.1"
+              value={interestRate} 
+              onChange={(e) => setInterestRate(Number(e.target.value))}
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Processing Fee (%)</label>
+            <input 
+              type="number" 
+              step="0.5"
+              value={processingFee} 
+              onChange={(e) => setProcessingFee(Number(e.target.value))}
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Start Date</label>
+            <input 
+              type="date" 
+              value={startDate} 
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
+
+          <div className="field-group buttons">
+            <button className="btn-calculate" onClick={calculateLoan}>Calculate</button>
+            <button className="btn-export" onClick={exportToPDF}>Export PDF</button>
+          </div>
+        </div>
       </div>
 
-      {/* Glow orbs */}
-      <div className="glow-orb glow-orb-1"></div>
-      <div className="glow-orb glow-orb-2"></div>
-      <div className="glow-orb glow-orb-3"></div>
-      <div className="glow-orb glow-orb-4"></div>
+      <div className="calc-results">
+        <div className="result-card">
+          <div className="result-label">Monthly Payment</div>
+          <div className="result-value">{formatMoney(monthlyPayment)}</div>
+        </div>
+        <div className="result-card">
+          <div className="result-label">Total Payment</div>
+          <div className="result-value">{formatMoney(totalPayment)}</div>
+        </div>
+        <div className="result-card">
+          <div className="result-label">Total Interest</div>
+          <div className="result-value">{formatMoney(totalInterest)}</div>
+        </div>
+        <div className="result-card">
+          <div className="result-label">Processing Fee</div>
+          <div className="result-value">{formatMoney(totalFee)}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-      {/* Grid pattern overlay */}
-      <div className="grid-overlay"></div>
+// =========================
+// HOME PAGE (LANDING PAGE)
+// =========================
+function Home() {
+  return (
+    <div className="landing-page">
+      {/* Top Navigation */}
+      <div className="top-nav">
+        <div className="logo">
+          <span className="logo-icon">🏦</span>
+          <span className="logo-text">Orethan Microfinance</span>
+        </div>
+        <div className="nav-links">
+          <Link to="/login" className="login-btn">Login</Link>
+          <Link to="/register" className="register-btn">Get Started</Link>
+        </div>
+      </div>
 
-      <main className="home__wrap">
-        {/* Hero Section */}
-        <section className="home__hero">
-          <div className="home__badge">
-            <span className="badge-pulse"></span>
-            <span className="badge-text">Next-Gen Microfinance</span>
-          </div>
-          
-          <h1 className="home__title">
-            Empowering Communities
-            <span className="title-gradient"> Through Smart Lending</span>
-          </h1>
-          
-          <p className="home__subtitle">
-            Transform your microfinance operations with our cutting-edge platform. 
-            Manage loans, track members, and generate insights in real-time.
-          </p>
+      {/* Calculator Section */}
+      <div className="calculator-section">
+        <MicrofinanceCalculator />
+      </div>
 
-          {/* CTA Buttons */}
-          <div className="hero-buttons">
-            <Link to="/login" className="btn-primary">
-              <span>Get Started</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </Link>
-            <Link to="/register" className="btn-secondary">
-              <span>Create Account</span>
-            </Link>
-          </div>
-
-          {/* Features Grid */}
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">🔒</div>
-              <div className="feature-content">
-                <h3>Bank-Grade Security</h3>
-                <p>Your data is protected with enterprise-level encryption and security protocols.</p>
-              </div>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">⚡</div>
-              <div className="feature-content">
-                <h3>Lightning Fast</h3>
-                <p>Process loan applications and approvals in minutes, not days.</p>
-              </div>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">📊</div>
-              <div className="feature-content">
-                <h3>Real-time Analytics</h3>
-                <p>Get instant insights and reports to make data-driven decisions.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Stats Section */}
-          <div className="stats-section">
-            <div className="stat-item">
-              <div className="stat-number">500+</div>
-              <div className="stat-label">Active Clients</div>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <div className="stat-number">₦2.5B+</div>
-              <div className="stat-label">Loans Disbursed</div>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <div className="stat-number">98%</div>
-              <div className="stat-label">Satisfaction Rate</div>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <div className="stat-number">24/7</div>
-              <div className="stat-label">Support Available</div>
-            </div>
-          </div>
-        </section>
-
-        {/* Right Panel - Interactive Section */}
-        <section className="home__panel">
-          <div className="panel-glow"></div>
-          
-          <div className="panel-header">
-            <div className="panel-icon">✨</div>
-            <h2>Ready to transform your lending?</h2>
-            <p>Join thousands of satisfied users managing their microfinance operations efficiently</p>
-          </div>
-
-          {/* Server Status */}
-          <div className="server-status">
-            <div className="status-indicator">
-              <div className={`status-dot ${status}`}></div>
-              <span className="status-text">
-                {status === "loading" && "Connecting to server..."}
-                {status === "success" && "Connected to server"}
-                {status === "error" && "Server connection issue"}
-              </span>
-            </div>
-            {status === "success" && message && (
-              <div className="status-message">{message}</div>
-            )}
-          </div>
-
-          {/* Benefits List */}
-          <div className="benefits-list">
-            <div className="benefit-item">
-              <div className="benefit-icon">✅</div>
-              <div className="benefit-content">
-                <h4>Automated Workflows</h4>
-                <p>Streamline loan approval processes with multi-stage verification</p>
-              </div>
-            </div>
-            <div className="benefit-item">
-              <div className="benefit-icon">👥</div>
-              <div className="benefit-content">
-                <h4>Role-Based Access</h4>
-                <p>Loan officers, managers, and directors each have dedicated interfaces</p>
-              </div>
-            </div>
-            <div className="benefit-item">
-              <div className="benefit-icon">📱</div>
-              <div className="benefit-content">
-                <h4>Mobile Responsive</h4>
-                <p>Access your dashboard from any device, anywhere</p>
-              </div>
-            </div>
-            <div className="benefit-item">
-              <div className="benefit-icon">🔄</div>
-              <div className="benefit-content">
-                <h4>Real-time Updates</h4>
-                <p>Instant notifications on loan status changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Trust Badges */}
-          <div className="trust-badges">
-            <span>🏦 Trusted by Banks</span>
-            <span>🏛️ SACCOS</span>
-            <span>🏢 Microfinance Institutions</span>
-            <span>👥 Community Groups</span>
-          </div>
-        </section>
-      </main>
+      {/* Footer */}
+      <div className="footer">
+        <p>© 2026 Orethan Microfinance. All rights reserved.</p>
+      </div>
 
       <style>{`
         * {
@@ -245,578 +248,289 @@ function Home() {
           box-sizing: border-box;
         }
 
-        .home {
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Landing Page */
+        .landing-page {
           min-height: 100vh;
-          color: #e5e7eb;
-          position: relative;
-          overflow-x: hidden;
-          font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        /* Animated Gradient Background */
-        .animated-bg {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(135deg, #0a0a2a 0%, #1a1a4a 25%, #2d2b55 50%, #1a1a4a 75%, #0a0a2a 100%);
-          background-size: 400% 400%;
-          animation: gradientMove 20s ease infinite;
-          z-index: -3;
-        }
-
-        @keyframes gradientMove {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        /* Grid Overlay */
-        .grid-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-          background-size: 50px 50px;
-          z-index: -2;
-          pointer-events: none;
-        }
-
-        /* Particles */
-        .particles {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: -1;
-          pointer-events: none;
-        }
-
-        .particle {
-          position: absolute;
-          background: linear-gradient(135deg, rgba(96,165,250,0.3), rgba(168,85,247,0.3));
-          border-radius: 50%;
-          animation: floatParticle 15s ease-in-out infinite;
-        }
-
-        .particle:nth-child(1) { width: 100px; height: 100px; top: 10%; left: 5%; animation-duration: 20s; }
-        .particle:nth-child(2) { width: 150px; height: 150px; top: 60%; left: 85%; animation-duration: 25s; }
-        .particle:nth-child(3) { width: 70px; height: 70px; top: 75%; left: 15%; animation-duration: 18s; }
-        .particle:nth-child(4) { width: 120px; height: 120px; top: 20%; left: 80%; animation-duration: 22s; }
-        .particle:nth-child(5) { width: 60px; height: 60px; top: 40%; left: 45%; animation-duration: 28s; }
-        .particle:nth-child(6) { width: 90px; height: 90px; top: 85%; left: 50%; animation-duration: 30s; }
-        .particle:nth-child(7) { width: 80px; height: 80px; top: 30%; left: 25%; animation-duration: 35s; }
-        .particle:nth-child(8) { width: 50px; height: 50px; top: 50%; left: 65%; animation-duration: 15s; }
-        .particle:nth-child(9) { width: 130px; height: 130px; top: 15%; left: 55%; animation-duration: 40s; }
-        .particle:nth-child(10) { width: 40px; height: 40px; top: 70%; left: 35%; animation-duration: 12s; }
-        .particle:nth-child(11) { width: 110px; height: 110px; top: 45%; left: 10%; animation-duration: 32s; }
-        .particle:nth-child(12) { width: 85px; height: 85px; top: 5%; left: 70%; animation-duration: 26s; }
-        .particle:nth-child(13) { width: 65px; height: 65px; top: 55%; left: 90%; animation-duration: 38s; }
-        .particle:nth-child(14) { width: 95px; height: 95px; top: 80%; left: 20%; animation-duration: 24s; }
-        .particle:nth-child(15) { width: 45px; height: 45px; top: 25%; left: 40%; animation-duration: 16s; }
-        .particle:nth-child(16) { width: 75px; height: 75px; top: 90%; left: 75%; animation-duration: 34s; }
-        .particle:nth-child(17) { width: 55px; height: 55px; top: 35%; left: 95%; animation-duration: 29s; }
-        .particle:nth-child(18) { width: 105px; height: 105px; top: 10%; left: 35%; animation-duration: 23s; }
-        .particle:nth-child(19) { width: 35px; height: 35px; top: 65%; left: 5%; animation-duration: 27s; }
-        .particle:nth-child(20) { width: 115px; height: 115px; top: 5%; left: 95%; animation-duration: 31s; }
-
-        @keyframes floatParticle {
-          0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.4; }
-          25% { transform: translateY(-40px) translateX(25px) rotate(5deg); opacity: 0.7; }
-          50% { transform: translateY(30px) translateX(-20px) rotate(-5deg); opacity: 0.5; }
-          75% { transform: translateY(-15px) translateX(15px) rotate(3deg); opacity: 0.6; }
-        }
-
-        /* Glow Orbs */
-        .glow-orb {
-          position: fixed;
-          border-radius: 50%;
-          filter: blur(100px);
-          opacity: 0.35;
-          z-index: -2;
-          animation: orbPulse 10s ease-in-out infinite;
-        }
-
-        .glow-orb-1 {
-          width: 500px;
-          height: 500px;
-          background: #6366f1;
-          top: -150px;
-          left: -200px;
-        }
-
-        .glow-orb-2 {
-          width: 600px;
-          height: 600px;
-          background: #8b5cf6;
-          bottom: -200px;
-          right: -150px;
-          animation-delay: -4s;
-        }
-
-        .glow-orb-3 {
-          width: 350px;
-          height: 350px;
-          background: #06b6d4;
-          top: 40%;
-          left: 35%;
-          animation-delay: -7s;
-        }
-
-        .glow-orb-4 {
-          width: 450px;
-          height: 450px;
-          background: #10b981;
-          bottom: 30%;
-          left: 10%;
-          animation-delay: -2s;
-        }
-
-        @keyframes orbPulse {
-          0%, 100% { transform: scale(1); opacity: 0.25; }
-          50% { transform: scale(1.15); opacity: 0.4; }
-        }
-
-        /* Main Container */
-        .home__wrap {
-          position: relative;
-          min-height: 100vh;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 48px;
-          align-items: center;
-          padding: 60px 48px;
-          max-width: 1400px;
-          margin: 0 auto;
-          z-index: 1;
-        }
-
-        /* Hero Section */
-        .home__hero {
-          padding: 20px 0;
-        }
-
-        .home__badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-          padding: 8px 20px;
-          border-radius: 100px;
-          background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255,255,255,0.15);
-          margin-bottom: 32px;
-        }
-
-        .badge-pulse {
-          width: 8px;
-          height: 8px;
-          background: #10b981;
-          border-radius: 50%;
-          animation: badgePulse 1.5s ease infinite;
-        }
-
-        @keyframes badgePulse {
-          0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
-          50% { opacity: 0.5; transform: scale(1.2); box-shadow: 0 0 0 6px rgba(16,185,129,0); }
-        }
-
-        .badge-text {
-          font-size: 13px;
-          font-weight: 500;
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
-          background: linear-gradient(135deg, #e5e7eb, #9ca3af);
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-        }
-
-        .home__title {
-          font-size: clamp(42px, 5.5vw, 68px);
-          line-height: 1.1;
-          letter-spacing: -0.03em;
-          margin-bottom: 24px;
-          font-weight: 800;
-        }
-
-        .home__title .title-gradient {
-          background: linear-gradient(135deg, #60a5fa, #34d399, #a78bfa);
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-          display: inline-block;
-        }
-
-        .home__subtitle {
-          font-size: 18px;
-          line-height: 1.6;
-          color: rgba(229,231,235,0.75);
-          max-width: 540px;
-          margin-bottom: 36px;
-        }
-
-        /* Hero Buttons */
-        .hero-buttons {
-          display: flex;
-          gap: 16px;
-          margin-bottom: 56px;
-          flex-wrap: wrap;
-        }
-
-        .btn-primary {
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-          padding: 14px 32px;
-          background: linear-gradient(135deg, #6366f1, #8b5cf6);
-          border-radius: 14px;
-          text-decoration: none;
-          color: white;
-          font-weight: 600;
-          transition: all 0.3s ease;
-        }
-
-        .btn-primary svg {
-          width: 20px;
-          height: 20px;
-          transition: transform 0.3s ease;
-        }
-
-        .btn-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 30px rgba(139,92,246,0.4);
-        }
-
-        .btn-primary:hover svg {
-          transform: translateX(4px);
-        }
-
-        .btn-secondary {
-          display: inline-flex;
-          align-items: center;
-          padding: 14px 32px;
-          background: rgba(255,255,255,0.08);
-          border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 14px;
-          text-decoration: none;
-          color: white;
-          font-weight: 600;
-          transition: all 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-          background: rgba(255,255,255,0.12);
-          border-color: rgba(255,255,255,0.3);
-          transform: translateY(-2px);
-        }
-
-        /* Features Grid */
-        .features-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 16px;
-          margin-bottom: 48px;
-        }
-
-        .feature-card {
-          display: flex;
-          gap: 16px;
-          padding: 20px;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 20px;
-          transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-          background: rgba(255,255,255,0.06);
-          border-color: rgba(255,255,255,0.2);
-          transform: translateX(8px);
-        }
-
-        .feature-icon {
-          font-size: 40px;
-        }
-
-        .feature-content h3 {
-          font-size: 16px;
-          font-weight: 700;
-          margin-bottom: 6px;
-          color: white;
-        }
-
-        .feature-content p {
-          font-size: 13px;
-          color: rgba(229,231,235,0.65);
-          line-height: 1.5;
-        }
-
-        /* Stats Section */
-        .stats-section {
-          display: flex;
-          align-items: center;
-          gap: 24px;
-          padding: 24px 0;
-          border-top: 1px solid rgba(255,255,255,0.1);
-          flex-wrap: wrap;
-        }
-
-        .stat-item {
-          flex: 1;
-        }
-
-        .stat-number {
-          font-size: 28px;
-          font-weight: 800;
-          background: linear-gradient(135deg, #60a5fa, #34d399);
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-        }
-
-        .stat-label {
-          font-size: 12px;
-          color: rgba(229,231,235,0.6);
-          margin-top: 6px;
-        }
-
-        .stat-divider {
-          width: 1px;
-          height: 40px;
-          background: rgba(255,255,255,0.15);
-        }
-
-        /* Right Panel */
-        .home__panel {
-          position: relative;
-          background: rgba(255,255,255,0.04);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255,255,255,0.12);
-          border-radius: 32px;
-          padding: 40px;
-          transition: all 0.3s ease;
-        }
-
-        .home__panel:hover {
-          transform: translateY(-5px);
-          border-color: rgba(255,255,255,0.2);
-          box-shadow: 0 25px 45px rgba(0,0,0,0.3);
-        }
-
-        .panel-glow {
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: radial-gradient(circle, rgba(139,92,246,0.1), transparent);
-          pointer-events: none;
-          opacity: 0;
-          transition: opacity 0.5s ease;
-        }
-
-        .home__panel:hover .panel-glow {
-          opacity: 1;
-        }
-
-        .panel-header {
-          text-align: center;
-          margin-bottom: 32px;
-        }
-
-        .panel-icon {
-          font-size: 48px;
-          margin-bottom: 16px;
-        }
-
-        .panel-header h2 {
-          font-size: 24px;
-          font-weight: 700;
-          margin-bottom: 12px;
-          background: linear-gradient(135deg, #fff, #a78bfa);
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-        }
-
-        .panel-header p {
-          font-size: 14px;
-          color: rgba(229,231,235,0.7);
-          line-height: 1.5;
-        }
-
-        /* Server Status */
-        .server-status {
-          background: rgba(0,0,0,0.3);
-          border-radius: 16px;
-          padding: 20px;
-          margin-bottom: 28px;
-          text-align: center;
-        }
-
-        .status-indicator {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          margin-bottom: 10px;
-        }
-
-        .status-dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          animation: statusPulse 1.5s ease infinite;
-        }
-
-        .status-dot.loading {
-          background: #f59e0b;
-          box-shadow: 0 0 0 0 rgba(245,158,11,0.7);
-        }
-
-        .status-dot.success {
-          background: #10b981;
-          box-shadow: 0 0 0 0 rgba(16,185,129,0.7);
-        }
-
-        .status-dot.error {
-          background: #ef4444;
-          box-shadow: 0 0 0 0 rgba(239,68,68,0.7);
-        }
-
-        @keyframes statusPulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.2); opacity: 0.6; }
-        }
-
-        .status-text {
-          font-size: 13px;
-          color: rgba(229,231,235,0.8);
-        }
-
-        .status-message {
-          font-size: 12px;
-          color: #10b981;
-          margin-top: 8px;
-        }
-
-        /* Benefits List */
-        .benefits-list {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           display: flex;
           flex-direction: column;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 60px;
+          background: rgba(255,255,255,0.1);
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .logo {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .logo-icon {
+          font-size: 28px;
+        }
+
+        .logo-text {
+          font-size: 22px;
+          font-weight: 700;
+          color: white;
+        }
+
+        .nav-links {
+          display: flex;
+          gap: 16px;
+        }
+
+        .login-btn {
+          padding: 10px 28px;
+          background: transparent;
+          border: 1px solid rgba(255,255,255,0.5);
+          border-radius: 40px;
+          color: white;
+          text-decoration: none;
+          font-weight: 600;
+          transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+          background: rgba(255,255,255,0.1);
+          border-color: white;
+        }
+
+        .register-btn {
+          padding: 10px 28px;
+          background: white;
+          border: none;
+          border-radius: 40px;
+          color: #667eea;
+          text-decoration: none;
+          font-weight: 600;
+          transition: all 0.3s;
+        }
+
+        .register-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Calculator Section */
+        .calculator-section {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 40px 60px;
+        }
+
+        /* Main Calculator */
+        .main-calculator {
+          max-width: 1200px;
+          width: 100%;
+          background: white;
+          border-radius: 28px;
+          padding: 32px 40px;
+          box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+
+        .calc-header h1 {
+          text-align: center;
+          font-size: 26px;
+          font-weight: 700;
+          color: #1e293b;
+          margin-bottom: 32px;
+          letter-spacing: -0.5px;
+        }
+
+        /* Form Grid - Horizontal Layout */
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
           gap: 20px;
           margin-bottom: 32px;
         }
 
-        .benefit-item {
+        .field-group {
           display: flex;
-          gap: 16px;
-          padding: 16px;
-          background: rgba(255,255,255,0.02);
-          border-radius: 16px;
-          transition: all 0.3s ease;
+          flex-direction: column;
         }
 
-        .benefit-item:hover {
-          background: rgba(255,255,255,0.05);
-          transform: translateX(5px);
-        }
-
-        .benefit-icon {
-          font-size: 28px;
-        }
-
-        .benefit-content h4 {
-          font-size: 14px;
-          font-weight: 700;
+        .field-group label {
+          font-size: 12px;
+          font-weight: 600;
+          color: #475569;
           margin-bottom: 6px;
-          color: white;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
         }
 
-        .benefit-content p {
-          font-size: 12px;
-          color: rgba(229,231,235,0.6);
+        .field-group input,
+        .field-group select {
+          padding: 12px 14px;
+          border: 1px solid #e2e8f0;
+          border-radius: 12px;
+          font-size: 14px;
+          outline: none;
+          transition: all 0.3s;
+          background: #f8fafc;
         }
 
-        /* Trust Badges */
-        .trust-badges {
+        .field-group input:focus,
+        .field-group select:focus {
+          border-color: #667eea;
+          box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+          background: white;
+        }
+
+        .field-group.buttons {
           display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
+          flex-direction: row;
           gap: 12px;
-          padding-top: 20px;
-          border-top: 1px solid rgba(255,255,255,0.1);
+          margin-top: 22px;
         }
 
-        .trust-badges span {
-          font-size: 12px;
-          padding: 6px 14px;
-          background: rgba(255,255,255,0.05);
-          border-radius: 50px;
-          color: rgba(229,231,235,0.7);
-          transition: all 0.3s ease;
-        }
-
-        .trust-badges span:hover {
-          background: rgba(255,255,255,0.1);
+        .btn-calculate {
+          flex: 1;
+          padding: 12px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border: none;
+          border-radius: 12px;
           color: white;
+          font-weight: 600;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .btn-calculate:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        .btn-export {
+          flex: 1;
+          padding: 12px;
+          background: #f1f5f9;
+          border: 1px solid #e2e8f0;
+          border-radius: 12px;
+          color: #475569;
+          font-weight: 600;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .btn-export:hover {
+          background: #e2e8f0;
+        }
+
+        /* Results */
+        .calc-results {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+          padding-top: 24px;
+          border-top: 1px solid #e2e8f0;
+        }
+
+        .result-card {
+          text-align: center;
+          padding: 16px;
+          background: #f8fafc;
+          border-radius: 16px;
+        }
+
+        .result-label {
+          font-size: 12px;
+          font-weight: 600;
+          color: #64748b;
+          margin-bottom: 8px;
+          text-transform: uppercase;
+        }
+
+        .result-value {
+          font-size: 18px;
+          font-weight: 700;
+          color: #667eea;
+        }
+
+        /* Footer */
+        .footer {
+          text-align: center;
+          padding: 16px;
+          background: rgba(0,0,0,0.1);
+        }
+
+        .footer p {
+          font-size: 12px;
+          color: rgba(255,255,255,0.6);
         }
 
         /* Responsive */
-        @media (max-width: 1100px) {
-          .home__wrap {
-            grid-template-columns: 1fr;
-            gap: 40px;
-            padding: 40px 32px;
+        @media (max-width: 1000px) {
+          .form-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+          .calc-results {
+            grid-template-columns: repeat(2, 1fr);
           }
         }
 
-        @media (max-width: 768px) {
-          .home__wrap {
-            padding: 30px 24px;
-          }
-          .stats-section {
+        @media (max-width: 800px) {
+          .top-nav {
+            padding: 15px 30px;
             flex-direction: column;
-            align-items: flex-start;
-          }
-          .stat-divider {
-            width: 100%;
-            height: 1px;
-          }
-          .home__panel {
-            padding: 28px;
-          }
-          .hero-buttons {
-            flex-direction: column;
-          }
-          .btn-primary, .btn-secondary {
-            justify-content: center;
-          }
-          .home__title {
-            font-size: 36px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .home__wrap {
-            padding: 20px 16px;
-          }
-          .stats-section {
             gap: 15px;
           }
-          .features-grid {
-            gap: 12px;
+          .calculator-section {
+            padding: 30px;
+          }
+          .main-calculator {
+            padding: 24px;
+          }
+          .form-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 600px) {
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+          .calc-results {
+            grid-template-columns: 1fr;
+          }
+          .field-group.buttons {
+            flex-direction: column;
+          }
+          .calc-header h1 {
+            font-size: 20px;
           }
         }
       `}</style>
     </div>
   );
+}
+
+// =========================
+// PROTECTED ROUTE COMPONENT
+// =========================
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return <>{children}</>;
 }
 
 // =========================
@@ -852,91 +566,22 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 // APP ROUTES
 // =========================
 function App() {
-  const token = localStorage.getItem("token");
-
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* HOME PAGE */}
-        <Route
-          path="/"
-          element={
-            token ? (
-              <MainLayout>
-                <Dashboard />
-              </MainLayout>
-            ) : (
-              <Home />
-            )
-          }
-        />
-
-        {/* PUBLIC ROUTES */}
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-        {/* DASHBOARD */}
-        <Route
-          path="/dashboard"
-          element={
-            <MainLayout>
-              <Dashboard />
-            </MainLayout>
-          }
-        />
-
-        {/* OTHER PAGES */}
-        <Route
-          path="/users"
-          element={
-            <MainLayout>
-              <Users />
-            </MainLayout>
-          }
-        />
-
-        <Route path="/personal-loan" element={<PersonalLoan />} />
-
-        <Route path="/group-loan" element={<GroupLoan />} />
-
-        <Route
-          path="/employee-loan"
-          element={
-            <MainLayout>
-              <EmployeeLoan />
-            </MainLayout>
-          }
-        />
-
-        <Route
-          path="/loan-manager"
-          element={
-            <MainLayout>
-              <LoanManager />
-            </MainLayout>
-          }
-        />
-
-        <Route
-          path="/general-manager"
-          element={
-            <MainLayout>
-              <GeneralManager />
-            </MainLayout>
-          }
-        />
-
-        <Route
-          path="/managing-director"
-          element={
-            <MainLayout>
-              <ManagingDirector />
-            </MainLayout>
-          }
-        />
-
-        <Route path="/repayment-tracker" element={<MainLayout><RepaymentTracker /></MainLayout>} />
+        <Route path="/dashboard" element={<ProtectedRoute><MainLayout><Dashboard /></MainLayout></ProtectedRoute>} />
+        <Route path="/users" element={<ProtectedRoute><MainLayout><Users /></MainLayout></ProtectedRoute>} />
+        <Route path="/personal-loan" element={<ProtectedRoute><MainLayout><PersonalLoan /></MainLayout></ProtectedRoute>} />
+        <Route path="/group-loan" element={<ProtectedRoute><MainLayout><GroupLoan /></MainLayout></ProtectedRoute>} />
+        <Route path="/employee-loan" element={<ProtectedRoute><MainLayout><EmployeeLoan /></MainLayout></ProtectedRoute>} />
+        <Route path="/loan-manager" element={<ProtectedRoute><MainLayout><LoanManager /></MainLayout></ProtectedRoute>} />
+        <Route path="/general-manager" element={<ProtectedRoute><MainLayout><GeneralManager /></MainLayout></ProtectedRoute>} />
+        <Route path="/managing-director" element={<ProtectedRoute><MainLayout><ManagingDirector /></MainLayout></ProtectedRoute>} />
+        <Route path="/repayment-tracker" element={<ProtectedRoute><MainLayout><RepaymentTracker /></MainLayout></ProtectedRoute>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
