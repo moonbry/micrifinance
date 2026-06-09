@@ -565,22 +565,95 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 // =========================
 // APP ROUTES
 // =========================
+// =========================
+// APP ROUTES
+// =========================
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* ROOT - Home Page (Landing Page with Calculator) */}
         <Route path="/" element={<Home />} />
+
+        {/* PUBLIC ROUTES */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<ProtectedRoute><MainLayout><Dashboard /></MainLayout></ProtectedRoute>} />
-        <Route path="/users" element={<ProtectedRoute><MainLayout><Users /></MainLayout></ProtectedRoute>} />
-        <Route path="/personal-loan" element={<ProtectedRoute><MainLayout><PersonalLoan /></MainLayout></ProtectedRoute>} />
-        <Route path="/group-loan" element={<ProtectedRoute><MainLayout><GroupLoan /></MainLayout></ProtectedRoute>} />
-        <Route path="/employee-loan" element={<ProtectedRoute><MainLayout><EmployeeLoan /></MainLayout></ProtectedRoute>} />
-        <Route path="/loan-manager" element={<ProtectedRoute><MainLayout><LoanManager /></MainLayout></ProtectedRoute>} />
-        <Route path="/general-manager" element={<ProtectedRoute><MainLayout><GeneralManager /></MainLayout></ProtectedRoute>} />
-        <Route path="/managing-director" element={<ProtectedRoute><MainLayout><ManagingDirector /></MainLayout></ProtectedRoute>} />
-        <Route path="/repayment-tracker" element={<ProtectedRoute><MainLayout><RepaymentTracker /></MainLayout></ProtectedRoute>} />
+
+        {/* ========== FORMS - FULL PAGE (NO SIDEBAR) ========== */}
+        {/* Hizi forms zitaonekana full screen bila sidebar */}
+        <Route path="/personal-loan" element={<PersonalLoan />} />
+        <Route path="/group-loan" element={<GroupLoan />} />
+        <Route path="/employee-loan" element={<EmployeeLoan />} />
+
+        {/* ========== PROTECTED ROUTES - WITH SIDEBAR ========== */}
+        {/* Hizi ni routes zenye sidebar (dashboard, users, managers, n.k) */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Users />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/loan-manager"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <LoanManager />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/general-manager"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <GeneralManager />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/managing-director"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <ManagingDirector />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/repayment-tracker"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <RepaymentTracker />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
