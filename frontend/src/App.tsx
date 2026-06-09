@@ -223,10 +223,17 @@ function Home() {
     <div className="landing-page">
       {/* Top Navigation */}
       <div className="top-nav">
-        <div className="logo">
-          <span className="logo-icon">🏦</span>
-          <span className="logo-text">Orethan Microfinance</span>
+        {/* ========== LOGO SECTION - CLASS ZAKE ZIPO WAZI ========== */}
+        {/* Badilisha class hizi hapa kama unataka kubadilisha style ya logo */}
+        <div className="custom-logo-wrapper">
+          <img 
+            src="/logo.png" 
+            alt="Company Logo" 
+            className="custom-logo-image" 
+          />
         </div>
+        {/* ========== MWISHO WA LOGO SECTION ========== */}
+        
         <div className="nav-links">
           <Link to="/login" className="login-btn">Login</Link>
           <Link to="/register" className="register-btn">Get Started</Link>
@@ -288,21 +295,19 @@ function Home() {
           z-index: 10;
         }
 
-        .logo {
+        /* ========== LOGO CLASSES - ZINAWEZA KUBADILISHWA HAPA ========== */
+        /* Badilisha class hizi hapa kama unataka kubadilisha style ya logo */
+        .custom-logo-wrapper {
           display: flex;
           align-items: center;
-          gap: 10px;
         }
 
-        .logo-icon {
-          font-size: 28px;
+        .custom-logo-image {
+          height: 45px;
+          width: auto;
+          object-fit: contain;
         }
-
-        .logo-text {
-          font-size: 20px;
-          font-weight: 700;
-          color: #0f172a;
-        }
+        /* ========== MWISHO WA LOGO CLASSES ========== */
 
         .nav-links {
           display: flex;
@@ -555,6 +560,9 @@ function Home() {
           .title-circle h1 {
             font-size: 16px;
           }
+          .custom-logo-image {
+            height: 35px;
+          }
         }
 
         @media (max-width: 600px) {
@@ -573,6 +581,9 @@ function Home() {
           }
           .title-circle h1 {
             font-size: 14px;
+          }
+          .custom-logo-image {
+            height: 30px;
           }
         }
       `}</style>

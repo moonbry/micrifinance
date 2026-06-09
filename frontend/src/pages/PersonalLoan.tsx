@@ -22,7 +22,6 @@ function PersonalLoan() {
     kata: "",
     mtaa: "",
     umilikiMakazi: "",
-    umilikiMakaziMengine: "",
     nambaNyumba: "",
     umepanga: "",
     umeishiHapoTanguLini: "",
@@ -72,7 +71,7 @@ function PersonalLoan() {
   });
 
   const steps = [
-    "SEHEMU I: TAARIFA ZA MWOMBAJI",
+    "SEHEMU 1: TAARIFA ZA MWOMBAJI",
     "SEHEMU 2: TAARIFA ZA AJIRA",
     "SEHEMU 3: TAARIFA ZA BIASHARA",
     "SEHEMU 4: KIASI CHA MKOPO",
@@ -179,9 +178,10 @@ function PersonalLoan() {
         <form onSubmit={handleSubmit}>
           <div className="form-scroll">
             
-            {/* SEHEMU I: TAARIFA ZA MWOMBAJI */}
+            {/* SEHEMU 1: TAARIFA ZA MWOMBAJI */}
             {currentStep === 0 && (
               <div className="form-section">
+                <div className="section-divider">SEHEMU I: TAARIFA ZA MWOMBAJI</div>
                 <table className="form-table">
                   <tbody>
                     <tr>
@@ -320,6 +320,7 @@ function PersonalLoan() {
             {/* SEHEMU 2: TAARIFA ZA AJIRA */}
             {currentStep === 1 && (
               <div className="form-section">
+                <div className="section-divider">SEHEMU 2: TAARIFA ZA AJIRA</div>
                 <table className="form-table">
                   <tbody>
                     <tr><td colSpan={6}><strong>Jina la Mwajiri/kampuni</strong></td><td colSpan={6}><strong>Mahali Ofisi ilipo</strong></td></tr>
@@ -338,6 +339,7 @@ function PersonalLoan() {
             {/* SEHEMU 3: TAARIFA ZA BIASHARA */}
             {currentStep === 2 && (
               <div className="form-section">
+                <div className="section-divider">SEHEMU 3: TAARIFA ZA BIASHARA</div>
                 <table className="form-table">
                   <tbody>
                     <tr><td colSpan={6}><strong>Jina la Biashara</strong></td><td colSpan={6}><strong>Aina ya Biashara</strong></td></tr>
@@ -358,6 +360,7 @@ function PersonalLoan() {
             {/* SEHEMU 4: KIASI CHA MKOPO */}
             {currentStep === 3 && (
               <div className="form-section">
+                <div className="section-divider">SEHEMU 4: KIASI CHA MKOPO</div>
                 <table className="form-table">
                   <tbody>
                     <tr><td colSpan={6}><strong>Kiasi cha Mkopo</strong></td><td colSpan={6}><strong>Kwa maneno</strong></td></tr>
@@ -378,6 +381,7 @@ function PersonalLoan() {
             {/* SEHEMU 5: HISTORIA YA MIKOPO */}
             {currentStep === 4 && (
               <div className="form-section">
+                <div className="section-divider">SEHEMU 5: HISTORIA YA MIKOPO</div>
                 <table className="form-table history-table">
                   <thead>
                     <tr><th>Jina la Taasisi</th><th>Ulichukua Mkopo lini</th><th>Kiasi cha mkopo</th><th>Kiasi cha marejesho</th><th>Tarehe za marejesho</th><th>Kiasi kilichobaki</th></tr>
@@ -394,6 +398,7 @@ function PersonalLoan() {
             {/* SEHEMU 6: DHAMANA YA MKOPO */}
             {currentStep === 5 && (
               <div className="form-section">
+                <div className="section-divider">SEHEMU 6: DHAMANA YA MKOPO</div>
                 <table className="form-table">
                   <tbody>
                     <tr><td colSpan={6}><strong>Aina ya dhamana</strong></td><td colSpan={6}><strong>Namba za usajili</strong></td></tr>
@@ -410,13 +415,17 @@ function PersonalLoan() {
             {/* SEHEMU 7: WADHAMINI NO.1 */}
             {currentStep === 6 && (
               <div className="form-section">
-                <h3>NO. 1</h3>
+                <div className="section-divider">SEHEMU 7: TAARIFA ZA WADHAMINI NO.1</div>
                 <table className="form-table">
                   <tbody>
                     <tr><td colSpan={4}><strong>Jina kamili la Mdhamini</strong></td><td colSpan={4}><strong>Mahali Anapoishi</strong></td><td colSpan={4}><strong>Amepanga/ kwake</strong></td></tr>
                     <tr><td colSpan={4}><input type="text" name="wdhamini1JinaKamili" value={form.wdhamini1JinaKamili} onChange={handleChange} /></td><td colSpan={4}><input type="text" name="wdhamini1MahaliAnapoishi" value={form.wdhamini1MahaliAnapoishi} onChange={handleChange} /></td><td colSpan={4}><select name="wdhamini1AmepangaKwake" value={form.wdhamini1AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></td></tr>
                     <tr><td colSpan={4}><strong>Namba ya nyumba</strong></td><td colSpan={4}><strong>Kazi Anayofanya</strong></td><td colSpan={4}><strong>Uhusiano wenu</strong></td></tr>
-                    <tr><td colSpan={4}><input type="text" name="wdhamini1NambaNyumba" value={form.wdhamini1NambaNyumba} onChange={handleChange} /></td><td colSpan={4}><input type="text" name="wdhamini1KaziAnayofanya" value={form.wdhamini1KaziAnayofanya} onChange={handleChange} /></td><td colSpan={4}><input type="text" name="wdhamini1UhusianoWenu" value={form.wdhamini1UhusianoWenu} onChange={handleChange} /></td></tr>
+                    <tr>
+                      <td colSpan={4}><input type="text" name="wdhamini1NambaNyumba" value={form.wdhamini1NambaNyumba} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini1KaziAnayofanya" value={form.wdhamini1KaziAnayofanya} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini1UhusianoWenu" value={form.wdhamini1UhusianoWenu} onChange={handleChange} /></td>
+                    </tr>
                     <tr><td colSpan={4}><strong>Mahali ilipo Ofisi yake</strong></td><td colSpan={4}><strong>Jina la kampuni/ biashara</strong></td><td colSpan={4}><strong>Simu</strong></td></tr>
                     <tr>
                       <td colSpan={4}><input type="text" name="wdhamini1MahaliOfisiYake" value={form.wdhamini1MahaliOfisiYake} onChange={handleChange} /></td>
@@ -431,13 +440,21 @@ function PersonalLoan() {
             {/* SEHEMU 7: WADHAMINI NO.2 */}
             {currentStep === 7 && (
               <div className="form-section">
-                <h3>NO. 2</h3>
+                <div className="section-divider">SEHEMU 7: TAARIFA ZA WADHAMINI NO.2</div>
                 <table className="form-table">
                   <tbody>
                     <tr><td colSpan={4}><strong>Jina kamili la Mdhamini</strong></td><td colSpan={4}><strong>Mahali Anapoishi</strong></td><td colSpan={4}><strong>Amepanga/ kwake</strong></td></tr>
-                    <tr><td colSpan={4}><input type="text" name="wdhamini2JinaKamili" value={form.wdhamini2JinaKamili} onChange={handleChange} /></td><td colSpan={4}><input type="text" name="wdhamini2MahaliAnapoishi" value={form.wdhamini2MahaliAnapoishi} onChange={handleChange} /></td><td colSpan={4}><select name="wdhamini2AmepangaKwake" value={form.wdhamini2AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></td></tr>
+                    <tr>
+                      <td colSpan={4}><input type="text" name="wdhamini2JinaKamili" value={form.wdhamini2JinaKamili} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini2MahaliAnapoishi" value={form.wdhamini2MahaliAnapoishi} onChange={handleChange} /></td>
+                      <td colSpan={4}><select name="wdhamini2AmepangaKwake" value={form.wdhamini2AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></td>
+                    </tr>
                     <tr><td colSpan={4}><strong>Namba ya nyumba</strong></td><td colSpan={4}><strong>Kazi Anayofanya</strong></td><td colSpan={4}><strong>Uhusiano wenu</strong></td></tr>
-                    <tr><td colSpan={4}><input type="text" name="wdhamini2NambaNyumba" value={form.wdhamini2NambaNyumba} onChange={handleChange} /></td><td colSpan={4}><input type="text" name="wdhamini2KaziAnayofanya" value={form.wdhamini2KaziAnayofanya} onChange={handleChange} /></td><td colSpan={4}><input type="text" name="wdhamini2UhusianoWenu" value={form.wdhamini2UhusianoWenu} onChange={handleChange} /></td></tr>
+                    <tr>
+                      <td colSpan={4}><input type="text" name="wdhamini2NambaNyumba" value={form.wdhamini2NambaNyumba} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini2KaziAnayofanya" value={form.wdhamini2KaziAnayofanya} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini2UhusianoWenu" value={form.wdhamini2UhusianoWenu} onChange={handleChange} /></td>
+                    </tr>
                     <tr><td colSpan={4}><strong>Mahali ilipo Ofisi yake</strong></td><td colSpan={4}><strong>Jina la kampuni/ biashara</strong></td><td colSpan={4}><strong>Simu</strong></td></tr>
                     <tr>
                       <td colSpan={4}><input type="text" name="wdhamini2MahaliOfisiYake" value={form.wdhamini2MahaliOfisiYake} onChange={handleChange} /></td>
@@ -451,7 +468,8 @@ function PersonalLoan() {
 
             {/* PICHA YA PASSPORT */}
             {currentStep === 8 && (
-              <div className="form-section passport-section">
+              <div className="form-section">
+                <div className="section-divider">PICHA YA PASSPORT</div>
                 <div className="passport-upload">
                   <div className="passport-preview">
                     {passportPhotoPreview ? (
@@ -465,15 +483,9 @@ function PersonalLoan() {
                       CHAGUA PICHA YA PASSPORT
                       <input type="file" accept="image/*" onChange={handlePassportPhotoChange} hidden />
                     </label>
-                    {passportPhoto && (
-                      <p>Imechaguliwa: {passportPhoto.name}</p>
-                    )}
+                    {passportPhoto && <p>Imechaguliwa: {passportPhoto.name}</p>}
                     <div className="upload-note">
-                      <p>Maelekezo:</p>
-                      <p>- Picha iwe ya hivi karibuni (ndani ya miezi 6)</p>
-                      <p>- Usuli wa picha uwe mweupe au bluu</p>
-                      <p>- Ukubwa: Passport size (2x2 inches)</p>
-                      <p>- Umbizo: JPG, PNG (Max 2MB)</p>
+                      <p>Maelekezo: Picha iwe ya hivi karibuni, usuli mweupe au bluu, ukubwa Passport size, Umbizo JPG/PNG (Max 2MB)</p>
                     </div>
                   </div>
                 </div>
@@ -482,25 +494,28 @@ function PersonalLoan() {
 
             {/* TAMKO NA WASILISHA */}
             {currentStep === 9 && (
-              <div className="form-section tamko-section">
+              <div className="form-section">
+                <div className="section-divider">TAMKO NA WASILISHA</div>
                 <div className="tamko-content">
-                  <p><strong>Mimi</strong> nimeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu.</p>
-                  <p>Pia Kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine kama ilivyoanishwa kwenye sheria na miongozo inayotolewa na Benki Kuu Ya Tanzania pamoja na Tume ya Ulinzi wa Taarifa Binafsi.</p>
-                  <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                  
-                  <h4>TAMKO LA WADHAMINI</h4>
-                  <p><strong>1.</strong> Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
-                  <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                  
-                  <p><strong>2.</strong> Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
-                  <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                  
-                  <div className="tamko-checkboxes">
+                  <div className="tamko-card">
+                    <p><strong>TAMKO LA MWOMBAJI</strong></p>
+                    <p>Mimi nimeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu.</p>
+                    <p>Pia Kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine kama ilivyoanishwa kwenye sheria na miongozo inayotolewa na Benki Kuu Ya Tanzania pamoja na Tume ya Ulinzi wa Taarifa Binafsi.</p>
+                    <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
                     <label><input type="checkbox" name="tamkoMwombaji" checked={form.tamkoMwombaji} onChange={handleChange} /> Ninakubali Tamko la Mwombaji</label>
+                  </div>
+                  <div className="tamko-card">
+                    <p><strong>TAMKO LA MDHAMINI 1</strong></p>
+                    <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
+                    <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
                     <label><input type="checkbox" name="tamkoMdhamini1" checked={form.tamkoMdhamini1} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 1</label>
+                  </div>
+                  <div className="tamko-card">
+                    <p><strong>TAMKO LA MDHAMINI 2</strong></p>
+                    <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
+                    <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
                     <label><input type="checkbox" name="tamkoMdhamini2" checked={form.tamkoMdhamini2} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 2</label>
                   </div>
-                  
                   <div className="contact-info">
                     <p>NB: KWA CHANGAMOTO AMA MALALAMIKO USISITE KUTUPIGIA KUPITIA Tel No: +255 769337774 or +255 702 519 104.</p>
                   </div>
@@ -530,7 +545,6 @@ function PersonalLoan() {
 
       <style>{`
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         .page-container {
           min-height: 100vh;
           background: #e8f0fe;
@@ -540,7 +554,6 @@ function PersonalLoan() {
           align-items: center;
           font-family: 'Times New Roman', 'Arial', sans-serif;
         }
-        
         .form-container {
           max-width: 1300px;
           width: 100%;
@@ -549,20 +562,17 @@ function PersonalLoan() {
           box-shadow: 0 2px 10px rgba(0,0,0,0.1);
           overflow: hidden;
         }
-        
         .form-header {
           background: #1a3a5c;
           padding: 12px 20px;
           text-align: center;
           color: white;
         }
-        
         .fomu-no {
           text-align: right;
           margin-bottom: 8px;
           font-size: 13px;
         }
-        
         .fomu-no-input {
           width: 120px;
           padding: 4px 8px;
@@ -570,12 +580,10 @@ function PersonalLoan() {
           border: 1px solid #ccc;
           border-radius: 2px;
         }
-        
         .form-header h1 {
           font-size: 18px;
           letter-spacing: 1px;
         }
-        
         .step-indicators {
           display: flex;
           gap: 5px;
@@ -584,7 +592,6 @@ function PersonalLoan() {
           border-bottom: 1px solid #ddd;
           flex-wrap: wrap;
         }
-        
         .step-btn {
           width: 32px;
           height: 32px;
@@ -595,19 +602,8 @@ function PersonalLoan() {
           font-weight: bold;
           font-size: 12px;
         }
-        
-        .step-btn.active {
-          background: #1a3a5c;
-          color: white;
-          border-color: #1a3a5c;
-        }
-        
-        .step-btn.completed {
-          background: #2e7d32;
-          color: white;
-          border-color: #2e7d32;
-        }
-        
+        .step-btn.active { background: #1a3a5c; color: white; border-color: #1a3a5c; }
+        .step-btn.completed { background: #2e7d32; color: white; border-color: #2e7d32; }
         .step-title {
           background: #e0e0e0;
           padding: 8px 20px;
@@ -615,32 +611,33 @@ function PersonalLoan() {
           font-size: 14px;
           border-bottom: 2px solid #1a3a5c;
         }
-        
         .form-scroll {
           padding: 20px;
           max-height: 60vh;
           overflow-y: auto;
         }
-        
+        .section-divider {
+          background: #1a3a5c;
+          color: white;
+          padding: 8px 15px;
+          margin-bottom: 15px;
+          margin-top: 5px;
+          border-radius: 4px;
+          font-weight: bold;
+          font-size: 14px;
+        }
         .form-table {
           width: 100%;
           border-collapse: collapse;
-          margin-bottom: 20px;
+          margin-bottom: 25px;
         }
-        
         .form-table td, .form-table th {
           border: 1px solid #ddd;
           padding: 6px;
           vertical-align: top;
           font-size: 13px;
         }
-        
-        .form-table th {
-          background: #f0f0f0;
-          font-weight: bold;
-          text-align: center;
-        }
-        
+        .form-table th { background: #f0f0f0; font-weight: bold; text-align: center; }
         .form-table input, .form-table select, .form-table textarea {
           width: 100%;
           padding: 5px;
@@ -649,30 +646,8 @@ function PersonalLoan() {
           font-family: inherit;
           font-size: 12px;
         }
-        
-        .form-table textarea {
-          resize: vertical;
-        }
-        
-        .history-table th, .history-table td {
-          padding: 4px;
-        }
-        
-        .history-table input {
-          min-width: 80px;
-        }
-        
-        .form-section h3 {
-          background: #e0e0e0;
-          padding: 5px 10px;
-          margin-bottom: 10px;
-          font-size: 14px;
-        }
-        
-        .passport-section {
-          padding: 20px;
-        }
-        
+        .history-table th, .history-table td { padding: 4px; }
+        .history-table input { min-width: 80px; }
         .passport-upload {
           display: flex;
           gap: 20px;
@@ -680,7 +655,6 @@ function PersonalLoan() {
           justify-content: center;
           align-items: flex-start;
         }
-        
         .passport-preview {
           width: 150px;
           height: 170px;
@@ -690,24 +664,9 @@ function PersonalLoan() {
           align-items: center;
           justify-content: center;
         }
-        
-        .passport-preview img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        
-        .preview-placeholder {
-          text-align: center;
-          color: #999;
-          font-size: 11px;
-        }
-        
-        .upload-controls {
-          flex: 1;
-          min-width: 220px;
-        }
-        
+        .passport-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-placeholder { text-align: center; color: #999; font-size: 11px; }
+        .upload-controls { flex: 1; min-width: 220px; }
         .upload-btn {
           display: inline-block;
           background: #1a3a5c;
@@ -718,64 +677,39 @@ function PersonalLoan() {
           margin-bottom: 8px;
           font-size: 12px;
         }
-        
         .upload-note {
           margin-top: 10px;
           padding: 8px;
           background: #f5f5f5;
           font-size: 11px;
         }
-        
-        .upload-note p {
-          margin: 2px 0;
+        .tamko-content { display: flex; flex-direction: column; gap: 20px; }
+        .tamko-card {
+          background: #f8fafc;
+          padding: 15px;
+          border-radius: 12px;
+          border-left: 4px solid #1a3a5c;
         }
-        
-        .tamko-section {
-          padding: 20px;
-        }
-        
-        .tamko-content p {
-          margin-bottom: 12px;
-          line-height: 1.5;
-          text-align: justify;
-          font-size: 12px;
-        }
-        
-        .tamko-line {
-          margin: 12px 0;
-          padding: 4px;
-          border-bottom: 1px dotted #999;
-        }
-        
-        .tamko-content h4 {
-          margin: 15px 0 8px 0;
-          font-size: 14px;
-        }
-        
-        .tamko-checkboxes {
-          margin: 15px 0;
-          display: flex;
-          gap: 15px;
-          flex-wrap: wrap;
-        }
-        
-        .tamko-checkboxes label {
+        .tamko-card p { margin-bottom: 10px; line-height: 1.5; text-align: justify; font-size: 12px; }
+        .tamko-line { margin: 10px 0; padding: 5px; border-bottom: 1px dotted #999; }
+        .tamko-card label {
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
           cursor: pointer;
           font-size: 12px;
+          font-weight: 500;
+          margin-top: 8px;
         }
-        
         .contact-info {
           margin-top: 15px;
-          padding: 8px;
-          background: #f0f0f0;
+          padding: 10px;
+          background: #fef3c7;
+          border-radius: 8px;
           text-align: center;
           font-size: 11px;
+          color: #92400e;
         }
-        
-        /* BUTTONS - ZITAONEKANA VIZURI CHINI */
         .nav-buttons {
           display: flex;
           gap: 15px;
@@ -783,7 +717,6 @@ function PersonalLoan() {
           background: #ffffff;
           border-top: 2px solid #1a3a5c;
         }
-        
         .btn-prev {
           flex: 1;
           padding: 12px 20px;
@@ -794,9 +727,7 @@ function PersonalLoan() {
           border-radius: 8px;
           background: #6c757d;
           color: white;
-          transition: all 0.3s ease;
         }
-        
         .btn-next {
           flex: 1;
           padding: 12px 20px;
@@ -807,9 +738,7 @@ function PersonalLoan() {
           border-radius: 8px;
           background: #28a745;
           color: white;
-          transition: all 0.3s ease;
         }
-        
         .btn-submit {
           flex: 1;
           padding: 12px 20px;
@@ -820,20 +749,9 @@ function PersonalLoan() {
           border-radius: 8px;
           background: #007bff;
           color: white;
-          transition: all 0.3s ease;
         }
-        
-        .btn-prev:hover, .btn-next:hover, .btn-submit:hover {
-          opacity: 0.85;
-          transform: translateY(-2px);
-        }
-        
-        .btn-submit:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-          transform: none;
-        }
-        
+        .btn-prev:hover, .btn-next:hover, .btn-submit:hover { opacity: 0.85; transform: translateY(-2px); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         .footer {
           text-align: center;
           padding: 8px;
@@ -842,7 +760,6 @@ function PersonalLoan() {
           color: #666;
           border-top: 1px solid #ddd;
         }
-        
         @media (max-width: 800px) {
           .page-container { padding: 10px; }
           .form-scroll { padding: 12px; max-height: 50vh; }
