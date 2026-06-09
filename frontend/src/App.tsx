@@ -111,7 +111,9 @@ function MicrofinanceCalculator() {
   return (
     <div className="main-calculator">
       <div className="calc-header">
-        <h1>MICROFINANCE CALCULATOR</h1>
+        <div className="title-circle">
+          <h1>MICROFINANCE CALCULATOR</h1>
+        </div>
       </div>
       
       <div className="calc-form">
@@ -252,12 +254,25 @@ function Home() {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        /* Landing Page */
+        /* Landing Page - Professional Background */
         .landing-page {
           min-height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: #f0f4f8;
           display: flex;
           flex-direction: column;
+          position: relative;
+        }
+
+        /* Subtle Pattern Overlay */
+        .landing-page::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23d4dcec' fill-opacity='0.15' d='M10 10h5v5h-5zM25 10h5v5h-5zM40 10h5v5h-5zM55 10h5v5h-5zM70 10h5v5h-5zM85 10h5v5h-5zM10 25h5v5h-5zM25 25h5v5h-5zM40 25h5v5h-5zM55 25h5v5h-5zM70 25h5v5h-5zM85 25h5v5h-5zM10 40h5v5h-5zM25 40h5v5h-5zM40 40h5v5h-5zM55 40h5v5h-5zM70 40h5v5h-5zM85 40h5v5h-5zM10 55h5v5h-5zM25 55h5v5h-5zM40 55h5v5h-5zM55 55h5v5h-5zM70 55h5v5h-5zM85 55h5v5h-5zM10 70h5v5h-5zM25 70h5v5h-5zM40 70h5v5h-5zM55 70h5v5h-5zM70 70h5v5h-5zM85 70h5v5h-5zM10 85h5v5h-5zM25 85h5v5h-5zM40 85h5v5h-5zM55 85h5v5h-5zM70 85h5v5h-5zM85 85h5v5h-5z'/%3E%3C/svg%3E");
+          pointer-events: none;
         }
 
         /* Top Navigation */
@@ -266,9 +281,11 @@ function Home() {
           justify-content: space-between;
           align-items: center;
           padding: 20px 60px;
-          background: rgba(255,255,255,0.1);
-          backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(255,255,255,0.2);
+          background: #ffffff;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+          border-bottom: 1px solid #e2e8f0;
+          position: relative;
+          z-index: 10;
         }
 
         .logo {
@@ -282,9 +299,9 @@ function Home() {
         }
 
         .logo-text {
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 700;
-          color: white;
+          color: #0f172a;
         }
 
         .nav-links {
@@ -295,33 +312,36 @@ function Home() {
         .login-btn {
           padding: 10px 28px;
           background: transparent;
-          border: 1px solid rgba(255,255,255,0.5);
+          border: 1px solid #cbd5e1;
           border-radius: 40px;
-          color: white;
+          color: #1e293b;
           text-decoration: none;
           font-weight: 600;
+          font-size: 14px;
           transition: all 0.3s;
         }
 
         .login-btn:hover {
-          background: rgba(255,255,255,0.1);
-          border-color: white;
+          background: #f1f5f9;
+          border-color: #94a3b8;
         }
 
         .register-btn {
           padding: 10px 28px;
-          background: white;
+          background: #0f172a;
           border: none;
           border-radius: 40px;
-          color: #667eea;
+          color: white;
           text-decoration: none;
           font-weight: 600;
+          font-size: 14px;
           transition: all 0.3s;
         }
 
         .register-btn:hover {
+          background: #1e293b;
           transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         /* Calculator Section */
@@ -331,6 +351,8 @@ function Home() {
           justify-content: center;
           align-items: center;
           padding: 40px 60px;
+          position: relative;
+          z-index: 10;
         }
 
         /* Main Calculator */
@@ -338,18 +360,35 @@ function Home() {
           max-width: 1200px;
           width: 100%;
           background: white;
-          border-radius: 28px;
+          border-radius: 24px;
           padding: 32px 40px;
-          box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+          box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+          border: 1px solid #e2e8f0;
         }
 
-        .calc-header h1 {
-          text-align: center;
-          font-size: 26px;
-          font-weight: 700;
-          color: #1e293b;
+        /* Title Circle - ROUND SHAPE WITH PINK COLOR */
+        .calc-header {
+          display: flex;
+          justify-content: center;
           margin-bottom: 32px;
-          letter-spacing: -0.5px;
+        }
+
+        .title-circle {
+          background: linear-gradient(135deg, #f472b6, #ec4899);
+          width: auto;
+          min-width: 320px;
+          padding: 20px 40px;
+          border-radius: 60px;
+          text-align: center;
+          box-shadow: 0 10px 25px -5px rgba(236,72,153,0.3);
+        }
+
+        .title-circle h1 {
+          font-size: 22px;
+          font-weight: 700;
+          color: white;
+          letter-spacing: 1px;
+          margin: 0;
         }
 
         /* Form Grid - Horizontal Layout */
@@ -378,18 +417,17 @@ function Home() {
         .field-group select {
           padding: 12px 14px;
           border: 1px solid #e2e8f0;
-          border-radius: 12px;
+          border-radius: 10px;
           font-size: 14px;
           outline: none;
           transition: all 0.3s;
-          background: #f8fafc;
+          background: #ffffff;
         }
 
         .field-group input:focus,
         .field-group select:focus {
-          border-color: #667eea;
-          box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
-          background: white;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
 
         .field-group.buttons {
@@ -399,12 +437,13 @@ function Home() {
           margin-top: 22px;
         }
 
+        /* Calculate Button - BLUE */
         .btn-calculate {
           flex: 1;
           padding: 12px;
-          background: linear-gradient(135deg, #667eea, #764ba2);
+          background: #3b82f6;
           border: none;
-          border-radius: 12px;
+          border-radius: 10px;
           color: white;
           font-weight: 600;
           font-size: 14px;
@@ -413,17 +452,19 @@ function Home() {
         }
 
         .btn-calculate:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+          background: #2563eb;
+          transform: translateY(-1px);
+          box-shadow: 0 5px 15px rgba(59,130,246,0.3);
         }
 
+        /* Export Button - GREEN */
         .btn-export {
           flex: 1;
           padding: 12px;
-          background: #f1f5f9;
-          border: 1px solid #e2e8f0;
-          border-radius: 12px;
-          color: #475569;
+          background: #10b981;
+          border: none;
+          border-radius: 10px;
+          color: white;
           font-weight: 600;
           font-size: 14px;
           cursor: pointer;
@@ -431,7 +472,9 @@ function Home() {
         }
 
         .btn-export:hover {
-          background: #e2e8f0;
+          background: #059669;
+          transform: translateY(-1px);
+          box-shadow: 0 5px 15px rgba(16,185,129,0.3);
         }
 
         /* Results */
@@ -448,6 +491,7 @@ function Home() {
           padding: 16px;
           background: #f8fafc;
           border-radius: 16px;
+          border: 1px solid #e2e8f0;
         }
 
         .result-label {
@@ -461,19 +505,22 @@ function Home() {
         .result-value {
           font-size: 18px;
           font-weight: 700;
-          color: #667eea;
+          color: #0f172a;
         }
 
         /* Footer */
         .footer {
           text-align: center;
-          padding: 16px;
-          background: rgba(0,0,0,0.1);
+          padding: 20px;
+          background: #ffffff;
+          border-top: 1px solid #e2e8f0;
+          position: relative;
+          z-index: 10;
         }
 
         .footer p {
           font-size: 12px;
-          color: rgba(255,255,255,0.6);
+          color: #64748b;
         }
 
         /* Responsive */
@@ -501,6 +548,13 @@ function Home() {
           .form-grid {
             grid-template-columns: repeat(2, 1fr);
           }
+          .title-circle {
+            min-width: 250px;
+            padding: 15px 25px;
+          }
+          .title-circle h1 {
+            font-size: 16px;
+          }
         }
 
         @media (max-width: 600px) {
@@ -513,8 +567,12 @@ function Home() {
           .field-group.buttons {
             flex-direction: column;
           }
-          .calc-header h1 {
-            font-size: 20px;
+          .title-circle {
+            min-width: 200px;
+            padding: 12px 20px;
+          }
+          .title-circle h1 {
+            font-size: 14px;
           }
         }
       `}</style>
@@ -565,9 +623,6 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 // =========================
 // APP ROUTES
 // =========================
-// =========================
-// APP ROUTES
-// =========================
 function App() {
   return (
     <BrowserRouter>
@@ -580,13 +635,11 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         {/* ========== FORMS - FULL PAGE (NO SIDEBAR) ========== */}
-        {/* Hizi forms zitaonekana full screen bila sidebar */}
         <Route path="/personal-loan" element={<PersonalLoan />} />
         <Route path="/group-loan" element={<GroupLoan />} />
         <Route path="/employee-loan" element={<EmployeeLoan />} />
 
         {/* ========== PROTECTED ROUTES - WITH SIDEBAR ========== */}
-        {/* Hizi ni routes zenye sidebar (dashboard, users, managers, n.k) */}
         <Route
           path="/dashboard"
           element={
