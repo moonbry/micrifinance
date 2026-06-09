@@ -71,7 +71,9 @@ const Sidebar: FC = () => {
   const canAccessGeneralManager = userRole === "admin" || userRole === "general_manager";
   const canAccessManagingDirector = userRole === "admin" || userRole === "managing_director";
   const canAccessUsers = userRole === "admin";
-  const canAccessRepayment = userRole === "admin" || userRole === "loan_manager" || userRole === "general_manager";
+  
+  // ✅ HAPA NDIO MAREKEBISHO - NIMEONGEZA loan_officer NA managing_director
+  const canAccessRepayment = userRole === "admin" || userRole === "loan_manager" || userRole === "general_manager" || userRole === "loan_officer" || userRole === "managing_director";
 
   return (
     <div className="sidebar">
