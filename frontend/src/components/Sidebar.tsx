@@ -33,7 +33,6 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
   const fetchCurrentUser = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       const res = await axios.get("http://127.0.0.1:8000/api/v1/me", {
         headers: { Authorization: `Bearer ${token}` }
@@ -70,7 +69,6 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
   };
 
   const userRole = user?.role;
-
   const canAccessLoansForm = userRole === "admin" || userRole === "loan_officer";
   const canAccessLoanManager = userRole === "admin" || userRole === "loan_manager";
   const canAccessGeneralManager = userRole === "admin" || userRole === "general_manager";
@@ -79,159 +77,136 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
   const canAccessRepayment = userRole === "admin" || userRole === "loan_manager" || userRole === "general_manager" || userRole === "loan_officer" || userRole === "managing_director";
 
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
+  const userDisplayRole = user?.role?.replace(/_/g, " ")?.replace(/\b\w/g, c => c.toUpperCase()) || "User";
 
   return (
-    <div className={`sb ${isCollapsed ? "sb--collapsed" : ""}`}>
+    <div className={`sd ${isCollapsed ? "sd--c" : ""}`}>
 
-      {/* ── Top bar: collapse toggle + brand ── */}
-      <div className="sb__top">
-        <button className="sb__toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
-          {isCollapsed ? "»" : "«"}
-        </button>
-        {!isCollapsed && <span className="sb__brand">Microfinance</span>}
-      </div>
-
-      {/* ── User profile ── */}
-      <div className="sb__profile">
-        <div className="sb__avatar">{userInitial}</div>
-        {!isCollapsed && user && (
-          <div className="sb__user-info">
-            <div className="sb__user-name">{user.name}</div>
-            <div className="sb__user-role">{user.role?.replace("_", " ").toUpperCase()}</div>
+      {/* ── Logo + Hamburger ── */}
+      <div className="sd-logo">
+        <div className="sd-logo__icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+        </div>
+        {!isCollapsed && (
+          <div className="sd-logo__text">
+            <span className="sd-logo__title">Microfinance</span>
+            <span className="sd-logo__sub">System</span>
           </div>
         )}
+        <button className="sd-logo__menu" onClick={() => setIsCollapsed(!isCollapsed)} title={isCollapsed ? "Expand" : "Collapse"}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+        </button>
+      </div>
+
+      {/* ── User Profile ── */}
+      <div className="sd-user">
+        <div className="sd-user__avatar">{userInitial}</div>
+        {!isCollapsed && user && (
+          <div className="sd-user__info">
+            <span className="sd-user__name">{user.name}</span>
+            <span className="sd-user__role">{userDisplayRole}</span>
+          </div>
+        )}
+        {!isCollapsed && <span className="sd-user__chevron">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+        </span>}
       </div>
 
       {/* ── Navigation ── */}
-      <nav className="sb__nav">
+      <nav className="sd-nav">
 
-        {/* Section: Loan Operations */}
+        {/* Loan Operations */}
         {canAccessLoansForm && (
           <>
-            <div className="sb__section-label">{!isCollapsed ? "Loan Operations" : ""}</div>
-
-            <div className="sb__item" onClick={() => setShowLoans(!showLoans)} title="Loans Form">
-              <span className="sb__icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
-              </span>
-              {!isCollapsed && <span className="sb__label">Loans Form</span>}
-              {!isCollapsed && <span className={`sb__chevron ${showLoans ? "sb__chevron--open" : ""}`}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
-              </span>}
+            <div className="sd-sec">{!isCollapsed ? "LOAN OPERATIONS" : "─"}</div>
+            <div className="sd-item" onClick={() => setShowLoans(!showLoans)} title="Loans Form">
+              <span className="sd-item__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg></span>
+              {!isCollapsed && <span className="sd-item__text">Loans Form</span>}
+              {!isCollapsed && <span className={`sd-item__arrow ${showLoans ? "sd-item__arrow--open" : ""}`}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>}
             </div>
             {showLoans && !isCollapsed && (
-              <div className="sb__submenu">
-                <div className="sb__sublink" onClick={() => navigate("/personal-loan")}>Personal Loan</div>
-                <div className="sb__sublink" onClick={() => navigate("/group-loan")}>Group Loan</div>
+              <div className="sd-sub">
+                <div className="sd-sub__link" onClick={() => navigate("/personal-loan")}>Personal Loan</div>
+                <div className="sd-sub__link" onClick={() => navigate("/group-loan")}>Group Loan</div>
               </div>
             )}
           </>
         )}
 
-        {/* Section: Management */}
+        {/* Management */}
         {(canAccessLoanManager || canAccessGeneralManager || canAccessManagingDirector) && (
           <>
-            <div className="sb__section-label">{!isCollapsed ? "Management" : ""}</div>
+            <div className="sd-sec">{!isCollapsed ? "MANAGEMENT" : "─"}</div>
 
             {canAccessLoanManager && (
               <>
-                <div className="sb__item" onClick={() => setShowLoanManager(!showLoanManager)} title="Loan Manager">
-                  <span className="sb__icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg>
-                  </span>
-                  {!isCollapsed && <span className="sb__label">Loan Manager</span>}
-                  {!isCollapsed && <span className={`sb__chevron ${showLoanManager ? "sb__chevron--open" : ""}`}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
-                  </span>}
+                <div className="sd-item" onClick={() => setShowLoanManager(!showLoanManager)} title="Loan Manager">
+                  <span className="sd-item__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg></span>
+                  {!isCollapsed && <span className="sd-item__text">Loan Manager</span>}
+                  {!isCollapsed && <span className={`sd-item__arrow ${showLoanManager ? "sd-item__arrow--open" : ""}`}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>}
                 </div>
                 {showLoanManager && !isCollapsed && (
-                  <div className="sb__submenu">
-                    <div className="sb__sublink" onClick={() => navigate("/loan-manager")}>Dashboard</div>
-                  </div>
+                  <div className="sd-sub"><div className="sd-sub__link" onClick={() => navigate("/loan-manager")}>Dashboard</div></div>
                 )}
               </>
             )}
 
             {canAccessGeneralManager && (
               <>
-                <div className="sb__item" onClick={() => setShowGeneralManager(!showGeneralManager)} title="General Manager">
-                  <span className="sb__icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-                  </span>
-                  {!isCollapsed && <span className="sb__label">General Manager</span>}
-                  {!isCollapsed && <span className={`sb__chevron ${showGeneralManager ? "sb__chevron--open" : ""}`}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
-                  </span>}
+                <div className="sd-item" onClick={() => setShowGeneralManager(!showGeneralManager)} title="General Manager">
+                  <span className="sd-item__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></span>
+                  {!isCollapsed && <span className="sd-item__text">General Manager</span>}
+                  {!isCollapsed && <span className={`sd-item__arrow ${showGeneralManager ? "sd-item__arrow--open" : ""}`}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>}
                 </div>
                 {showGeneralManager && !isCollapsed && (
-                  <div className="sb__submenu">
-                    <div className="sb__sublink" onClick={() => navigate("/general-manager")}>Dashboard</div>
-                  </div>
+                  <div className="sd-sub"><div className="sd-sub__link" onClick={() => navigate("/general-manager")}>Dashboard</div></div>
                 )}
               </>
             )}
 
             {canAccessManagingDirector && (
               <>
-                <div className="sb__item" onClick={() => setShowManagingManager(!showManagingManager)} title="Managing Director">
-                  <span className="sb__icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-                  </span>
-                  {!isCollapsed && <span className="sb__label">Managing Director</span>}
-                  {!isCollapsed && <span className={`sb__chevron ${showManagingManager ? "sb__chevron--open" : ""}`}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
-                  </span>}
+                <div className="sd-item" onClick={() => setShowManagingManager(!showManagingManager)} title="Managing Director">
+                  <span className="sd-item__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg></span>
+                  {!isCollapsed && <span className="sd-item__text">Managing Director</span>}
+                  {!isCollapsed && <span className={`sd-item__arrow ${showManagingManager ? "sd-item__arrow--open" : ""}`}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>}
                 </div>
                 {showManagingManager && !isCollapsed && (
-                  <div className="sb__submenu">
-                    <div className="sb__sublink" onClick={() => navigate("/managing-director")}>Dashboard</div>
-                  </div>
+                  <div className="sd-sub"><div className="sd-sub__link" onClick={() => navigate("/managing-director")}>Dashboard</div></div>
                 )}
               </>
             )}
           </>
         )}
 
-        {/* Section: Internal */}
+        {/* Internal */}
         {(canAccessUsers || canAccessRepayment) && (
           <>
-            <div className="sb__section-label">{!isCollapsed ? "Internal" : ""}</div>
+            <div className="sd-sec">{!isCollapsed ? "INTERNAL" : "─"}</div>
 
             {canAccessUsers && (
               <>
-                <div className="sb__item" onClick={handleUsersClick} title="Users">
-                  <span className="sb__icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg>
-                  </span>
-                  {!isCollapsed && <span className="sb__label">Users</span>}
-                  {!isCollapsed && userCount !== null && <span className="sb__badge">{userCount}</span>}
-                  {!isCollapsed && <span className={`sb__chevron ${showUsers ? "sb__chevron--open" : ""}`}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
-                  </span>}
+                <div className="sd-item" onClick={handleUsersClick} title="Users">
+                  <span className="sd-item__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg></span>
+                  {!isCollapsed && <span className="sd-item__text">Users</span>}
+                  {!isCollapsed && userCount !== null && <span className="sd-badge">{userCount}</span>}
+                  {!isCollapsed && <span className={`sd-item__arrow ${showUsers ? "sd-item__arrow--open" : ""}`}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>}
                 </div>
                 {showUsers && !isCollapsed && (
-                  <div className="sb__submenu">
-                    <div className="sb__sublink" onClick={() => navigate("/users")}>View Users</div>
-                  </div>
+                  <div className="sd-sub"><div className="sd-sub__link" onClick={() => navigate("/users")}>View Users</div></div>
                 )}
               </>
             )}
 
             {canAccessRepayment && (
               <>
-                <div className="sb__item" onClick={() => setShowRepayment(!showRepayment)} title="Repayment Tracker">
-                  <span className="sb__icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg>
-                  </span>
-                  {!isCollapsed && <span className="sb__label">Repayment Tracker</span>}
-                  {!isCollapsed && <span className={`sb__chevron ${showRepayment ? "sb__chevron--open" : ""}`}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
-                  </span>}
+                <div className="sd-item" onClick={() => setShowRepayment(!showRepayment)} title="Repayment Tracker">
+                  <span className="sd-item__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg></span>
+                  {!isCollapsed && <span className="sd-item__text">Repayment Tracker</span>}
+                  {!isCollapsed && <span className={`sd-item__arrow ${showRepayment ? "sd-item__arrow--open" : ""}`}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>}
                 </div>
                 {showRepayment && !isCollapsed && (
-                  <div className="sb__submenu">
-                    <div className="sb__sublink" onClick={() => navigate("/repayment-tracker")}>View</div>
-                  </div>
+                  <div className="sd-sub"><div className="sd-sub__link" onClick={() => navigate("/repayment-tracker")}>View</div></div>
                 )}
               </>
             )}
@@ -239,28 +214,23 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         )}
       </nav>
 
-      {/* ── Footer: Settings / Logout ── */}
-      <div className="sb__footer">
-        <div className="sb__section-label">{!isCollapsed ? "Preferences" : ""}</div>
-
-        <div className="sb__item sb__item--footer" onClick={handleLogout} title="Log Out">
-          <span className="sb__icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
-          </span>
-          {!isCollapsed && <span className="sb__label">Log Out</span>}
+      {/* ── Footer ── */}
+      <div className="sd-footer">
+        <div className="sd-sec">{!isCollapsed ? "PREFERENCES" : "─"}</div>
+        <div className="sd-item" onClick={handleLogout} title="Log Out">
+          <span className="sd-item__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg></span>
+          {!isCollapsed && <span className="sd-item__text">Log Out</span>}
         </div>
       </div>
 
       <style>{`
-        /* ═══════════ SIDEBAR SHELL ═══════════ */
-        .sb {
+        .sd {
           width: 260px;
           height: 100vh;
-          background: #2a2a2a;
-          color: #d4d4d4;
+          background: #102a43;
+          color: #cbd5e1;
           position: fixed;
-          top: 0;
-          left: 0;
+          top: 0; left: 0;
           display: flex;
           flex-direction: column;
           overflow-x: hidden;
@@ -268,211 +238,116 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
           z-index: 100;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          border-right: 1px solid #3a3a3a;
         }
-        .sb--collapsed { width: 80px; }
+        .sd--c { width: 80px; }
 
-        /* ═══════════ TOP BAR ═══════════ */
-        .sb__top {
+        /* ─── LOGO ─── */
+        .sd-logo {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 18px 20px;
-          border-bottom: 1px solid #3a3a3a;
-          min-height: 56px;
+          gap: 10px;
+          padding: 16px 16px;
+          border-bottom: 1px solid rgba(255,255,255, 0.08);
         }
-        .sb--collapsed .sb__top {
-          justify-content: center;
-          padding: 18px 0;
+        .sd--c .sd-logo { justify-content: center; gap: 0; padding: 16px 8px; }
+        .sd-logo__icon {
+          width: 38px; height: 38px;
+          background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+          border-radius: 10px;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
         }
-
-        .sb__toggle {
-          background: none;
-          border: none;
-          color: #d4d4d4;
-          font-size: 18px;
-          cursor: pointer;
-          padding: 4px 8px;
+        .sd-logo__text { display: flex; flex-direction: column; }
+        .sd-logo__title { font-size: 15px; font-weight: 700; color: #ffffff; }
+        .sd-logo__sub { font-size: 11px; color: #94a3b8; margin-top: 1px; }
+        .sd-logo__menu {
+          margin-left: auto;
+          background: none; border: none;
+          cursor: pointer; padding: 6px;
           border-radius: 6px;
+          display: flex; align-items: center; justify-content: center;
           transition: background 0.15s;
-          line-height: 1;
-          flex-shrink: 0;
         }
-        .sb__toggle:hover { background: #404040; }
+        .sd-logo__menu:hover { background: rgba(255,255,255, 0.08); }
+        .sd--c .sd-logo__menu { margin-left: 0; display: none; }
+        .sd--c .sd-logo__icon { cursor: pointer; }
 
-        .sb__brand {
-          font-size: 18px;
-          font-weight: 700;
-          color: #e8863a;
-          letter-spacing: 0.2px;
-          white-space: nowrap;
+        /* ─── USER ─── */
+        .sd-user {
+          display: flex; align-items: center; gap: 10px;
+          padding: 14px 16px;
+          margin: 10px 12px 4px 12px;
+          background: rgba(255,255,255, 0.06);
+          border-radius: 12px;
+          cursor: default;
         }
-
-        /* ═══════════ PROFILE ═══════════ */
-        .sb__profile {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 20px;
-          margin: 12px 12px 8px 12px;
-          background: #353535;
-          border-radius: 14px;
-        }
-        .sb--collapsed .sb__profile {
-          justify-content: center;
-          padding: 14px;
-          margin: 12px 10px 8px 10px;
-        }
-
-        .sb__avatar {
-          width: 42px;
-          height: 42px;
+        .sd--c .sd-user { justify-content: center; padding: 12px; margin: 10px 8px 4px 8px; }
+        .sd-user__avatar {
+          width: 36px; height: 36px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #e8863a 0%, #d4723a 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 700;
-          font-size: 18px;
-          color: white;
+          background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 700; font-size: 15px; color: white;
           flex-shrink: 0;
-          box-shadow: 0 2px 8px rgba(232, 134, 58, 0.3);
         }
+        .sd-user__info { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+        .sd-user__name { font-size: 13px; font-weight: 600; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sd-user__role { font-size: 11px; color: #94a3b8; margin-top: 1px; }
+        .sd-user__chevron { color: #64748b; display: flex; flex-shrink: 0; }
 
-        .sb__user-info {
-          overflow: hidden;
-        }
-        .sb__user-name {
-          font-weight: 600;
-          font-size: 14px;
-          color: #f0f0f0;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .sb__user-role {
-          font-size: 11px;
-          color: #e8863a;
-          font-weight: 600;
-          letter-spacing: 0.3px;
-          margin-top: 2px;
-        }
-
-        /* ═══════════ NAVIGATION ═══════════ */
-        .sb__nav {
-          flex: 1;
-          padding: 8px 0;
-          overflow-y: auto;
-        }
-
-        .sb__section-label {
-          font-size: 11px;
-          font-weight: 600;
-          color: #808080;
+        /* ─── SECTION LABEL ─── */
+        .sd-sec {
+          font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.35);
+          letter-spacing: 1.2px; padding: 18px 20px 6px 20px;
           text-transform: uppercase;
-          letter-spacing: 0.8px;
-          padding: 16px 24px 8px 24px;
-          white-space: nowrap;
-          min-height: 12px;
         }
-        .sb--collapsed .sb__section-label {
-          padding: 12px 0;
-          text-align: center;
-          border-top: 1px solid #3a3a3a;
-          margin: 0 10px;
-        }
+        .sd--c .sd-sec { text-align: center; padding: 14px 0 4px 0; font-size: 9px; color: rgba(255,255,255,0.15); }
 
-        .sb__item {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          padding: 10px 24px;
+        /* ─── NAV ITEM ─── */
+        .sd-item {
+          display: flex; align-items: center; gap: 12px;
+          padding: 9px 20px;
           cursor: pointer;
-          transition: all 0.15s;
-          position: relative;
+          transition: background 0.15s;
           white-space: nowrap;
         }
-        .sb--collapsed .sb__item {
-          justify-content: center;
-          padding: 12px 0;
-        }
-        .sb__item:hover {
-          background: #353535;
-        }
-
-        .sb__icon {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 24px;
-          height: 24px;
-          flex-shrink: 0;
-          color: #b0b0b0;
+        .sd--c .sd-item { justify-content: center; padding: 11px 0; }
+        .sd-item:hover { background: rgba(255,255,255, 0.06); }
+        .sd-item__icon {
+          width: 22px; height: 22px;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0; color: #94a3b8;
           transition: color 0.15s;
         }
-        .sb__item:hover .sb__icon { color: #e8863a; }
-
-        .sb__label {
-          flex: 1;
-          font-size: 14px;
-          font-weight: 500;
-          color: #d4d4d4;
+        .sd-item:hover .sd-item__icon { color: #38bdf8; }
+        .sd-item__text { flex: 1; font-size: 13px; font-weight: 500; color: #e2e8f0; }
+        .sd-item__arrow {
+          color: #64748b; display: flex; align-items: center;
+          transition: transform 0.2s ease;
         }
-        .sb__item:hover .sb__label { color: #f0f0f0; }
+        .sd-item__arrow--open { transform: rotate(180deg); }
 
-        .sb__chevron {
-          display: flex;
-          align-items: center;
-          color: #808080;
-          transition: transform 0.25s ease;
-        }
-        .sb__chevron--open { transform: rotate(180deg); }
-
-        .sb__badge {
-          background: #e8863a;
-          color: white;
-          font-size: 11px;
-          font-weight: 700;
-          padding: 1px 7px;
-          border-radius: 10px;
-          margin-right: auto;
-          margin-left: -4px;
+        .sd-badge {
+          background: #2563eb; color: white;
+          font-size: 10px; font-weight: 700;
+          padding: 1px 6px; border-radius: 8px;
         }
 
-        /* ═══════════ SUBMENU ═══════════ */
-        .sb__submenu {
-          padding: 2px 0 2px 62px;
+        /* ─── SUBMENU ─── */
+        .sd-sub { padding: 2px 0 2px 54px; }
+        .sd-sub__link {
+          padding: 7px 12px; font-size: 13px; color: #94a3b8;
+          cursor: pointer; border-radius: 6px; transition: all 0.15s;
         }
-        .sb__sublink {
-          padding: 8px 14px;
-          font-size: 13px;
-          font-weight: 400;
-          color: #a0a0a0;
-          cursor: pointer;
-          border-radius: 8px;
-          transition: all 0.15s;
-        }
-        .sb__sublink:hover {
-          color: #e8863a;
-          background: #303030;
-        }
+        .sd-sub__link:hover { color: #ffffff; background: rgba(255,255,255, 0.06); }
 
-        /* ═══════════ FOOTER ═══════════ */
-        .sb__footer {
-          border-top: 1px solid #3a3a3a;
-          margin-top: auto;
-          padding-bottom: 12px;
-        }
+        /* ─── FOOTER ─── */
+        .sd-footer { margin-top: auto; border-top: 1px solid rgba(255,255,255, 0.06); padding-bottom: 8px; }
 
-        .sb__item--footer .sb__icon { color: #b0b0b0; }
-        .sb__item--footer:hover .sb__icon { color: #ef4444; }
-        .sb__item--footer:hover .sb__label { color: #ef4444; }
-
-        /* ═══════════ SCROLLBAR ═══════════ */
-        .sb::-webkit-scrollbar { width: 4px; }
-        .sb::-webkit-scrollbar-track { background: transparent; }
-        .sb::-webkit-scrollbar-thumb { background: #404040; border-radius: 4px; }
-        .sb::-webkit-scrollbar-thumb:hover { background: #505050; }
+        /* ─── SCROLLBAR ─── */
+        .sd::-webkit-scrollbar { width: 3px; }
+        .sd::-webkit-scrollbar-track { background: transparent; }
+        .sd::-webkit-scrollbar-thumb { background: rgba(255,255,255, 0.1); border-radius: 3px; }
       `}</style>
     </div>
   );
