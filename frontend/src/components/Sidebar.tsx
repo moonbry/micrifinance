@@ -84,9 +84,11 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
 
       {/* ── Logo + Hamburger ── */}
       <div className="sd-logo">
-        <div className="sd-logo__icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
-        </div>
+        {!isCollapsed && (
+          <div className="sd-logo__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+          </div>
+        )}
         {!isCollapsed && (
           <div className="sd-logo__text">
             <span className="sd-logo__title">Microfinance</span>
@@ -94,7 +96,11 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
           </div>
         )}
         <button className="sd-logo__menu" onClick={() => setIsCollapsed(!isCollapsed)} title={isCollapsed ? "Expand" : "Collapse"}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+          {isCollapsed ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+          )}
         </button>
       </div>
 
@@ -248,8 +254,9 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
           gap: 10px;
           padding: 16px 16px;
           border-bottom: 1px solid rgba(255,255,255, 0.08);
+          min-height: 56px;
         }
-        .sd--c .sd-logo { justify-content: center; gap: 0; padding: 16px 8px; }
+        .sd--c .sd-logo { justify-content: center; gap: 0; padding: 16px 0; }
         .sd-logo__icon {
           width: 38px; height: 38px;
           background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
@@ -263,14 +270,14 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         .sd-logo__menu {
           margin-left: auto;
           background: none; border: none;
-          cursor: pointer; padding: 6px;
-          border-radius: 6px;
+          cursor: pointer; padding: 8px;
+          border-radius: 8px;
           display: flex; align-items: center; justify-content: center;
           transition: background 0.15s;
+          flex-shrink: 0;
         }
-        .sd-logo__menu:hover { background: rgba(255,255,255, 0.08); }
-        .sd--c .sd-logo__menu { margin-left: 0; display: none; }
-        .sd--c .sd-logo__icon { cursor: pointer; }
+        .sd-logo__menu:hover { background: rgba(255,255,255, 0.1); }
+        .sd--c .sd-logo__menu { margin: 0 auto; }
 
         /* ─── USER ─── */
         .sd-user {
