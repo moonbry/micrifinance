@@ -5,7 +5,6 @@ function PersonalLoan() {
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [passportPhoto, setPassportPhoto] = useState<File | null>(null);
-  const [passportPhotoPreview, setPassportPhotoPreview] = useState<string>("");
 
   const [form, setForm] = useState({
     fomuNo: "",
@@ -88,24 +87,6 @@ function PersonalLoan() {
     "TAMKO NA WASILISHA"
   ];
 
-  const handlePassportPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        alert("Picha ni kubwa mno. Tafadhali tumia picha chini ya 2MB");
-        return;
-      }
-      if (!file.type.includes("image/")) {
-        alert("Tafadhali chagua faili ya picha tu (jpg, png, jpeg)");
-        return;
-      }
-      setPassportPhoto(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setPassportPhotoPreview(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
-
   const uploadPassportPhoto = async (): Promise<string | null> => {
     if (!passportPhoto) return null;
     try {
@@ -129,8 +110,17 @@ function PersonalLoan() {
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
   };
 
-  const nextStep = () => currentStep < steps.length - 1 && setCurrentStep(currentStep + 1);
-  const prevStep = () => currentStep > 0 && setCurrentStep(currentStep - 1);
+  const nextStep = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -278,7 +268,7 @@ function PersonalLoan() {
                 <table className="form-table">
                   <tbody>
                     <tr><td colSpan={6}><strong>Jina la Biashara</strong></td><td colSpan={6}><strong>Aina ya Biashara</strong></td></tr>
-                    <tr><td colSpan={6}><input type="text" name="jinaBiashara" value={form.jinaBiashara} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="ainaBiashara" value={form.ainaBiashara} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={6}><input type="text" name="jinaLaBiashara" value={form.jinaLaBiashara} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="ainaYaBiashara" value={form.ainaYaBiashara} onChange={handleChange} /></td></tr>
                     <tr><td colSpan={12}><strong>Mahali Biashara Ilipo</strong></td></tr>
                     <tr><td colSpan={12}><input type="text" name="mahaliBiasharaIlipo" value={form.mahaliBiasharaIlipo} onChange={handleChange} /></td></tr>
                     <tr><td colSpan={6}><strong>Umefanya Biashara hii tangu lini</strong></td><td colSpan={6}><strong>Jina la mmiliki wa eneo la biashara</strong></td></tr>

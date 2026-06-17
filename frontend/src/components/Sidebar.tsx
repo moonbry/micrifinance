@@ -10,7 +10,12 @@ interface User {
   role: string;
 }
 
-const Sidebar: FC = () => {
+interface SidebarProps {
+  isCollapsed: boolean;
+  setIsCollapsed: (collapsed: boolean) => void;
+}
+
+const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [showLoans, setShowLoans] = useState(false);
@@ -71,21 +76,24 @@ const Sidebar: FC = () => {
   const canAccessGeneralManager = userRole === "admin" || userRole === "general_manager";
   const canAccessManagingDirector = userRole === "admin" || userRole === "managing_director";
   const canAccessUsers = userRole === "admin";
-  
-  // ✅ HAPA NDIO MAREKEBISHO - NIMEONGEZA loan_officer NA managing_director
   const canAccessRepayment = userRole === "admin" || userRole === "loan_manager" || userRole === "general_manager" || userRole === "loan_officer" || userRole === "managing_director";
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="logo-area">
         <div className="logo-placeholder"></div>
-        <div className="logo-text">
-          <div className="logo-title">Microfinance</div>
-          <div className="logo-sub">Management System</div>
-        </div>
+        {!isCollapsed && (
+          <div className="logo-text">
+            <div className="logo-title">Microfinance</div>
+            <div className="logo-sub">Management System</div>
+          </div>
+        )}
+        <button className="collapse-toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
+          {isCollapsed ? "❯" : "❮"}
+        </button>
       </div>
 
-      {user && (
+      {user && !isCollapsed && (
         <div className="user-profile">
           <div className="user-name">{user.name}</div>
           <div className="user-role">{user.role?.replace("_", " ").toUpperCase()}</div>
@@ -95,12 +103,19 @@ const Sidebar: FC = () => {
       <div className="nav-menu">
         {canAccessUsers && (
           <div className="nav-item">
-            <div className="nav-header" onClick={handleUsersClick}>
-              <span>Users</span>
-              {userCount !== null && <span className="nav-badge">{userCount}</span>}
-              <span className={`nav-arrow ${showUsers ? "open" : ""}`}>▼</span>
+            <div className="nav-header" onClick={handleUsersClick} title="Users">
+              <div className="nav-header-left">
+                <span className="nav-icon">👥</span>
+                {!isCollapsed && <span>Users</span>}
+              </div>
+              {!isCollapsed && (
+                <>
+                  {userCount !== null && <span className="nav-badge">{userCount}</span>}
+                  <span className={`nav-arrow ${showUsers ? "open" : ""}`}>▼</span>
+                </>
+              )}
             </div>
-            {showUsers && (
+            {showUsers && !isCollapsed && (
               <div className="nav-submenu">
                 <div className="nav-link" onClick={() => navigate("/users")}>View Users</div>
               </div>
@@ -110,11 +125,14 @@ const Sidebar: FC = () => {
 
         {canAccessLoansForm && (
           <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowLoans(!showLoans)}>
-              <span>Loans Form</span>
-              <span className={`nav-arrow ${showLoans ? "open" : ""}`}>▼</span>
+            <div className="nav-header" onClick={() => setShowLoans(!showLoans)} title="Loans Form">
+              <div className="nav-header-left">
+                <span className="nav-icon">📝</span>
+                {!isCollapsed && <span>Loans Form</span>}
+              </div>
+              {!isCollapsed && <span className={`nav-arrow ${showLoans ? "open" : ""}`}>▼</span>}
             </div>
-            {showLoans && (
+            {showLoans && !isCollapsed && (
               <div className="nav-submenu">
                 <div className="nav-link" onClick={() => navigate("/personal-loan")}>Personal Loan</div>
                 <div className="nav-link" onClick={() => navigate("/group-loan")}>Group Loan</div>
@@ -125,11 +143,14 @@ const Sidebar: FC = () => {
 
         {canAccessLoanManager && (
           <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowLoanManager(!showLoanManager)}>
-              <span>Loan Manager</span>
-              <span className={`nav-arrow ${showLoanManager ? "open" : ""}`}>▼</span>
+            <div className="nav-header" onClick={() => setShowLoanManager(!showLoanManager)} title="Loan Manager">
+              <div className="nav-header-left">
+                <span className="nav-icon">📊</span>
+                {!isCollapsed && <span>Loan Manager</span>}
+              </div>
+              {!isCollapsed && <span className={`nav-arrow ${showLoanManager ? "open" : ""}`}>▼</span>}
             </div>
-            {showLoanManager && (
+            {showLoanManager && !isCollapsed && (
               <div className="nav-submenu">
                 <div className="nav-link" onClick={() => navigate("/loan-manager")}>Dashboard</div>
               </div>
@@ -139,11 +160,14 @@ const Sidebar: FC = () => {
 
         {canAccessGeneralManager && (
           <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowGeneralManager(!showGeneralManager)}>
-              <span>General Manager</span>
-              <span className={`nav-arrow ${showGeneralManager ? "open" : ""}`}>▼</span>
+            <div className="nav-header" onClick={() => setShowGeneralManager(!showGeneralManager)} title="General Manager">
+              <div className="nav-header-left">
+                <span className="nav-icon">👔</span>
+                {!isCollapsed && <span>General Manager</span>}
+              </div>
+              {!isCollapsed && <span className={`nav-arrow ${showGeneralManager ? "open" : ""}`}>▼</span>}
             </div>
-            {showGeneralManager && (
+            {showGeneralManager && !isCollapsed && (
               <div className="nav-submenu">
                 <div className="nav-link" onClick={() => navigate("/general-manager")}>Dashboard</div>
               </div>
@@ -153,11 +177,14 @@ const Sidebar: FC = () => {
 
         {canAccessManagingDirector && (
           <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowManagingManager(!showManagingManager)}>
-              <span>Managing Director</span>
-              <span className={`nav-arrow ${showManagingManager ? "open" : ""}`}>▼</span>
+            <div className="nav-header" onClick={() => setShowManagingManager(!showManagingManager)} title="Managing Director">
+              <div className="nav-header-left">
+                <span className="nav-icon">💎</span>
+                {!isCollapsed && <span>Managing Director</span>}
+              </div>
+              {!isCollapsed && <span className={`nav-arrow ${showManagingManager ? "open" : ""}`}>▼</span>}
             </div>
-            {showManagingManager && (
+            {showManagingManager && !isCollapsed && (
               <div className="nav-submenu">
                 <div className="nav-link" onClick={() => navigate("/managing-director")}>Dashboard</div>
               </div>
@@ -167,11 +194,14 @@ const Sidebar: FC = () => {
 
         {canAccessRepayment && (
           <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowRepayment(!showRepayment)}>
-              <span>Repayment Tracker</span>
-              <span className={`nav-arrow ${showRepayment ? "open" : ""}`}>▼</span>
+            <div className="nav-header" onClick={() => setShowRepayment(!showRepayment)} title="Repayment Tracker">
+              <div className="nav-header-left">
+                <span className="nav-icon">💰</span>
+                {!isCollapsed && <span>Repayment Tracker</span>}
+              </div>
+              {!isCollapsed && <span className={`nav-arrow ${showRepayment ? "open" : ""}`}>▼</span>}
             </div>
-            {showRepayment && (
+            {showRepayment && !isCollapsed && (
               <div className="nav-submenu">
                 <div className="nav-link" onClick={() => navigate("/repayment-tracker")}>View</div>
               </div>
@@ -181,7 +211,9 @@ const Sidebar: FC = () => {
       </div>
 
       <div className="nav-footer">
-        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+        <button className="logout-btn" onClick={handleLogout} title="Logout">
+          {isCollapsed ? "🚪" : "Logout"}
+        </button>
       </div>
 
       <style>{`
@@ -197,6 +229,11 @@ const Sidebar: FC = () => {
           border-right: 1px solid #1e293b;
           z-index: 100;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+          width: 80px;
         }
 
         .logo-area {
@@ -206,6 +243,35 @@ const Sidebar: FC = () => {
           display: flex;
           align-items: center;
           gap: 12px;
+          position: relative;
+        }
+
+        .sidebar.collapsed .logo-area {
+          justify-content: center;
+          padding: 20px 0;
+        }
+
+        .collapse-toggle {
+          position: absolute;
+          right: -12px;
+          top: 25px;
+          width: 24px;
+          height: 24px;
+          background: #3b82f6;
+          border: none;
+          color: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: 12px;
+          z-index: 101;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .sidebar.collapsed .collapse-toggle {
+          right: 28px;
         }
 
         .logo-placeholder {
@@ -214,6 +280,7 @@ const Sidebar: FC = () => {
           background: #1e293b;
           border-radius: 10px;
           border: 1px solid #334155;
+          flex-shrink: 0;
         }
 
         .logo-title {
@@ -254,6 +321,10 @@ const Sidebar: FC = () => {
           padding: 0 12px;
         }
 
+        .collapsed .nav-menu {
+          padding: 0 10px;
+        }
+
         .nav-item {
           margin-bottom: 6px;
         }
@@ -271,6 +342,23 @@ const Sidebar: FC = () => {
           font-weight: 500;
           color: #e2e8f0;
           transition: background 0.2s;
+        }
+
+        .collapsed .nav-header {
+          justify-content: center;
+          padding: 12px;
+        }
+
+        .nav-header-left {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .nav-icon {
+          font-size: 18px;
+          width: 24px;
+          text-align: center;
         }
 
         .nav-header:hover {
@@ -339,6 +427,9 @@ const Sidebar: FC = () => {
           font-weight: 500;
           cursor: pointer;
           transition: background 0.2s;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         .logout-btn:hover {
