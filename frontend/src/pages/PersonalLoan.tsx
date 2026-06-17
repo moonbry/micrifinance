@@ -185,63 +185,88 @@ function PersonalLoan() {
 
             {/* SEHEMU 1: TAARIFA ZA MWOMBAJI */}
             {currentStep === 0 && (
-              <div className="form-grid-2cols">
-                {/* Basic Info */}
-                <div className="input-box"><input type="text" name="jinaKamiliLaMwombaji" placeholder=" " value={form.jinaKamiliLaMwombaji} onChange={handleChange} /><label>Jina kamili la mwombaji</label></div>
-                <div className="input-box"><select name="jinsia" value={form.jinsia} onChange={handleChange}><option value="">Chagua</option><option value="Me">Me</option><option value="Ke">Ke</option></select><label>Jinsia</label></div>
-                <div className="input-box"><input type="text" name="jinaMaarufu" placeholder=" " value={form.jinaMaarufu} onChange={handleChange} /><label>Jina maarufu</label></div>
-                <div className="input-box"><input type="date" name="tareheYaKuzaliwa" placeholder=" " value={form.tareheYaKuzaliwa} onChange={handleChange} /><label>Tarehe ya kuzaliwa</label></div>
-                <div className="input-box"><select name="ainaYaKitambulisho" value={form.ainaYaKitambulisho} onChange={handleChange}><option value="">Chagua</option><option value="Kitambulisho cha Taifa">Kitambulisho cha Taifa</option><option value="Pasipoti">Pasipoti</option><option value="Leseni ya kuendesha">Leseni ya kuendesha</option></select><label>Aina ya kitambulisho</label></div>
-                <div className="input-box"><input type="text" name="nambaYaKitambulisho" placeholder=" " value={form.nambaYaKitambulisho} onChange={handleChange} /><label>Namba ya kitambulisho</label></div>
-                <div className="input-box"><input type="tel" name="nambaYaSimu" placeholder=" " value={form.nambaYaSimu} onChange={handleChange} /><label>Namba ya simu</label></div>
-                <div className="input-box"><input type="email" name="baruaPepe" placeholder=" " value={form.baruaPepe} onChange={handleChange} /><label>Barua pepe (Email)</label></div>
-                <div className="input-box"><input type="text" name="uraia" placeholder=" " value={form.uraia} onChange={handleChange} /><label>Uraia (Nationality)</label></div>
-                <div className="input-box"><select name="haliYaNdoa" value={form.haliYaNdoa} onChange={handleChange}><option value="">Chagua</option><option value="Nimeoa/Olewa">1. Nimeoa/Olewa</option><option value="Sijaoa/Olewa">2. Sijaoa/Olewa</option><option value="Nimeachika">3. Nimeachika</option><option value="Mjane">4. Mjane</option></select><label>Hali ya ndoa</label></div>
-
-                {/* Residence Info */}
-                <div className="input-box"><input type="text" name="mahaliUnapoishiMkoa" placeholder=" " value={form.mahaliUnapoishiMkoa} onChange={handleChange} /><label>Mkoa</label></div>
-                <div className="input-box"><input type="text" name="mahaliUnapoishiWilaya" placeholder=" " value={form.mahaliUnapoishiWilaya} onChange={handleChange} /><label>Wilaya</label></div>
-                <div className="input-box"><input type="text" name="mahaliUnapoishiKata" placeholder=" " value={form.mahaliUnapoishiKata} onChange={handleChange} /><label>Kata</label></div>
-                <div className="input-box"><input type="text" name="mahaliUnapoishiMtaa" placeholder=" " value={form.mahaliUnapoishiMtaa} onChange={handleChange} /><label>Mtaa</label></div>
-                <div className="input-box">
-                  <select name="umilikiWaMakazi" value={form.umilikiWaMakazi} onChange={handleChange}>
-                    <option value="">Chagua</option>
-                    <option value="Kwake">Kwake</option>
-                    <option value="Mengine">Mengine (eleza)</option>
-                  </select>
-                  <label>Umiliki wa makazi</label>
-                </div>
-                {form.umilikiWaMakazi === "Mengine" && (
-                  <div className="input-box"><input type="text" name="umilikiWaMakaziMengine" placeholder=" " value={form.umilikiWaMakaziMengine} onChange={handleChange} /><label>Eleza umiliki wa makazi</label></div>
-                )}
-                <div className="input-box"><input type="text" name="nambaYaNyumba" placeholder=" " value={form.nambaYaNyumba} onChange={handleChange} /><label>Namba ya nyumba</label></div>
-                <div className="input-box"><select name="umepanga" value={form.umepanga} onChange={handleChange}><option value="">Chagua</option><option value="Ndio">Ndio</option><option value="Hapana">Hapana</option></select><label>Umepanga</label></div>
-                <div className="input-box"><input type="text" name="umeishiHapoTanguMiezi" placeholder=" " value={form.umeishiHapoTanguMiezi} onChange={handleChange} /><label>Umeishi hapo tangu (miezi)</label></div>
-
-                {/* Spouse Info */}
-                <h4 style={{ gridColumn: "1/-1", color: "#22d3ee", margin: "10px 0 5px 0" }}>📌 Taarifa za Mume/Mke</h4>
-                <div className="input-box"><input type="text" name="jinaKamiliLaMumeMke" placeholder=" " value={form.jinaKamiliLaMumeMke} onChange={handleChange} /><label>Jina kamili la mume/mke</label></div>
-                <div className="input-box"><input type="tel" name="simuYaMumeMke" placeholder=" " value={form.simuYaMumeMke} onChange={handleChange} /><label>Simu ya mume/mke</label></div>
-                <div className="input-box"><input type="text" name="jinaMaarufuMtaani" placeholder=" " value={form.jinaMaarufuMtaani} onChange={handleChange} /><label>Jina maarufu mtaani</label></div>
-                <div className="input-box"><select name="ainaYaKitambulishoMumeMke" value={form.ainaYaKitambulishoMumeMke} onChange={handleChange}><option value="">Chagua</option><option value="Kitambulisho cha Taifa">Kitambulisho cha Taifa</option><option value="Pasipoti">Pasipoti</option></select><label>Aina ya kitambulisho cha mume/mke</label></div>
-                <div className="input-box"><input type="text" name="nambaYaKitambulishoMumeMke" placeholder=" " value={form.nambaYaKitambulishoMumeMke} onChange={handleChange} /><label>Namba ya kitambulisho cha mume/mke</label></div>
-                <div className="input-box"><input type="text" name="kaziYaMumeMke" placeholder=" " value={form.kaziYaMumeMke} onChange={handleChange} /><label>Kazi ya mume/mke</label></div>
-                <div className="input-box"><input type="text" name="jinaLaMwajiriWaMumeMke" placeholder=" " value={form.jinaLaMwajiriWaMumeMke} onChange={handleChange} /><label>Jina la mwajiri wa mume/mke</label></div>
-                <div className="input-box"><input type="tel" name="simuYaOfisiYaMumeMke" placeholder=" " value={form.simuYaOfisiYaMumeMke} onChange={handleChange} /><label>Simu ya ofisi ya mume/mke</label></div>
+              <div className="form-section">
+                <div className="section-divider">SEHEMU 1: TAARIFA ZA MWOMBAJI</div>
+                <table className="form-table">
+                  <tbody>
+                    <tr>
+                      <td colSpan={4}><strong>Jina kamili la mwombaji</strong><br /><input type="text" name="jinaKamiliLaMwombaji" value={form.jinaKamiliLaMwombaji} onChange={handleChange} /></td>
+                      <td colSpan={2}><strong>Jinsia</strong><br /><select name="jinsia" value={form.jinsia} onChange={handleChange}><option value="">Chagua</option><option value="Me">Me</option><option value="Ke">Ke</option></select></td>
+                      <td colSpan={3}><strong>Jina maarufu</strong><br /><input type="text" name="jinaMaarufu" value={form.jinaMaarufu} onChange={handleChange} /></td>
+                      <td colSpan={3}><strong>Tarehe ya kuzaliwa</strong><br /><input type="date" name="tareheYaKuzaliwa" value={form.tareheYaKuzaliwa} onChange={handleChange} /></td>
+                    </tr>
+                    <tr>
+                      <td colSpan={4}><strong>Aina ya kitambulisho</strong><br /><select name="ainaYaKitambulisho" value={form.ainaYaKitambulisho} onChange={handleChange}><option value="">Chagua</option><option value="Kitambulisho cha Taifa">Kitambulisho cha Taifa</option><option value="Pasipoti">Pasipoti</option><option value="Leseni ya kuendesha">Leseni ya kuendesha</option></select></td>
+                      <td colSpan={4}><strong>Namba ya kitambulisho</strong><br /><input type="text" name="nambaYaKitambulisho" value={form.nambaYaKitambulisho} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Namba ya simu</strong><br /><input type="tel" name="nambaYaSimu" value={form.nambaYaSimu} onChange={handleChange} /></td>
+                    </tr>
+                    <tr>
+                      <td colSpan={4}><strong>Barua pepe (Email)</strong><br /><input type="email" name="baruaPepe" value={form.baruaPepe} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Uraia (Nationality)</strong><br /><input type="text" name="uraia" value={form.uraia} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Hali ya ndoa</strong><br /><select name="haliYaNdoa" value={form.haliYaNdoa} onChange={handleChange}><option value="">Chagua</option><option value="Nimeoa/Olewa">1. Nimeoa/Olewa</option><option value="Sijaoa/Olewa">2. Sijaoa/Olewa</option><option value="Nimeachika">3. Nimeachika</option><option value="Mjane">4. Mjane</option></select></td>
+                    </tr>
+                    <tr><td colSpan={12} className="sub-header" style={{ background: "#f0f0f0", fontWeight: "bold" }}>MAHALI UNAPOISHI KWA SASA</td></tr>
+                    <tr>
+                      <td colSpan={3}><strong>Mkoa</strong><br /><input type="text" name="mahaliUnapoishiMkoa" value={form.mahaliUnapoishiMkoa} onChange={handleChange} /></td>
+                      <td colSpan={3}><strong>Wilaya</strong><br /><input type="text" name="mahaliUnapoishiWilaya" value={form.mahaliUnapoishiWilaya} onChange={handleChange} /></td>
+                      <td colSpan={3}><strong>Kata</strong><br /><input type="text" name="mahaliUnapoishiKata" value={form.mahaliUnapoishiKata} onChange={handleChange} /></td>
+                      <td colSpan={3}><strong>Mtaa</strong><br /><input type="text" name="mahaliUnapoishiMtaa" value={form.mahaliUnapoishiMtaa} onChange={handleChange} /></td>
+                    </tr>
+                    <tr>
+                      <td colSpan={4}><strong>Umiliki wa makazi</strong><br />
+                        <select name="umilikiWaMakazi" value={form.umilikiWaMakazi} onChange={handleChange}>
+                          <option value="">Chagua</option><option value="Kwake">Kwake</option><option value="Mengine">Mengine (eleza)</option>
+                        </select>
+                        {form.umilikiWaMakazi === "Mengine" && <input type="text" name="umilikiWaMakaziMengine" value={form.umilikiWaMakaziMengine} onChange={handleChange} style={{ marginTop: "5px" }} placeholder="Eleza hapa..." />}
+                      </td>
+                      <td colSpan={3}><strong>Namba ya nyumba</strong><br /><input type="text" name="nambaYaNyumba" value={form.nambaYaNyumba} onChange={handleChange} /></td>
+                      <td colSpan={2}><strong>Umepanga</strong><br /><select name="umepanga" value={form.umepanga} onChange={handleChange}><option value="">Chagua</option><option value="Ndio">Ndio</option><option value="Hapana">Hapana</option></select></td>
+                      <td colSpan={3}><strong>Umeishi hapo tangu (miezi)</strong><br /><input type="text" name="umeishiHapoTanguMiezi" value={form.umeishiHapoTanguMiezi} onChange={handleChange} /></td>
+                    </tr>
+                    <tr><td colSpan={12} className="sub-header" style={{ background: "#f0f0f0", fontWeight: "bold" }}>TAARIFA ZA MUME/MKE</td></tr>
+                    <tr>
+                      <td colSpan={4}><strong>Jina kamili la mume/mke</strong><br /><input type="text" name="jinaKamiliLaMumeMke" value={form.jinaKamiliLaMumeMke} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Simu</strong><br /><input type="tel" name="simuYaMumeMke" value={form.simuYaMumeMke} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Jina maarufu mtaani</strong><br /><input type="text" name="jinaMaarufuMtaani" value={form.jinaMaarufuMtaani} onChange={handleChange} /></td>
+                    </tr>
+                    <tr>
+                      <td colSpan={4}><strong>Aina ya kitambulisho</strong><br /><select name="ainaYaKitambulishoMumeMke" value={form.ainaYaKitambulishoMumeMke} onChange={handleChange}><option value="">Chagua</option><option value="Kitambulisho cha Taifa">Kitambulisho cha Taifa</option><option value="Pasipoti">Pasipoti</option></select></td>
+                      <td colSpan={4}><strong>Namba ya kitambulisho</strong><br /><input type="text" name="nambaYaKitambulishoMumeMke" value={form.nambaYaKitambulishoMumeMke} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Kazi anayofanya</strong><br /><input type="text" name="kaziYaMumeMke" value={form.kaziYaMumeMke} onChange={handleChange} /></td>
+                    </tr>
+                    <tr>
+                      <td colSpan={6}><strong>Jina la mwajiri</strong><br /><input type="text" name="jinaLaMwajiriWaMumeMke" value={form.jinaLaMwajiriWaMumeMke} onChange={handleChange} /></td>
+                      <td colSpan={6}><strong>Simu ya ofisi</strong><br /><input type="tel" name="simuYaOfisiYaMumeMke" value={form.simuYaOfisiYaMumeMke} onChange={handleChange} /></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             )}
 
             {/* SEHEMU 2: TAARIFA ZA AJIRA */}
             {currentStep === 1 && (
-              <div className="form-grid-2cols">
-                <div className="input-box"><input type="text" name="jinaLaKampuniYaMwajiri" placeholder=" " value={form.jinaLaKampuniYaMwajiri} onChange={handleChange} /><label>Jina la kampuni/mwajiri</label></div>
-                <div className="input-box"><input type="text" name="anuaniYaOfisiYaMwajiri" placeholder=" " value={form.anuaniYaOfisiYaMwajiri} onChange={handleChange} /><label>Anuani ya ofisi ya mwajiri</label></div>
-                <div className="input-box"><input type="text" name="wadhifa" placeholder=" " value={form.wadhifa} onChange={handleChange} /><label>Wadhifa wako</label></div>
-                <div className="input-box"><input type="text" name="tareheYaKuanzaKazi" placeholder=" " value={form.tareheYaKuanzaKazi} onChange={handleChange} /><label>Umefanya kazi hapo toka lini</label></div>
-                <div className="input-box"><input type="number" name="mshaharaKwaMwezi" placeholder=" " value={form.mshaharaKwaMwezi} onChange={handleChange} /><label>Mshahara kwa mwezi (Tsh)</label></div>
-                <div className="input-box"><select name="ainaYaAjira" value={form.ainaYaAjira} onChange={handleChange}><option value="">Chagua</option><option value="Kudumu">Kudumu</option><option value="Mkataba">Mkataba</option><option value="Ya muda mfupi">Ya muda mfupi</option></select><label>Aina ya ajira</label></div>
-                <div className="input-box"><input type="date" name="tareheYaKumalizaMkataba" placeholder=" " value={form.tareheYaKumalizaMkataba} onChange={handleChange} /><label>Tarehe ya kumaliza mkataba</label></div>
-                <div className="input-box"><input type="date" name="tareheYaKustaafu" placeholder=" " value={form.tareheYaKustaafu} onChange={handleChange} /><label>Tarehe ya kustaafu</label></div>
+              <div className="form-section">
+                <div className="section-divider">SEHEMU 2: TAARIFA ZA AJIRA</div>
+                <table className="form-table">
+                  <tbody>
+                    <tr>
+                      <td colSpan={6}><strong>Jina la kampuni/mwajiri</strong><br /><input type="text" name="jinaLaKampuniYaMwajiri" value={form.jinaLaKampuniYaMwajiri} onChange={handleChange} /></td>
+                      <td colSpan={6}><strong>Anuani ya ofisi ya mwajiri</strong><br /><input type="text" name="anuaniYaOfisiYaMwajiri" value={form.anuaniYaOfisiYaMwajiri} onChange={handleChange} /></td>
+                    </tr>
+                    <tr>
+                      <td colSpan={6}><strong>Wadhifa wako</strong><br /><input type="text" name="wadhifa" value={form.wadhifa} onChange={handleChange} /></td>
+                      <td colSpan={6}><strong>Umefanya kazi hapo toka lini</strong><br /><input type="text" name="tareheYaKuanzaKazi" value={form.tareheYaKuanzaKazi} onChange={handleChange} /></td>
+                    </tr>
+                    <tr>
+                      <td colSpan={6}><strong>Mshahara kwa mwezi (Tsh)</strong><br /><input type="number" name="mshaharaKwaMwezi" value={form.mshaharaKwaMwezi} onChange={handleChange} /></td>
+                      <td colSpan={6}><strong>Aina ya ajira</strong><br /><select name="ainaYaAjira" value={form.ainaYaAjira} onChange={handleChange}><option value="">Chagua</option><option value="Kudumu">Kudumu</option><option value="Mkataba">Mkataba</option><option value="Ya muda mfupi">Ya muda mfupi</option></select></td>
+                    </tr>
+                    <tr>
+                      <td colSpan={6}><strong>Tarehe ya kumaliza mkataba</strong><br /><input type="date" name="tareheYaKumalizaMkataba" value={form.tareheYaKumalizaMkataba} onChange={handleChange} /></td>
+                      <td colSpan={6}><strong>Tarehe ya kustaafu</strong><br /><input type="date" name="tareheYaKustaafu" value={form.tareheYaKustaafu} onChange={handleChange} /></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             )}
 
