@@ -220,236 +220,254 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         .sidebar {
           width: 260px;
           height: 100vh;
-          background: #0a0f1a;
+          background: linear-gradient(180deg, #090e17 0%, #020617 100%);
           color: #e2e8f0;
           position: fixed;
           top: 0;
           left: 0;
           overflow-x: visible;
           overflow-y: auto;
-          border-right: 1px solid #1e293b;
+          border-right: 1px solid rgba(255, 255, 255, 0.05);
+          box-shadow: 4px 0 24px rgba(0,0,0,0.4);
           z-index: 100;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          transition: width 0.3s ease;
+          transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .sidebar.collapsed {
-          width: 80px;
-        }
+        .sidebar.collapsed { width: 80px; }
 
         .logo-area {
-          padding: 20px 18px;
-          border-bottom: 1px solid #1e293b;
-          margin-bottom: 16px;
+          padding: 24px 20px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          margin-bottom: 20px;
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 14px;
           position: relative;
-          overflow: visible;
         }
 
-        .sidebar.collapsed .logo-area {
-          justify-content: center;
-          padding: 20px 0;
-        }
+        .sidebar.collapsed .logo-area { justify-content: center; padding: 24px 0; }
 
         .collapse-toggle {
           position: absolute;
-          right: -12px;
-          top: 25px;
-          width: 24px;
-          height: 24px;
-          background: #3b82f6;
-          border: none;
+          right: -14px;
+          top: 30px;
+          width: 28px;
+          height: 28px;
+          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+          border: 2px solid #0f172a;
           color: white;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          font-size: 12px;
+          font-size: 10px;
           z-index: 101;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .collapse-toggle:hover {
+          transform: scale(1.1);
+          box-shadow: 0 6px 16px rgba(59, 130, 246, 0.6);
         }
 
-        .sidebar.collapsed .collapse-toggle {
-          right: 28px;
-        }
+        .sidebar.collapsed .collapse-toggle { right: 26px; border: 2px solid #020617; }
 
         .logo-placeholder {
-          width: 36px;
-          height: 36px;
-          background: #1e293b;
-          border-radius: 10px;
-          border: 1px solid #334155;
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
           flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .logo-placeholder::after {
+          content: 'M';
+          font-size: 20px;
+          font-weight: 800;
+          color: white;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .logo-title {
-          font-weight: 700;
+          font-weight: 800;
           font-size: 16px;
-          color: #f1f5f9;
-          letter-spacing: -0.3px;
+          color: #ffffff;
+          letter-spacing: 0.5px;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .logo-sub {
           font-size: 11px;
           color: #94a3b8;
           margin-top: 2px;
+          font-weight: 500;
+          letter-spacing: 0.2px;
         }
 
         .user-profile {
-          padding: 12px 16px;
-          margin: 0 12px 16px 12px;
-          background: #111827;
-          border-radius: 12px;
-          border: 1px solid #1e293b;
+          padding: 16px;
+          margin: 0 16px 24px 16px;
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          box-shadow: inset 0 0 20px rgba(255,255,255,0.01);
+          transition: transform 0.2s;
+        }
+        
+        .user-profile:hover {
+          background: rgba(255, 255, 255, 0.05);
         }
 
         .user-name {
-          font-weight: 600;
+          font-weight: 700;
           font-size: 14px;
-          color: #f1f5f9;
-          margin-bottom: 4px;
+          color: #f8fafc;
+          margin-bottom: 6px;
+          text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
 
         .user-role {
           font-size: 11px;
-          color: #22d3ee;
-          letter-spacing: 0.3px;
+          color: #38bdf8;
+          font-weight: 600;
+          letter-spacing: 0.5px;
         }
 
-        .nav-menu {
-          padding: 0 12px;
-        }
+        .nav-menu { padding: 0 12px; }
+        .collapsed .nav-menu { padding: 0 10px; }
 
-        .collapsed .nav-menu {
-          padding: 0 10px;
-        }
-
-        .nav-item {
-          margin-bottom: 6px;
-        }
+        .nav-item { margin-bottom: 8px; }
 
         .nav-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 10px 12px;
-          background: #111827;
-          border-radius: 10px;
-          border: 1px solid #1e293b;
+          padding: 12px 14px;
+          background: transparent;
+          border-radius: 12px;
+          border: 1px solid transparent;
           cursor: pointer;
           font-size: 14px;
           font-weight: 500;
-          color: #e2e8f0;
-          transition: background 0.2s;
+          color: #cbd5e1;
+          transition: all 0.2s ease;
         }
 
-        .collapsed .nav-header {
-          justify-content: center;
-          padding: 12px;
-        }
+        .collapsed .nav-header { justify-content: center; padding: 14px; }
 
-        .nav-header-left {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
+        .nav-header-left { display: flex; align-items: center; gap: 14px; }
 
         .nav-icon {
           font-size: 18px;
           width: 24px;
           text-align: center;
+          transition: transform 0.2s, filter 0.2s;
         }
 
         .nav-header:hover {
-          background: #1a2332;
+          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.05);
+          color: #ffffff;
+        }
+        
+        .nav-header:hover .nav-icon {
+          transform: scale(1.1);
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
         }
 
         .nav-badge {
-          background: #1e293b;
+          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
           padding: 2px 8px;
           border-radius: 30px;
           font-size: 11px;
-          font-weight: 600;
-          color: #94a3b8;
+          font-weight: 700;
+          color: #ffffff;
+          box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
         }
 
         .nav-arrow {
           font-size: 10px;
           color: #64748b;
-          transition: transform 0.2s;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .nav-arrow.open {
-          transform: rotate(180deg);
-        }
+        .nav-arrow.open { transform: rotate(180deg); color: #3b82f6; }
 
         .nav-submenu {
           margin-top: 4px;
-          margin-left: 12px;
-          padding-left: 8px;
-          border-left: 2px solid #1e293b;
+          margin-left: 20px;
+          padding-left: 12px;
+          border-left: 2px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
         }
 
         .nav-link {
-          padding: 8px 12px;
-          margin: 2px 0;
-          border-radius: 8px;
+          padding: 10px 14px;
+          border-radius: 10px;
           font-size: 13px;
-          font-weight: 400;
+          font-weight: 500;
           color: #94a3b8;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.2s ease;
+          position: relative;
         }
 
         .nav-link:hover {
-          background: #111827;
-          color: #f1f5f9;
+          background: rgba(59, 130, 246, 0.1);
+          color: #60a5fa;
+          padding-left: 18px;
         }
 
         .nav-footer {
           position: sticky;
           bottom: 0;
           margin-top: 20px;
-          padding: 16px 12px;
-          background: #0a0f1a;
-          border-top: 1px solid #1e293b;
+          padding: 20px 16px;
+          background: linear-gradient(180deg, transparent 0%, rgba(2,6,23,0.95) 100%);
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .logout-btn {
           width: 100%;
-          padding: 10px;
-          background: #1e293b;
-          border: 1px solid #334155;
-          border-radius: 10px;
+          padding: 12px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
           color: #e2e8f0;
-          font-size: 13px;
-          font-weight: 500;
+          font-size: 14px;
+          font-weight: 600;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: all 0.2s;
           display: flex;
           justify-content: center;
           align-items: center;
+          letter-spacing: 0.5px;
         }
 
         .logout-btn:hover {
-          background: #2d3a4e;
+          background: rgba(239, 68, 68, 0.1);
+          border-color: rgba(239, 68, 68, 0.3);
+          color: #ef4444;
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
         }
 
-        ::-webkit-scrollbar {
-          width: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: #0f172a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: #334155;
-          border-radius: 4px;
-        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
       `}</style>
     </div>
   );

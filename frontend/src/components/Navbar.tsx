@@ -43,43 +43,61 @@ const Navbar: FC = () => {
           top: 0;
           left: 0;
           right: 0;
-          height: 60px;
-          background: white;
+          height: 70px;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           color: #0f172a;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 0 24px;
-          border-bottom: 1px solid #e2e8f0;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+          padding: 0 32px;
+          border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+          box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05);
           z-index: 99;
+          transition: all 0.3s ease;
         }
 
         .left {
           display: flex;
           flex-direction: column;
-          gap: 2px;
+          gap: 4px;
         }
 
         .title {
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 800;
-          color: #0f172a;
+          color: #1e293b;
+          letter-spacing: -0.5px;
+          background: linear-gradient(135deg, #0f172a 0%, #3b82f6 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-          font-size: 12px;
+          font-size: 13px;
           color: #64748b;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
         }
 
         .logout {
-          background: #ef4444;
+          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
           border: none;
-          padding: 8px 16px;
+          padding: 10px 20px;
           color: white;
-          border-radius: 8px;
+          border-radius: 10px;
           cursor: pointer;
           font-weight: 600;
+          font-size: 14px;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+        
+        .logout:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
         }
 
         .navbar-portal {
@@ -87,7 +105,7 @@ const Navbar: FC = () => {
           display: flex;
           justify-content: flex-end;
           align-items: center;
-          margin-right: 20px;
+          margin-right: 30px;
         }
       `}</style>
     </div>
