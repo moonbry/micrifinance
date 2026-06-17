@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import axios from "axios";
 
 function PersonalLoan() {
@@ -87,6 +88,11 @@ function PersonalLoan() {
     "TAMKO NA WASILISHA"
   ];
 
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    setPortalTarget(document.getElementById("navbar-portal"));
+  }, []);
+
   const uploadPassportPhoto = async (): Promise<string | null> => {
     if (!passportPhoto) return null;
     try {
@@ -155,19 +161,24 @@ function PersonalLoan() {
 
   return (
     <div className="page-container">
-      <div className="form-container">
-        <div className="form-top-bar">
-          <span className="form-title-text">FOMU YA MAOMBI YA MKOPO BINAFSI</span>
-          <div className="fomu-no">Fomu No: <input type="text" name="fomuNo" value={form.fomuNo} onChange={handleChange} placeholder="........" className="fomu-no-input" /></div>
-        </div>
+      {portalTarget && createPortal(
+        <div className="form-portal-content">
+          <div className="fomu-no">
+            <span style={{ color: '#64748b' }}>Fomu No:</span>
+            <input type="text" name="fomuNo" value={form.fomuNo} onChange={handleChange} placeholder="........" className="fomu-no-input" />
+          </div>
+          <div className="step-indicators">
+            {steps.map((_, idx) => (
+              <button key={idx} type="button" className={`step-btn ${idx === currentStep ? "active" : ""} ${idx < currentStep ? "completed" : ""}`} onClick={() => idx < currentStep && setCurrentStep(idx)}>
+                {idx + 1}
+              </button>
+            ))}
+          </div>
+        </div>,
+        portalTarget
+      )}
 
-        <div className="step-indicators">
-          {steps.map((_, idx) => (
-            <button key={idx} className={`step-btn ${idx === currentStep ? "active" : ""} ${idx < currentStep ? "completed" : ""}`} onClick={() => idx < currentStep && setCurrentStep(idx)}>
-              {idx + 1}
-            </button>
-          ))}
-        </div>
+      <div className="form-container">
         <div className="step-title">{steps[currentStep]}</div>
 
         <form onSubmit={handleSubmit}>
@@ -459,59 +470,58 @@ function PersonalLoan() {
           width: 100%;
           background: white;
           border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          box-shadow: 0 4px 15px rgba(0,0,0,0.05);
           overflow: hidden;
         }
-        .form-top-bar {
-          background: #1a3a5c;
-          padding: 10px 20px;
+        .form-portal-content {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          color: white;
-        }
-        .form-title-text {
-          font-size: 15px;
-          font-weight: bold;
-          letter-spacing: 0.5px;
+          gap: 24px;
         }
         .fomu-no {
-          font-size: 13px;
-          color: #fff;
+          font-size: 14px;
+          font-weight: 600;
+          color: #0f172a;
           white-space: nowrap;
+          display: flex;
+          align-items: center;
         }
         .fomu-no-input {
-          width: 110px;
-          padding: 4px 8px;
+          width: 130px;
+          padding: 6px 10px;
           margin-left: 8px;
-          border: 1px solid #ccc;
-          border-radius: 2px;
-          color: #000;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          color: #0f172a;
+          font-weight: normal;
+          outline: none;
         }
-        .form-header h1 {
-          font-size: 18px;
-          letter-spacing: 1px;
+        .fomu-no-input:focus {
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
         .step-indicators {
           display: flex;
-          gap: 5px;
-          padding: 10px 20px;
-          background: #f5f5f5;
-          border-bottom: 1px solid #ddd;
-          flex-wrap: wrap;
+          gap: 8px;
+          align-items: center;
         }
         .step-btn {
           width: 32px;
           height: 32px;
           border-radius: 50%;
-          border: 1px solid #ccc;
+          border: 2px solid #e2e8f0;
           background: white;
+          color: #64748b;
           cursor: pointer;
           font-weight: bold;
-          font-size: 12px;
+          font-size: 13px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
-        .step-btn.active { background: #1a3a5c; color: white; border-color: #1a3a5c; }
-        .step-btn.completed { background: #2e7d32; color: white; border-color: #2e7d32; }
+        .step-btn.completed { background: #22c55e; color: white; border-color: #22c55e; }
+        .step-btn.active { background: #1a3a5c; color: white; border-color: #1a3a5c; box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.2); }
         .step-title {
           background: #e0e0e0;
           padding: 8px 20px;

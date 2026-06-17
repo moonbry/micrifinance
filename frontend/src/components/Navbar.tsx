@@ -31,6 +31,8 @@ const Navbar: FC = () => {
         <div className="subtitle">{subtitle}</div>
       </div>
 
+      <div id="navbar-portal" className="navbar-portal"></div>
+
       <button className="logout" onClick={handleLogout}>
         Logout
       </button>
@@ -78,6 +80,14 @@ const Navbar: FC = () => {
           border-radius: 8px;
           cursor: pointer;
           font-weight: 600;
+        }
+
+        .navbar-portal {
+          flex: 1;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          margin-right: 20px;
         }
       `}</style>
     </div>
