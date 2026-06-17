@@ -55,7 +55,7 @@ const Navbar: FC = () => {
         .nb {
           position: sticky;
           top: 0; left: 0; right: 0;
-          height: 64px;
+          height: 80px;
           background: #ffffff;
           color: #1e293b;
           display: flex;

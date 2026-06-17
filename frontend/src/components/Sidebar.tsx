@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import type { FC } from "react";
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.png";
 
 interface User {
   id: number;
@@ -87,14 +87,8 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
       <div className="sd-logo">
         <div className="sd-logo__brand">
           <div className="sd-logo__icon">
-            <img src={logo} alt="Orethan" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '4px' }} />
+            <img src={logo} alt="Orethan" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
-          {!isCollapsed && (
-            <div className="sd-logo__text">
-              <span className="sd-logo__title">Orethan</span>
-              <span className="sd-logo__sub">Microfinance</span>
-            </div>
-          )}
         </div>
         <button className="sd-logo__menu" onClick={() => setIsCollapsed(!isCollapsed)} title={isCollapsed ? "Expand" : "Collapse"}>
           {isCollapsed ? (
@@ -249,7 +243,7 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
           align-items: center;
           justify-content: space-between;
           padding: 0 16px;
-          height: 64px;
+          height: 80px;
           background: #ffffff;
           border-bottom: 1px solid #e2e8f0;
           border-right: 1px solid #e2e8f0;
@@ -258,9 +252,7 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         .sd-logo__brand { display: flex; align-items: center; gap: 10px; }
         .sd--c .sd-logo__brand { display: none; }
         .sd-logo__icon {
-          width: 40px; height: 40px;
-          background: #f1f5f9;
-          border-radius: 8px;
+          width: 140px; height: 50px;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
           overflow: hidden;
