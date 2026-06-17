@@ -78,396 +78,401 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
   const canAccessUsers = userRole === "admin";
   const canAccessRepayment = userRole === "admin" || userRole === "loan_manager" || userRole === "general_manager" || userRole === "loan_officer" || userRole === "managing_director";
 
+  const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
+
   return (
-    <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
-      <div className="logo-area">
-        <div className="logo-placeholder"></div>
-        {!isCollapsed && (
-          <div className="logo-text">
-            <div className="logo-title">Microfinance</div>
-            <div className="logo-sub">Management System</div>
-          </div>
-        )}
-        <button className="collapse-toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
-          {isCollapsed ? "❯" : "❮"}
+    <div className={`sb ${isCollapsed ? "sb--collapsed" : ""}`}>
+
+      {/* ── Top bar: collapse toggle + brand ── */}
+      <div className="sb__top">
+        <button className="sb__toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
+          {isCollapsed ? "»" : "«"}
         </button>
+        {!isCollapsed && <span className="sb__brand">Microfinance</span>}
       </div>
 
-      {user && !isCollapsed && (
-        <div className="user-profile">
-          <div className="user-name">{user.name}</div>
-          <div className="user-role">{user.role?.replace("_", " ").toUpperCase()}</div>
-        </div>
-      )}
-
-      <div className="nav-menu">
-        {canAccessUsers && (
-          <div className="nav-item">
-            <div className="nav-header" onClick={handleUsersClick} title="Users">
-              <div className="nav-header-left">
-                <span className="nav-icon">👥</span>
-                {!isCollapsed && <span>Users</span>}
-              </div>
-              {!isCollapsed && (
-                <>
-                  {userCount !== null && <span className="nav-badge">{userCount}</span>}
-                  <span className={`nav-arrow ${showUsers ? "open" : ""}`}>▼</span>
-                </>
-              )}
-            </div>
-            {showUsers && !isCollapsed && (
-              <div className="nav-submenu">
-                <div className="nav-link" onClick={() => navigate("/users")}>View Users</div>
-              </div>
-            )}
+      {/* ── User profile ── */}
+      <div className="sb__profile">
+        <div className="sb__avatar">{userInitial}</div>
+        {!isCollapsed && user && (
+          <div className="sb__user-info">
+            <div className="sb__user-name">{user.name}</div>
+            <div className="sb__user-role">{user.role?.replace("_", " ").toUpperCase()}</div>
           </div>
         )}
+      </div>
 
+      {/* ── Navigation ── */}
+      <nav className="sb__nav">
+
+        {/* Section: Loan Operations */}
         {canAccessLoansForm && (
-          <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowLoans(!showLoans)} title="Loans Form">
-              <div className="nav-header-left">
-                <span className="nav-icon">📝</span>
-                {!isCollapsed && <span>Loans Form</span>}
-              </div>
-              {!isCollapsed && <span className={`nav-arrow ${showLoans ? "open" : ""}`}>▼</span>}
+          <>
+            <div className="sb__section-label">{!isCollapsed ? "Loan Operations" : ""}</div>
+
+            <div className="sb__item" onClick={() => setShowLoans(!showLoans)} title="Loans Form">
+              <span className="sb__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
+              </span>
+              {!isCollapsed && <span className="sb__label">Loans Form</span>}
+              {!isCollapsed && <span className={`sb__chevron ${showLoans ? "sb__chevron--open" : ""}`}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+              </span>}
             </div>
             {showLoans && !isCollapsed && (
-              <div className="nav-submenu">
-                <div className="nav-link" onClick={() => navigate("/personal-loan")}>Personal Loan</div>
-                <div className="nav-link" onClick={() => navigate("/group-loan")}>Group Loan</div>
+              <div className="sb__submenu">
+                <div className="sb__sublink" onClick={() => navigate("/personal-loan")}>Personal Loan</div>
+                <div className="sb__sublink" onClick={() => navigate("/group-loan")}>Group Loan</div>
               </div>
             )}
-          </div>
+          </>
         )}
 
-        {canAccessLoanManager && (
-          <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowLoanManager(!showLoanManager)} title="Loan Manager">
-              <div className="nav-header-left">
-                <span className="nav-icon">📊</span>
-                {!isCollapsed && <span>Loan Manager</span>}
-              </div>
-              {!isCollapsed && <span className={`nav-arrow ${showLoanManager ? "open" : ""}`}>▼</span>}
-            </div>
-            {showLoanManager && !isCollapsed && (
-              <div className="nav-submenu">
-                <div className="nav-link" onClick={() => navigate("/loan-manager")}>Dashboard</div>
-              </div>
+        {/* Section: Management */}
+        {(canAccessLoanManager || canAccessGeneralManager || canAccessManagingDirector) && (
+          <>
+            <div className="sb__section-label">{!isCollapsed ? "Management" : ""}</div>
+
+            {canAccessLoanManager && (
+              <>
+                <div className="sb__item" onClick={() => setShowLoanManager(!showLoanManager)} title="Loan Manager">
+                  <span className="sb__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg>
+                  </span>
+                  {!isCollapsed && <span className="sb__label">Loan Manager</span>}
+                  {!isCollapsed && <span className={`sb__chevron ${showLoanManager ? "sb__chevron--open" : ""}`}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                  </span>}
+                </div>
+                {showLoanManager && !isCollapsed && (
+                  <div className="sb__submenu">
+                    <div className="sb__sublink" onClick={() => navigate("/loan-manager")}>Dashboard</div>
+                  </div>
+                )}
+              </>
             )}
-          </div>
-        )}
 
-        {canAccessGeneralManager && (
-          <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowGeneralManager(!showGeneralManager)} title="General Manager">
-              <div className="nav-header-left">
-                <span className="nav-icon">👔</span>
-                {!isCollapsed && <span>General Manager</span>}
-              </div>
-              {!isCollapsed && <span className={`nav-arrow ${showGeneralManager ? "open" : ""}`}>▼</span>}
-            </div>
-            {showGeneralManager && !isCollapsed && (
-              <div className="nav-submenu">
-                <div className="nav-link" onClick={() => navigate("/general-manager")}>Dashboard</div>
-              </div>
+            {canAccessGeneralManager && (
+              <>
+                <div className="sb__item" onClick={() => setShowGeneralManager(!showGeneralManager)} title="General Manager">
+                  <span className="sb__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                  </span>
+                  {!isCollapsed && <span className="sb__label">General Manager</span>}
+                  {!isCollapsed && <span className={`sb__chevron ${showGeneralManager ? "sb__chevron--open" : ""}`}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                  </span>}
+                </div>
+                {showGeneralManager && !isCollapsed && (
+                  <div className="sb__submenu">
+                    <div className="sb__sublink" onClick={() => navigate("/general-manager")}>Dashboard</div>
+                  </div>
+                )}
+              </>
             )}
-          </div>
-        )}
 
-        {canAccessManagingDirector && (
-          <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowManagingManager(!showManagingManager)} title="Managing Director">
-              <div className="nav-header-left">
-                <span className="nav-icon">💎</span>
-                {!isCollapsed && <span>Managing Director</span>}
-              </div>
-              {!isCollapsed && <span className={`nav-arrow ${showManagingManager ? "open" : ""}`}>▼</span>}
-            </div>
-            {showManagingManager && !isCollapsed && (
-              <div className="nav-submenu">
-                <div className="nav-link" onClick={() => navigate("/managing-director")}>Dashboard</div>
-              </div>
+            {canAccessManagingDirector && (
+              <>
+                <div className="sb__item" onClick={() => setShowManagingManager(!showManagingManager)} title="Managing Director">
+                  <span className="sb__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                  </span>
+                  {!isCollapsed && <span className="sb__label">Managing Director</span>}
+                  {!isCollapsed && <span className={`sb__chevron ${showManagingManager ? "sb__chevron--open" : ""}`}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                  </span>}
+                </div>
+                {showManagingManager && !isCollapsed && (
+                  <div className="sb__submenu">
+                    <div className="sb__sublink" onClick={() => navigate("/managing-director")}>Dashboard</div>
+                  </div>
+                )}
+              </>
             )}
-          </div>
+          </>
         )}
 
-        {canAccessRepayment && (
-          <div className="nav-item">
-            <div className="nav-header" onClick={() => setShowRepayment(!showRepayment)} title="Repayment Tracker">
-              <div className="nav-header-left">
-                <span className="nav-icon">💰</span>
-                {!isCollapsed && <span>Repayment Tracker</span>}
-              </div>
-              {!isCollapsed && <span className={`nav-arrow ${showRepayment ? "open" : ""}`}>▼</span>}
-            </div>
-            {showRepayment && !isCollapsed && (
-              <div className="nav-submenu">
-                <div className="nav-link" onClick={() => navigate("/repayment-tracker")}>View</div>
-              </div>
+        {/* Section: Internal */}
+        {(canAccessUsers || canAccessRepayment) && (
+          <>
+            <div className="sb__section-label">{!isCollapsed ? "Internal" : ""}</div>
+
+            {canAccessUsers && (
+              <>
+                <div className="sb__item" onClick={handleUsersClick} title="Users">
+                  <span className="sb__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg>
+                  </span>
+                  {!isCollapsed && <span className="sb__label">Users</span>}
+                  {!isCollapsed && userCount !== null && <span className="sb__badge">{userCount}</span>}
+                  {!isCollapsed && <span className={`sb__chevron ${showUsers ? "sb__chevron--open" : ""}`}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                  </span>}
+                </div>
+                {showUsers && !isCollapsed && (
+                  <div className="sb__submenu">
+                    <div className="sb__sublink" onClick={() => navigate("/users")}>View Users</div>
+                  </div>
+                )}
+              </>
             )}
-          </div>
-        )}
-      </div>
 
-      <div className="nav-footer">
-        <button className="logout-btn" onClick={handleLogout} title="Logout">
-          {isCollapsed ? "🚪" : "Logout"}
-        </button>
+            {canAccessRepayment && (
+              <>
+                <div className="sb__item" onClick={() => setShowRepayment(!showRepayment)} title="Repayment Tracker">
+                  <span className="sb__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg>
+                  </span>
+                  {!isCollapsed && <span className="sb__label">Repayment Tracker</span>}
+                  {!isCollapsed && <span className={`sb__chevron ${showRepayment ? "sb__chevron--open" : ""}`}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                  </span>}
+                </div>
+                {showRepayment && !isCollapsed && (
+                  <div className="sb__submenu">
+                    <div className="sb__sublink" onClick={() => navigate("/repayment-tracker")}>View</div>
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </nav>
+
+      {/* ── Footer: Settings / Logout ── */}
+      <div className="sb__footer">
+        <div className="sb__section-label">{!isCollapsed ? "Preferences" : ""}</div>
+
+        <div className="sb__item sb__item--footer" onClick={handleLogout} title="Log Out">
+          <span className="sb__icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+          </span>
+          {!isCollapsed && <span className="sb__label">Log Out</span>}
+        </div>
       </div>
 
       <style>{`
-        .sidebar {
+        /* ═══════════ SIDEBAR SHELL ═══════════ */
+        .sb {
           width: 260px;
           height: 100vh;
-          background: linear-gradient(180deg, #090e17 0%, #020617 100%);
-          color: #e2e8f0;
+          background: #2a2a2a;
+          color: #d4d4d4;
           position: fixed;
           top: 0;
           left: 0;
-          overflow-x: visible;
+          display: flex;
+          flex-direction: column;
+          overflow-x: hidden;
           overflow-y: auto;
-          border-right: 1px solid rgba(255, 255, 255, 0.05);
-          box-shadow: 4px 0 24px rgba(0,0,0,0.4);
           z-index: 100;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border-right: 1px solid #3a3a3a;
+        }
+        .sb--collapsed { width: 80px; }
+
+        /* ═══════════ TOP BAR ═══════════ */
+        .sb__top {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 18px 20px;
+          border-bottom: 1px solid #3a3a3a;
+          min-height: 56px;
+        }
+        .sb--collapsed .sb__top {
+          justify-content: center;
+          padding: 18px 0;
         }
 
-        .sidebar.collapsed { width: 80px; }
+        .sb__toggle {
+          background: none;
+          border: none;
+          color: #d4d4d4;
+          font-size: 18px;
+          cursor: pointer;
+          padding: 4px 8px;
+          border-radius: 6px;
+          transition: background 0.15s;
+          line-height: 1;
+          flex-shrink: 0;
+        }
+        .sb__toggle:hover { background: #404040; }
 
-        .logo-area {
-          padding: 24px 20px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-          margin-bottom: 20px;
+        .sb__brand {
+          font-size: 18px;
+          font-weight: 700;
+          color: #e8863a;
+          letter-spacing: 0.2px;
+          white-space: nowrap;
+        }
+
+        /* ═══════════ PROFILE ═══════════ */
+        .sb__profile {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 20px;
+          margin: 12px 12px 8px 12px;
+          background: #353535;
+          border-radius: 14px;
+        }
+        .sb--collapsed .sb__profile {
+          justify-content: center;
+          padding: 14px;
+          margin: 12px 10px 8px 10px;
+        }
+
+        .sb__avatar {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #e8863a 0%, #d4723a 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 18px;
+          color: white;
+          flex-shrink: 0;
+          box-shadow: 0 2px 8px rgba(232, 134, 58, 0.3);
+        }
+
+        .sb__user-info {
+          overflow: hidden;
+        }
+        .sb__user-name {
+          font-weight: 600;
+          font-size: 14px;
+          color: #f0f0f0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .sb__user-role {
+          font-size: 11px;
+          color: #e8863a;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          margin-top: 2px;
+        }
+
+        /* ═══════════ NAVIGATION ═══════════ */
+        .sb__nav {
+          flex: 1;
+          padding: 8px 0;
+          overflow-y: auto;
+        }
+
+        .sb__section-label {
+          font-size: 11px;
+          font-weight: 600;
+          color: #808080;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          padding: 16px 24px 8px 24px;
+          white-space: nowrap;
+          min-height: 12px;
+        }
+        .sb--collapsed .sb__section-label {
+          padding: 12px 0;
+          text-align: center;
+          border-top: 1px solid #3a3a3a;
+          margin: 0 10px;
+        }
+
+        .sb__item {
           display: flex;
           align-items: center;
           gap: 14px;
+          padding: 10px 24px;
+          cursor: pointer;
+          transition: all 0.15s;
           position: relative;
+          white-space: nowrap;
+        }
+        .sb--collapsed .sb__item {
+          justify-content: center;
+          padding: 12px 0;
+        }
+        .sb__item:hover {
+          background: #353535;
         }
 
-        .sidebar.collapsed .logo-area { justify-content: center; padding: 24px 0; }
-
-        .collapse-toggle {
-          position: absolute;
-          right: -14px;
-          top: 30px;
-          width: 28px;
-          height: 28px;
-          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-          border: 2px solid #0f172a;
-          color: white;
-          border-radius: 50%;
+        .sb__icon {
           display: flex;
           align-items: center;
           justify-content: center;
-          cursor: pointer;
-          font-size: 10px;
-          z-index: 101;
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-          transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .collapse-toggle:hover {
-          transform: scale(1.1);
-          box-shadow: 0 6px 16px rgba(59, 130, 246, 0.6);
-        }
-
-        .sidebar.collapsed .collapse-toggle { right: 26px; border: 2px solid #020617; }
-
-        .logo-placeholder {
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-          border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-          flex-shrink: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .logo-placeholder::after {
-          content: 'M';
-          font-size: 20px;
-          font-weight: 800;
-          color: white;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .logo-title {
-          font-weight: 800;
-          font-size: 16px;
-          color: #ffffff;
-          letter-spacing: 0.5px;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .logo-sub {
-          font-size: 11px;
-          color: #94a3b8;
-          margin-top: 2px;
-          font-weight: 500;
-          letter-spacing: 0.2px;
-        }
-
-        .user-profile {
-          padding: 16px;
-          margin: 0 16px 24px 16px;
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border-radius: 16px;
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          box-shadow: inset 0 0 20px rgba(255,255,255,0.01);
-          transition: transform 0.2s;
-        }
-        
-        .user-profile:hover {
-          background: rgba(255, 255, 255, 0.05);
-        }
-
-        .user-name {
-          font-weight: 700;
-          font-size: 14px;
-          color: #f8fafc;
-          margin-bottom: 6px;
-          text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .user-role {
-          font-size: 11px;
-          color: #38bdf8;
-          font-weight: 600;
-          letter-spacing: 0.5px;
-        }
-
-        .nav-menu { padding: 0 12px; }
-        .collapsed .nav-menu { padding: 0 10px; }
-
-        .nav-item { margin-bottom: 8px; }
-
-        .nav-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 14px;
-          background: transparent;
-          border-radius: 12px;
-          border: 1px solid transparent;
-          cursor: pointer;
-          font-size: 14px;
-          font-weight: 500;
-          color: #cbd5e1;
-          transition: all 0.2s ease;
-        }
-
-        .collapsed .nav-header { justify-content: center; padding: 14px; }
-
-        .nav-header-left { display: flex; align-items: center; gap: 14px; }
-
-        .nav-icon {
-          font-size: 18px;
           width: 24px;
-          text-align: center;
-          transition: transform 0.2s, filter 0.2s;
+          height: 24px;
+          flex-shrink: 0;
+          color: #b0b0b0;
+          transition: color 0.15s;
         }
+        .sb__item:hover .sb__icon { color: #e8863a; }
 
-        .nav-header:hover {
-          background: rgba(255, 255, 255, 0.05);
-          border-color: rgba(255, 255, 255, 0.05);
-          color: #ffffff;
+        .sb__label {
+          flex: 1;
+          font-size: 14px;
+          font-weight: 500;
+          color: #d4d4d4;
         }
-        
-        .nav-header:hover .nav-icon {
-          transform: scale(1.1);
-          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
-        }
+        .sb__item:hover .sb__label { color: #f0f0f0; }
 
-        .nav-badge {
-          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-          padding: 2px 8px;
-          border-radius: 30px;
+        .sb__chevron {
+          display: flex;
+          align-items: center;
+          color: #808080;
+          transition: transform 0.25s ease;
+        }
+        .sb__chevron--open { transform: rotate(180deg); }
+
+        .sb__badge {
+          background: #e8863a;
+          color: white;
           font-size: 11px;
           font-weight: 700;
-          color: #ffffff;
-          box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-        }
-
-        .nav-arrow {
-          font-size: 10px;
-          color: #64748b;
-          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .nav-arrow.open { transform: rotate(180deg); color: #3b82f6; }
-
-        .nav-submenu {
-          margin-top: 4px;
-          margin-left: 20px;
-          padding-left: 12px;
-          border-left: 2px solid rgba(255, 255, 255, 0.1);
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-
-        .nav-link {
-          padding: 10px 14px;
+          padding: 1px 7px;
           border-radius: 10px;
+          margin-right: auto;
+          margin-left: -4px;
+        }
+
+        /* ═══════════ SUBMENU ═══════════ */
+        .sb__submenu {
+          padding: 2px 0 2px 62px;
+        }
+        .sb__sublink {
+          padding: 8px 14px;
           font-size: 13px;
-          font-weight: 500;
-          color: #94a3b8;
+          font-weight: 400;
+          color: #a0a0a0;
           cursor: pointer;
-          transition: all 0.2s ease;
-          position: relative;
+          border-radius: 8px;
+          transition: all 0.15s;
+        }
+        .sb__sublink:hover {
+          color: #e8863a;
+          background: #303030;
         }
 
-        .nav-link:hover {
-          background: rgba(59, 130, 246, 0.1);
-          color: #60a5fa;
-          padding-left: 18px;
+        /* ═══════════ FOOTER ═══════════ */
+        .sb__footer {
+          border-top: 1px solid #3a3a3a;
+          margin-top: auto;
+          padding-bottom: 12px;
         }
 
-        .nav-footer {
-          position: sticky;
-          bottom: 0;
-          margin-top: 20px;
-          padding: 20px 16px;
-          background: linear-gradient(180deg, transparent 0%, rgba(2,6,23,0.95) 100%);
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        .sb__item--footer .sb__icon { color: #b0b0b0; }
+        .sb__item--footer:hover .sb__icon { color: #ef4444; }
+        .sb__item--footer:hover .sb__label { color: #ef4444; }
 
-        .logout-btn {
-          width: 100%;
-          padding: 12px;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 12px;
-          color: #e2e8f0;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          letter-spacing: 0.5px;
-        }
-
-        .logout-btn:hover {
-          background: rgba(239, 68, 68, 0.1);
-          border-color: rgba(239, 68, 68, 0.3);
-          color: #ef4444;
-          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
-        }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+        /* ═══════════ SCROLLBAR ═══════════ */
+        .sb::-webkit-scrollbar { width: 4px; }
+        .sb::-webkit-scrollbar-track { background: transparent; }
+        .sb::-webkit-scrollbar-thumb { background: #404040; border-radius: 4px; }
+        .sb::-webkit-scrollbar-thumb:hover { background: #505050; }
       `}</style>
     </div>
   );
