@@ -81,11 +81,8 @@ function GroupLoan() {
   const steps = [
     "SEHEMU 1: TAARIFA ZA MWOMBAJI",
     "SEHEMU 2: TAARIFA ZA KIKUNDI",
-    "SEHEMU 3: TAARIFA ZA MIRADI",
-    "SEHEMU 4: KIASI CHA MKOPO",
-    "SEHEMU 5: MDHAMINI NO. 1 (MWENYEKITI)",
-    "SEHEMU 5B: MDHAMINI NO. 2 (MKE/MME/NDUGU)",
-    "SEHEMU 6: TAARIFA ZA DHAMANA",
+    "SEHEMU 3: TAARIFA ZA MIRADI NA MKOPO",
+    "SEHEMU 4: MDHAMINI NA DHAMANA",
     "TAMKO NA WASILISHA"
   ];
 
@@ -241,46 +238,35 @@ function GroupLoan() {
               </div>
             )}
 
-            {/* SEHEMU 3: TAARIFA ZA MIRADI */}
+            {/* SEHEMU 3: TAARIFA ZA MIRADI + KIASI CHA MKOPO (merged) */}
             {currentStep === 2 && (
               <div className="form-section">
-                <div className="section-divider">SEHEMU 3: TAARIFA ZA MIRADI</div>
+                <div className="section-divider">SEHEMU 3A: TAARIFA ZA MRADI</div>
                 <table className="form-table">
                   <tbody>
                     <tr>
-                      <td colSpan={6}><strong>Jina la Mradi</strong><br /><input type="text" name="jinaLaMradi" value={form.jinaLaMradi} onChange={handleChange} /></td>
-                      <td colSpan={6}><strong>Aina ya Mradi</strong><br /><input type="text" name="ainaYaMradi" value={form.ainaYaMradi} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Jina la Mradi</strong><br /><input type="text" name="jinaLaMradi" value={form.jinaLaMradi} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Aina ya Mradi</strong><br /><input type="text" name="ainaYaMradi" value={form.ainaYaMradi} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Mahali mradi upo (Wilaya)</strong><br /><input type="text" name="mahaliMradiUpoWilaya" value={form.mahaliMradiUpoWilaya} onChange={handleChange} /></td>
                     </tr>
                     <tr>
                       <td colSpan={4}><strong>Mahali mradi upo (Kata)</strong><br /><input type="text" name="mahaliMradiUpoKata" value={form.mahaliMradiUpoKata} onChange={handleChange} /></td>
-                      <td colSpan={4}><strong>Mahali mradi upo (Wilaya)</strong><br /><input type="text" name="mahaliMradiUpoWilaya" value={form.mahaliMradiUpoWilaya} onChange={handleChange} /></td>
                       <td colSpan={4}><strong>Wastani wa kipato kwa mwezi</strong><br /><input type="text" name="wastaniWaKipatoKwaMwezi" value={form.wastaniWaKipatoKwaMwezi} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Wastani wa matumizi kwa mwezi</strong><br /><input type="text" name="wastaniWaMatumiziKwaMwezi" value={form.wastaniWaMatumiziKwaMwezi} onChange={handleChange} /></td>
                     </tr>
                     <tr>
-                      <td colSpan={6}><strong>Wastani wa matumizi kwa mwezi</strong><br /><input type="text" name="wastaniWaMatumiziKwaMwezi" value={form.wastaniWaMatumiziKwaMwezi} onChange={handleChange} /></td>
-                      <td colSpan={6}><strong>Mradi umeanza lini</strong><br /><input type="text" name="mradiUmeanzaLini" value={form.mradiUmeanzaLini} onChange={handleChange} /></td>
+                      <td colSpan={12}><strong>Mradi umeanza lini</strong><br /><input type="text" name="mradiUmeanzaLini" value={form.mradiUmeanzaLini} onChange={handleChange} /></td>
                     </tr>
                   </tbody>
                 </table>
-              </div>
-            )}
 
-            {/* SEHEMU 4: KIASI CHA MKOPO */}
-            {/* SEHEMU 4: KIASI CHA MKOPO */}
-            {currentStep === 3 && (
-              <div className="form-section">
-                <div className="section-divider">SEHEMU 4: KIASI CHA MKOPO</div>
+                <div className="section-divider" style={{ marginTop: "20px" }}>SEHEMU 3B: KIASI CHA MKOPO</div>
                 <table className="form-table">
                   <tbody>
                     <tr>
-                      <td colSpan={6}><strong>Kiasi cha Mkopo (TZS)</strong><br /><input type="text" name="kiasiChaMkopo" value={form.kiasiChaMkopo} onChange={handleChange} /></td>
-                      <td colSpan={6}><strong>Muda wa kulipa Mkopo</strong><br /><input type="text" name="mudaWaLipaMkopo" value={form.mudaWaLipaMkopo} onChange={handleChange} /></td>
-                    </tr>
-                    <tr>
-                      <td colSpan={12}><strong>Ni kiasi gani cha rejesho unaweza kulipa bila matatizo?</strong><br /><input type="text" name="kiasiGaniChaRejesho" value={form.kiasiGaniChaRejesho} onChange={handleChange} /></td>
-                    </tr>
-                    <tr>
-                      <td colSpan={12}><strong>Malengo ya Mkopo</strong><br /><textarea name="malengoYaMkopo" rows={2} value={form.malengoYaMkopo} onChange={handleChange}></textarea></td>
+                      <td colSpan={4}><strong>Kiasi cha Mkopo (TZS)</strong><br /><input type="text" name="kiasiChaMkopo" value={form.kiasiChaMkopo} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Muda wa kulipa Mkopo</strong><br /><input type="text" name="mudaWaLipaMkopo" value={form.mudaWaLipaMkopo} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Kiasi cha rejesho bila matatizo</strong><br /><input type="text" name="kiasiGaniChaRejesho" value={form.kiasiGaniChaRejesho} onChange={handleChange} /></td>
                     </tr>
                     <tr>
                       <td colSpan={4}><strong>Kiasi kikundi kinadaiwa</strong><br /><input type="text" name="kiasiKikundiKinadaiwa" value={form.kiasiKikundiKinadaiwa} onChange={handleChange} /></td>
@@ -291,70 +277,65 @@ function GroupLoan() {
                       </td>
                       <td colSpan={4}><strong>Chanzo cha mapato</strong><br /><input type="text" name="chanzoChaMapato" value={form.chanzoChaMapato} onChange={handleChange} /></td>
                     </tr>
+                    <tr>
+                      <td colSpan={12}><strong>Malengo ya Mkopo</strong><br /><textarea name="malengoYaMkopo" rows={2} value={form.malengoYaMkopo} onChange={handleChange}></textarea></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
             )}
 
-            {/* SEHEMU 5: MDHAMINI (MWENYEKITI) */}
-            {/* SEHEMU 5: MDHAMINI (MWENYEKITI) */}
-            {currentStep === 4 && (
+            {/* SEHEMU 4: MDHAMINI (MWENYEKITI) + DHAMANA (merged) */}
+            {currentStep === 3 && (
               <div className="form-section">
-                <div className="section-divider">SEHEMU 5: MDHAMINI (MWENYEKITI)</div>
+                <div className="section-divider">SEHEMU 4A: MDHAMINI (MWENYEKITI)</div>
                 <table className="form-table">
                   <tbody>
                     <tr>
-                      <td colSpan={6}><strong>Jina kamili la Mwenyekiti</strong><br /><input type="text" name="mdhamini1JinaKamili" value={form.mdhamini1JinaKamili} onChange={handleChange} /></td>
-                      <td colSpan={6}><strong>Mahali Anapoishi</strong><br /><input type="text" name="mdhamini1MahaliAnapoishi" value={form.mdhamini1MahaliAnapoishi} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Jina kamili la Mwenyekiti</strong><br /><input type="text" name="mdhamini1JinaKamili" value={form.mdhamini1JinaKamili} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Mahali Anapoishi</strong><br /><input type="text" name="mdhamini1MahaliAnapoishi" value={form.mdhamini1MahaliAnapoishi} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Namba ya nyumba</strong><br /><input type="text" name="mdhamini1NambaYaNyumba" value={form.mdhamini1NambaYaNyumba} onChange={handleChange} /></td>
                     </tr>
                     <tr>
-                      <td colSpan={4}><strong>Namba ya nyumba</strong><br /><input type="text" name="mdhamini1NambaYaNyumba" value={form.mdhamini1NambaYaNyumba} onChange={handleChange} /></td>
                       <td colSpan={4}><strong>Amepanga kwake</strong><br />
                         <select name="mdhamini1AmepangaKwake" value={form.mdhamini1AmepangaKwake} onChange={handleChange}>
                           <option value="">Chagua</option><option value="Amepanga">Amepanga</option><option value="Kwake">Kwake</option>
                         </select>
                       </td>
+                      <td colSpan={4}><strong>Kazi Anayofanya</strong><br /><input type="text" name="mdhamini1KaziAnayofanya" value={form.mdhamini1KaziAnayofanya} onChange={handleChange} /></td>
                       <td colSpan={4}><strong>Simu</strong><br /><input type="tel" name="mdhamini1Simu" value={form.mdhamini1Simu} onChange={handleChange} /></td>
                     </tr>
                     <tr>
-                      <td colSpan={4}><strong>Kazi Anayofanya</strong><br /><input type="text" name="mdhamini1KaziAnayofanya" value={form.mdhamini1KaziAnayofanya} onChange={handleChange} /></td>
-                      <td colSpan={4}><strong>Mahali ilipo Ofisi</strong><br /><input type="text" name="mdhamini1MahaliIlipoOfisi" value={form.mdhamini1MahaliIlipoOfisi} onChange={handleChange} /></td>
-                      <td colSpan={4}><strong>Jina la kampuni/biashara</strong><br /><input type="text" name="mdhamini1JinaLaKampuni" value={form.mdhamini1JinaLaKampuni} onChange={handleChange} /></td>
+                      <td colSpan={6}><strong>Mahali ilipo Ofisi</strong><br /><input type="text" name="mdhamini1MahaliIlipoOfisi" value={form.mdhamini1MahaliIlipoOfisi} onChange={handleChange} /></td>
+                      <td colSpan={6}><strong>Jina la kampuni/biashara</strong><br /><input type="text" name="mdhamini1JinaLaKampuni" value={form.mdhamini1JinaLaKampuni} onChange={handleChange} /></td>
                     </tr>
                   </tbody>
                 </table>
-              </div>
-            )}
 
-            {/* ========== SEHEMU 6: TAARIFA ZA DHAMANA ========== */}
-            {currentStep === 5 && (
-              <div className="form-section">
-                <div className="section-divider">SEHEMU 6: TAARIFA ZA DHAMANA</div>
+                <div className="section-divider" style={{ marginTop: "20px" }}>SEHEMU 4B: TAARIFA ZA DHAMANA</div>
                 <table className="form-table">
                   <tbody>
                     <tr>
-                      <td colSpan={6}><strong>Aina ya Dhamana</strong><br /><input type="text" name="dhamanaAinaYaDhamana" value={form.dhamanaAinaYaDhamana} onChange={handleChange} /></td>
-                      <td colSpan={6}><strong>Namba ya usajili</strong><br /><input type="text" name="dhamanaNambaYaUsajili" value={form.dhamanaNambaYaUsajili} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Aina ya Dhamana</strong><br /><input type="text" name="dhamanaAinaYaDhamana" value={form.dhamanaAinaYaDhamana} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Namba ya usajili</strong><br /><input type="text" name="dhamanaNambaYaUsajili" value={form.dhamanaNambaYaUsajili} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Umiliki</strong><br /><input type="text" name="dhamanaUmiliki" value={form.dhamanaUmiliki} onChange={handleChange} /></td>
                     </tr>
                     <tr>
-                      <td colSpan={6}><strong>Thamani ya dhamana</strong><br /><input type="text" name="dhamanaThamaniYaDhamana" value={form.dhamanaThamaniYaDhamana} onChange={handleChange} /></td>
-                      <td colSpan={6}><strong>Thamani yake kwa sasa</strong><br /><input type="text" name="dhamanaThamaniYakeKwaSasa" value={form.dhamanaThamaniYakeKwaSasa} onChange={handleChange} /></td>
-                    </tr>
-                    <tr>
+                      <td colSpan={4}><strong>Thamani yake kwa sasa</strong><br /><input type="text" name="dhamanaThamaniYakeKwaSasa" value={form.dhamanaThamaniYakeKwaSasa} onChange={handleChange} /></td>
                       <td colSpan={4}><strong>Umri</strong><br /><input type="text" name="dhamanaUmri" value={form.dhamanaUmri} onChange={handleChange} /></td>
-                      <td colSpan={4}><strong>Mmiliki/ wamiliki</strong><br /><input type="text" name="dhamanaMmilikiWamiliki" value={form.dhamanaMmilikiWamiliki} onChange={handleChange} /></td>
-                      <td colSpan={4}><strong>Rangi/Muonekano</strong><br /><input type="text" name="dhamanaRangiMuonekanoWaDhamana" value={form.dhamanaRangiMuonekanoWaDhamana} onChange={handleChange} /></td>
+                      <td colSpan={4}><strong>Mmiliki/Wamiliki</strong><br /><input type="text" name="dhamanaMmilikiWamiliki" value={form.dhamanaMmilikiWamiliki} onChange={handleChange} /></td>
                     </tr>
                     <tr>
-                      <td colSpan={12}><strong>Mahali Ilipo</strong><br /><input type="text" name="dhamanaMahaliIlipo" value={form.dhamanaMahaliIlipo} onChange={handleChange} /></td>
+                      <td colSpan={6}><strong>Rangi/Muonekano wa Dhamana</strong><br /><input type="text" name="dhamanaRangiMuonekanoWaDhamana" value={form.dhamanaRangiMuonekanoWaDhamana} onChange={handleChange} /></td>
+                      <td colSpan={6}><strong>Mahali Ilipo</strong><br /><input type="text" name="dhamanaMahaliIlipo" value={form.dhamanaMahaliIlipo} onChange={handleChange} /></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             )}
 
-            {/* ========== SEHEMU 7: TAMKO NA WASILISHA ========== */}
-            {currentStep === 6 && (
+            {/* SEHEMU 5: TAMKO NA WASILISHA */}
+            {currentStep === 4 && (
               <div className="tamko-container">
                 <div className="tamko-card">
                   <p><strong>Mimi</strong> nimeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu kwa matumizi ya ofisi. Pia kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine.</p>
