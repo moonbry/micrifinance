@@ -379,12 +379,12 @@ function GroupLoan() {
                 </div>
 
                 <div className="tamko-card">
-                  <p><strong>TAMKO LA KIKUNDI</strong></p>
-                  <p>Mimi <strong>{form.jinaKamiliLaMwombaji || "_________________________"}</strong> nakubali kumdhamini aliyeomba mkopo wa Tsh <strong>{form.kiasiChaMkopo || "___________"}</strong> kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia, ninatambua na kukubali kwamba nitawajibika kulipa mkopo Pamoja na wajumbe wote wa kikundi endapo mkopaji atashindwa kulipa kama ilivyoainishwa kwenye mkataba.</p>
+                  <p><strong>TAMKO LA MDHAMINI ( MWENYEKITI)</strong></p>
+                  <p>1. Mimi <strong>{form.jinaLaMwenyekiti || "_______________________"}</strong> nakubali kumdhamini <strong>{form.jinaKamiliLaMwombaji || "________________________"}</strong> aliyeomba mkopo wa Tsh <strong>{form.kiasiChaMkopo || "____________"}</strong> kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia, ninatambua na kukubali kwamba nitawajibika kulipa mkopo Pamoja na wajumbe wote wa kikundi endapo mkopaji atashindwa kulipa kama ilivyoainishwa kwenye mkataba.</p>
 
                   <div className="tamko-checkbox-group">
-                    <label className="checkbox-label"><input type="checkbox" name="kikundiKimesainiFomuNgumu" checked={form.kikundiKimesainiFomuNgumu} onChange={handleChange} /> Je WAJUMBE WA KIKUNDI wamesaini kwenye fomu ngumu ya mkopo?</label>
-                    <label className="checkbox-label"><input type="checkbox" name="kikundiKimewekaDoleGumba" checked={form.kikundiKimewekaDoleGumba} onChange={handleChange} /> Je WAJUMBE WA KIKUNDI wameweka dole gumba kwenye karatasi ngumu ya mkopo?</label>
+                    <label className="checkbox-label"><input type="checkbox" name="kikundiKimesainiFomuNgumu" checked={form.kikundiKimesainiFomuNgumu} onChange={handleChange} /> Je MWENYEKITI amesaini kwenye fomu ngumu ya mkopo?</label>
+                    <label className="checkbox-label"><input type="checkbox" name="kikundiKimewekaDoleGumba" checked={form.kikundiKimewekaDoleGumba} onChange={handleChange} /> Je MWENYEKITI ameweka dole gumba kwenye karatasi ngumu ya mkopo?</label>
                   </div>
                 </div>
               </div>
