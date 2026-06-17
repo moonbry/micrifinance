@@ -33,44 +33,81 @@ const Navbar: FC = () => {
 
       <div id="navbar-portal" className="nb__portal"></div>
 
-      <button className="nb__logout" onClick={handleLogout}>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
-        Logout
-      </button>
+      <div className="nb__right">
+        {/* Step Indicators (Mock for design match) */}
+        {(location.pathname === "/personal-loan" || location.pathname === "/group-loan") && (
+          <div className="nb__steps">
+            {[1, 2, 3, 4, 5].map((s) => (
+              <div key={s} className={`nb__step ${s === 1 ? "nb__step--active" : ""}`}>
+                {s}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <button className="nb__logout" onClick={handleLogout}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+          Logout
+        </button>
+      </div>
 
       <style>{`
         .nb {
           position: sticky;
           top: 0; left: 0; right: 0;
-          height: 60px;
-          background: #102a43;
-          color: #e2e8f0;
+          height: 64px;
+          background: #ffffff;
+          color: #1e293b;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 0 24px;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          padding: 0 28px;
+          border-bottom: 1px solid #e2e8f0;
           z-index: 99;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+
         .nb__left { display: flex; flex-direction: column; gap: 2px; }
-        .nb__title { font-size: 15px; font-weight: 700; color: #ffffff; letter-spacing: 0.2px; }
-        .nb__subtitle { font-size: 11px; color: #94a3b8; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-        .nb__portal { flex: 1; display: flex; justify-content: flex-end; align-items: center; margin-right: 20px; }
+        .nb__title { font-size: 16px; font-weight: 800; color: #102a43; }
+        .nb__subtitle { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+
+        .nb__portal { flex: 1; display: flex; justify-content: flex-end; align-items: center; margin: 0 24px; }
+
+        .nb__right { display: flex; align-items: center; gap: 24px; }
+
+        .nb__steps { display: flex; gap: 10px; align-items: center; }
+        .nb__step {
+          width: 32px; height: 32px;
+          border-radius: 50%;
+          border: 2px solid #e2e8f0;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 13px; font-weight: 700; color: #94a3b8;
+          transition: all 0.2s;
+        }
+        .nb__step--active {
+          background: #102a43;
+          border-color: #102a43;
+          color: #ffffff;
+          box-shadow: 0 4px 12px rgba(16, 42, 67, 0.2);
+        }
+
         .nb__logout {
-          display: flex; align-items: center; gap: 6px;
-          background: rgba(255,255,255, 0.08);
-          border: 1px solid rgba(255,255,255, 0.12);
-          padding: 7px 16px;
-          color: #e2e8f0; border-radius: 8px;
-          cursor: pointer; font-weight: 600; font-size: 13px;
+          display: flex; align-items: center; gap: 8px;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          padding: 8px 18px;
+          color: #1e293b;
+          border-radius: 10px;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 13px;
+          transition: all 0.2s;
           font-family: inherit;
-          transition: all 0.15s;
         }
         .nb__logout:hover {
-          background: rgba(239, 68, 68, 0.15);
-          border-color: rgba(239, 68, 68, 0.3);
-          color: #fca5a5;
+          background: #f1f5f9;
+          border-color: #cbd5e1;
+          color: #0f172a;
         }
       `}</style>
     </div>
