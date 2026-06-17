@@ -145,17 +145,18 @@ function GroupLoan() {
   return (
     <div className="page-container">
       <div className="form-container">
-        <div className="form-header">
-          <div className="fomu-no">Fomu No: <input type="text" name="fomuNo" value={form.fomuNo} onChange={handleChange} placeholder="........" className="fomu-no-input" /></div>
-          <h1>FOMU YA MAOMBI YA MKOPO WA KIKUNDI</h1>
-        </div>
-
-        <div className="step-indicators">
-          {steps.map((_, idx) => (
-            <button key={idx} className={`step-btn ${idx === currentStep ? "active" : ""} ${idx < currentStep ? "completed" : ""}`} onClick={() => idx < currentStep && setCurrentStep(idx)}>
-              {idx + 1}
-            </button>
-          ))}
+        <div className="form-top-bar">
+          <span className="form-title-text">FOMU YA MAOMBI YA MKOPO WA KIKUNDI</span>
+          <div className="form-top-right">
+            <div className="fomu-no">Fomu No: <input type="text" name="fomuNo" value={form.fomuNo} onChange={handleChange} placeholder="........" className="fomu-no-input" /></div>
+            <div className="step-indicators">
+              {steps.map((_, idx) => (
+                <button key={idx} type="button" className={`step-btn ${idx === currentStep ? "active" : ""} ${idx < currentStep ? "completed" : ""}`} onClick={() => idx < currentStep && setCurrentStep(idx)}>
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="step-title">{steps[currentStep]}</div>
 
@@ -387,25 +388,15 @@ function GroupLoan() {
             )}
           </div>
         </form>
-
-        <div className="footer">
-          <p>© 2026 Orethan Microfinance. Haki zote zimehifadhiwa.</p>
-        </div>
       </div>
 
       <style>{`
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         .page-container {
-          min-height: 100vh;
           background: #e8f0fe;
-          padding: 20px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          padding: 16px;
           font-family: 'Times New Roman', 'Arial', sans-serif;
         }
-        
+
         .form-container {
           max-width: 1300px;
           width: 100%;
@@ -414,65 +405,68 @@ function GroupLoan() {
           box-shadow: 0 2px 10px rgba(0,0,0,0.1);
           overflow: hidden;
         }
-        
-        .form-header {
+
+        .form-top-bar {
           background: #1a3a5c;
-          padding: 12px 20px;
-          text-align: center;
+          padding: 10px 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: white;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .form-title-text {
+          font-size: 15px;
+          font-weight: bold;
+          letter-spacing: 0.5px;
           color: white;
         }
-        
-        .fomu-no {
-          text-align: right;
-          margin-bottom: 8px;
-          font-size: 13px;
+
+        .form-top-right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 6px;
         }
-        
+
+        .fomu-no {
+          font-size: 13px;
+          color: #fff;
+          white-space: nowrap;
+        }
+
         .fomu-no-input {
-          width: 120px;
+          width: 110px;
           padding: 4px 8px;
-          margin-left: 10px;
+          margin-left: 8px;
           border: 1px solid #ccc;
           border-radius: 2px;
+          color: #000;
         }
-        
-        .form-header h1 {
-          font-size: 18px;
-          letter-spacing: 1px;
-        }
-        
+
         .step-indicators {
           display: flex;
           gap: 5px;
-          padding: 10px 20px;
-          background: #f5f5f5;
-          border-bottom: 1px solid #ddd;
           flex-wrap: wrap;
         }
-        
+
         .step-btn {
           width: 32px;
           height: 32px;
           border-radius: 50%;
-          border: 1px solid #ccc;
-          background: white;
+          border: 1px solid rgba(255,255,255,0.5);
+          background: rgba(255,255,255,0.15);
+          color: white;
           cursor: pointer;
           font-weight: bold;
           font-size: 12px;
         }
-        
-        .step-btn.active {
-          background: #1a3a5c;
-          color: white;
-          border-color: #1a3a5c;
-        }
-        
-        .step-btn.completed {
-          background: #2e7d32;
-          color: white;
-          border-color: #2e7d32;
-        }
-        
+
+        .step-btn.active { background: white; color: #1a3a5c; border-color: white; }
+        .step-btn.completed { background: #2e7d32; color: white; border-color: #2e7d32; }
+
         .step-title {
           background: #e0e0e0;
           padding: 8px 20px;
@@ -480,10 +474,10 @@ function GroupLoan() {
           font-size: 14px;
           border-bottom: 2px solid #1a3a5c;
         }
-        
+
         .form-scroll {
           padding: 20px;
-          max-height: 60vh;
+          max-height: calc(100vh - 300px);
           overflow-y: auto;
         }
         
@@ -593,10 +587,47 @@ function GroupLoan() {
         .tamko-card p { font-size: 12px; line-height: 1.5; margin-bottom: 12px; }
         .tamko-card label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; margin-top: 10px; }
         
-        .button-group { display: flex; gap: 15px; margin-top: 10px; }
-        .btn-next, .btn-submit { flex: 1; padding: 12px; border: none; border-radius: 40px; background: linear-gradient(90deg, #06b6d4, #3b82f6); color: white; font-weight: bold; cursor: pointer; }
-        .btn-prev { flex: 1; padding: 12px; border: none; border-radius: 40px; background: #475569; color: white; font-weight: bold; cursor: pointer; }
-        button:hover { transform: translateY(-2px); opacity: 0.9; }
+        .nav-buttons {
+          display: flex;
+          gap: 15px;
+          padding: 15px 20px;
+          background: #ffffff;
+          border-top: 2px solid #1a3a5c;
+        }
+        .btn-prev {
+          flex: 1;
+          padding: 12px 20px;
+          border: none;
+          cursor: pointer;
+          font-weight: bold;
+          font-size: 15px;
+          border-radius: 8px;
+          background: #6c757d;
+          color: white;
+        }
+        .btn-next {
+          flex: 1;
+          padding: 12px 20px;
+          border: none;
+          cursor: pointer;
+          font-weight: bold;
+          font-size: 15px;
+          border-radius: 8px;
+          background: #28a745;
+          color: white;
+        }
+        .btn-submit {
+          flex: 1;
+          padding: 12px 20px;
+          border: none;
+          cursor: pointer;
+          font-weight: bold;
+          font-size: 15px;
+          border-radius: 8px;
+          background: #007bff;
+          color: white;
+        }
+        .btn-prev:hover, .btn-next:hover, .btn-submit:hover { opacity: 0.85; transform: translateY(-2px); }
         button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
         @media (max-width: 800px) {
