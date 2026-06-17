@@ -348,19 +348,20 @@ function GroupLoan() {
             {currentStep === 4 && (
               <div className="tamko-container">
                 <div className="tamko-card">
-                  <p><strong>Mimi</strong> nimeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu kwa matumizi ya ofisi. Pia kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine.</p>
-                  <label><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali tamko la mwombaji (Sahihi/Dole Gumba/Tarehe)</label>
+                  <p><strong>TAMKO LA MWOMBAJI</strong><br />Mimi nimeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu kwa matumizi ya ofisi. Pia kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine.</p>
+                  <label className="checkbox-label"><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali tamko la mwombaji (Sahihi/Dole Gumba/Tarehe)</label>
                 </div>
 
                 <div className="tamko-card">
-                  <div className="input-box"><input type="text" name="tamkoLaMdhaminiUhusiano" placeholder=" " value={form.tamkoLaMdhaminiUhusiano} onChange={handleChange} /><label>Uhusiano wako na mwombaji (Mume/Mke/Ndugu)</label></div>
+                  <p><strong>TAMKO LA MDHAMINI - DHAMANA</strong></p>
+                  <div className="input-box" style={{ marginBottom: "15px" }}><input type="text" name="tamkoLaMdhaminiUhusiano" placeholder=" " value={form.tamkoLaMdhaminiUhusiano} onChange={handleChange} /><label>Uhusiano wako na mwombaji (Mume/Mke/Ndugu)</label></div>
                   <p>Mimi ninakiri kuwa na taarifa juu ya mkopo wa Tsh uliyoombwa na kutoka Orethan Microfinance. Dhamana tajwa hapo juu nazifahamu na nipo tayari zitolewe kama dhamana kwa mujibu wa masharti na taratibu zilizokubaliwa na mkopaji na mkopeshaji.</p>
-                  <label><input type="checkbox" name="tamkoLaMdhamini" checked={form.tamkoLaMdhamini} onChange={handleChange} /> Ninakubali tamko la mdhamini (Sahihi/Dole Gumba/Tarehe)</label>
+                  <label className="checkbox-label"><input type="checkbox" name="tamkoLaMdhamini" checked={form.tamkoLaMdhamini} onChange={handleChange} /> Ninakubali tamko la mdhamini (Sahihi/Dole Gumba/Tarehe)</label>
                 </div>
 
                 <div className="tamko-card">
-                  <p><strong>Mimi</strong> nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia, ninatambua na kukubali kwamba nitawajibika kulipa mkopo Pamoja na wajumbe wote wa kikundi endapo mkopaji atashindwa kulipa kama ilivyoainishwa kwenye mkataba.</p>
-                  <label><input type="checkbox" name="tamkoLaMdhaminiWajibika" checked={form.tamkoLaMdhaminiWajibika} onChange={handleChange} /> Ninakubali kuwajibika kulipa pamoja na kikundi (Sahihi/Dole Gumba/Tarehe)</label>
+                  <p><strong>TAMKO LA MDHAMINI - KIKUNDI</strong><br />Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia, ninatambua na kukubali kwamba nitawajibika kulipa mkopo Pamoja na wajumbe wote wa kikundi endapo mkopaji atashindwa kulipa kama ilivyoainishwa kwenye mkataba.</p>
+                  <label className="checkbox-label"><input type="checkbox" name="tamkoLaMdhaminiWajibika" checked={form.tamkoLaMdhaminiWajibika} onChange={handleChange} /> Ninakubali kuwajibika kulipa pamoja na kikundi (Sahihi/Dole Gumba/Tarehe)</label>
                 </div>
               </div>
             )}
@@ -571,10 +572,72 @@ function GroupLoan() {
           color: #92400e;
         }
         
-        .tamko-container { display: flex; flex-direction: column; gap: 15px; }
-        .tamko-card { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 14px; }
-        .tamko-card p { font-size: 12px; line-height: 1.5; margin-bottom: 12px; }
-        .tamko-card label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; margin-top: 10px; }
+        .tamko-container { display: flex; flex-direction: column; gap: 24px; padding: 10px; }
+        .tamko-card {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          padding: 24px;
+          border-radius: 12px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+          transition: all 0.3s ease;
+          border-left: 5px solid #2563eb;
+          position: relative;
+          overflow: hidden;
+        }
+        .tamko-card::before {
+          content: "";
+          position: absolute;
+          top: 0; left: 0; width: 100%; height: 100%;
+          background: linear-gradient(135deg, rgba(59,130,246,0.05) 0%, transparent 100%);
+          pointer-events: none;
+        }
+        .tamko-card:hover {
+          box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+          transform: translateY(-2px);
+          border-left-color: #1d4ed8;
+        }
+        .tamko-card p {
+          font-size: 14px;
+          line-height: 1.6;
+          color: #334155;
+          margin-bottom: 20px;
+          position: relative;
+          z-index: 1;
+        }
+        .tamko-card strong {
+          color: #0f172a;
+          font-weight: 700;
+          background: rgba(59, 130, 246, 0.1);
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+        .checkbox-label {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 600;
+          color: #1e293b;
+          background: white;
+          padding: 14px 18px;
+          border-radius: 8px;
+          border: 1px solid #cbd5e1;
+          transition: all 0.2s;
+          position: relative;
+          z-index: 1;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .checkbox-label:hover {
+          background: #f1f5f9;
+          border-color: #94a3b8;
+        }
+        .checkbox-label input[type="checkbox"] {
+          width: 20px;
+          height: 20px;
+          cursor: pointer;
+          accent-color: #2563eb;
+        }
         
         .nav-buttons {
           display: flex;

@@ -407,7 +407,7 @@ function PersonalLoan() {
               <div className="tamko-container">
                 <div className="tamko-card">
                   <p><strong>Mimi</strong> nimeomba mkopo wa <strong>Tsh {form.kiasiMkopo || "____"}</strong> kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu. Pia kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine.</p>
-                  <label><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali tamko la mwombaji</label>
+                  <label className="checkbox-label"><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali tamko la mwombaji</label>
                 </div>
               </div>
             )}
@@ -422,19 +422,19 @@ function PersonalLoan() {
                     <p>Mimi nimeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu.</p>
                     <p>Pia Kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine kama ilivyoanishwa kwenye sheria na miongozo inayotolewa na Benki Kuu Ya Tanzania pamoja na Tume ya Ulinzi wa Taarifa Binafsi.</p>
                     <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                    <label><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali Tamko la Mwombaji</label>
+                    <label className="checkbox-label"><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali Tamko la Mwombaji</label>
                   </div>
                   <div className="tamko-card">
                     <p><strong>TAMKO LA MDHAMINI 1</strong></p>
                     <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
                     <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                    <label><input type="checkbox" name="tamkoMdhamini1" checked={form.tamkoMdhamini1} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 1</label>
+                    <label className="checkbox-label"><input type="checkbox" name="tamkoMdhamini1" checked={form.tamkoMdhamini1} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 1</label>
                   </div>
                   <div className="tamko-card">
                     <p><strong>TAMKO LA MDHAMINI 2</strong></p>
                     <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
                     <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                    <label><input type="checkbox" name="tamkoMdhamini2" checked={form.tamkoMdhamini2} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 2</label>
+                    <label className="checkbox-label"><input type="checkbox" name="tamkoMdhamini2" checked={form.tamkoMdhamini2} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 2</label>
                   </div>
                   <div className="contact-info">
                     <p>NB: KWA CHANGAMOTO AMA MALALAMIKO USISITE KUTUPIGIA KUPITIA Tel No: +255 769337774 or +255 702 519 104.</p>
@@ -605,23 +605,79 @@ function PersonalLoan() {
           background: #f5f5f5;
           font-size: 11px;
         }
-        .tamko-content { display: flex; flex-direction: column; gap: 20px; }
+        .tamko-content { display: flex; flex-direction: column; gap: 24px; padding: 10px; }
         .tamko-card {
           background: #f8fafc;
-          padding: 15px;
+          border: 1px solid #e2e8f0;
+          padding: 24px;
           border-radius: 12px;
-          border-left: 4px solid #1a3a5c;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+          transition: all 0.3s ease;
+          border-left: 5px solid #2563eb;
+          position: relative;
+          overflow: hidden;
         }
-        .tamko-card p { margin-bottom: 10px; line-height: 1.5; text-align: justify; font-size: 12px; }
-        .tamko-line { margin: 10px 0; padding: 5px; border-bottom: 1px dotted #999; }
-        .tamko-card label {
+        .tamko-card::before {
+          content: "";
+          position: absolute;
+          top: 0; left: 0; width: 100%; height: 100%;
+          background: linear-gradient(135deg, rgba(59,130,246,0.05) 0%, transparent 100%);
+          pointer-events: none;
+        }
+        .tamko-card:hover {
+          box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+          transform: translateY(-2px);
+          border-left-color: #1d4ed8;
+        }
+        .tamko-card p {
+          font-size: 14px;
+          line-height: 1.6;
+          color: #334155;
+          margin-bottom: 20px;
+          position: relative;
+          z-index: 1;
+        }
+        .tamko-card strong {
+          color: #0f172a;
+          font-weight: 700;
+          background: rgba(59, 130, 246, 0.1);
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+        .tamko-line {
+          margin: 16px 0;
+          padding: 8px 0;
+          border-bottom: 1px dashed #cbd5e1;
+          color: #94a3b8;
+          font-size: 12px;
+          letter-spacing: 1px;
+        }
+        .checkbox-label {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 12px;
           cursor: pointer;
-          font-size: 12px;
-          font-weight: 500;
-          margin-top: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          color: #1e293b;
+          background: white;
+          padding: 14px 18px;
+          border-radius: 8px;
+          border: 1px solid #cbd5e1;
+          transition: all 0.2s;
+          position: relative;
+          z-index: 1;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .checkbox-label:hover {
+          background: #f1f5f9;
+          border-color: #94a3b8;
+        }
+        .checkbox-label input[type="checkbox"] {
+          width: 20px;
+          height: 20px;
+          cursor: pointer;
+          accent-color: #2563eb;
         }
         .contact-info {
           margin-top: 15px;
