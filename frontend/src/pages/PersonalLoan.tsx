@@ -156,9 +156,9 @@ function PersonalLoan() {
   return (
     <div className="page-container">
       <div className="form-container">
-        <div className="form-header">
+        <div className="form-top-bar">
+          <span className="form-title-text">FOMU YA MAOMBI YA MKOPO BINAFSI</span>
           <div className="fomu-no">Fomu No: <input type="text" name="fomuNo" value={form.fomuNo} onChange={handleChange} placeholder="........" className="fomu-no-input" /></div>
-          <h1>FOMU YA MAOMBI YA MKOPO BINAFSI</h1>
         </div>
 
         <div className="step-indicators">
@@ -446,21 +446,12 @@ function PersonalLoan() {
             )}
           </div>
         </form>
-
-        <div className="footer">
-          <p>© 2026 Orethan Microfinance. Haki zote zimehifadhiwa.</p>
-        </div>
       </div>
 
       <style>{`
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         .page-container {
-          min-height: 100vh;
           background: #e8f0fe;
-          padding: 20px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          padding: 16px;
           font-family: 'Times New Roman', 'Arial', sans-serif;
         }
         .form-container {
@@ -471,23 +462,31 @@ function PersonalLoan() {
           box-shadow: 0 2px 10px rgba(0,0,0,0.1);
           overflow: hidden;
         }
-        .form-header {
+        .form-top-bar {
           background: #1a3a5c;
-          padding: 12px 20px;
-          text-align: center;
+          padding: 10px 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
           color: white;
         }
+        .form-title-text {
+          font-size: 15px;
+          font-weight: bold;
+          letter-spacing: 0.5px;
+        }
         .fomu-no {
-          text-align: right;
-          margin-bottom: 8px;
           font-size: 13px;
+          color: #fff;
+          white-space: nowrap;
         }
         .fomu-no-input {
-          width: 120px;
+          width: 110px;
           padding: 4px 8px;
-          margin-left: 10px;
+          margin-left: 8px;
           border: 1px solid #ccc;
           border-radius: 2px;
+          color: #000;
         }
         .form-header h1 {
           font-size: 18px;
@@ -522,7 +521,7 @@ function PersonalLoan() {
         }
         .form-scroll {
           padding: 20px;
-          max-height: 60vh;
+          max-height: calc(100vh - 300px);
           overflow-y: auto;
         }
         .section-divider {
@@ -661,14 +660,6 @@ function PersonalLoan() {
         }
         .btn-prev:hover, .btn-next:hover, .btn-submit:hover { opacity: 0.85; transform: translateY(-2px); }
         .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .footer {
-          text-align: center;
-          padding: 8px;
-          background: #f5f5f5;
-          font-size: 10px;
-          color: #666;
-          border-top: 1px solid #ddd;
-        }
         @media (max-width: 800px) {
           .page-container { padding: 10px; }
           .form-scroll { padding: 12px; max-height: 50vh; }

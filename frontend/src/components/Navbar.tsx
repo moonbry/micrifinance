@@ -1,8 +1,22 @@
 import type { FC } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
+const pageTitles: Record<string, string> = {
+  "/dashboard": "Dashboard",
+  "/personal-loan": "FOMU YA MAOMBI YA MKOPO BINAFSI",
+  "/group-loan": "FOMU YA MAOMBI YA MKOPO WA KIKUNDI",
+  "/employee-loan": "FOMU YA MAOMBI YA MKOPO WA MFANYAKAZI",
+  "/loan-manager": "Loan Manager",
+  "/general-manager": "General Manager",
+  "/managing-director": "Managing Director",
+  "/repayment-tracker": "Repayment Tracker",
+  "/users": "Users",
+};
 
 const Navbar: FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const subtitle = pageTitles[location.pathname] || "Dashboard";
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -14,7 +28,7 @@ const Navbar: FC = () => {
     <div className="navbar">
       <div className="left">
         <div className="title">Microfinance System</div>
-        <div className="subtitle">Dashboard</div>
+        <div className="subtitle">{subtitle}</div>
       </div>
 
       <button className="logout" onClick={handleLogout}>
@@ -23,9 +37,9 @@ const Navbar: FC = () => {
 
       <style>{`
         .navbar {
-          position: fixed;
+          position: sticky;
           top: 0;
-          left: 260px;
+          left: 0;
           right: 0;
           height: 60px;
           background: white;

@@ -225,6 +225,7 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
           position: fixed;
           top: 0;
           left: 0;
+          overflow-x: visible;
           overflow-y: auto;
           border-right: 1px solid #1e293b;
           z-index: 100;
@@ -244,6 +245,7 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
           align-items: center;
           gap: 12px;
           position: relative;
+          overflow: visible;
         }
 
         .sidebar.collapsed .logo-area {
