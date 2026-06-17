@@ -71,8 +71,14 @@ function PersonalLoan() {
     wdhamini1JinaKamili: "", wdhamini1MahaliAnapoishi: "", wdhamini1AmepangaKwake: "", wdhamini1NambaNyumba: "", wdhamini1KaziAnayofanya: "", wdhamini1UhusianoWenu: "", wdhamini1MahaliOfisiYake: "", wdhamini1JinaKampuniBiashara: "", wdhamini1Simu: "",
     wdhamini2JinaKamili: "", wdhamini2MahaliAnapoishi: "", wdhamini2AmepangaKwake: "", wdhamini2NambaNyumba: "", wdhamini2KaziAnayofanya: "", wdhamini2UhusianoWenu: "", wdhamini2MahaliOfisiYake: "", wdhamini2JinaKampuniBiashara: "", wdhamini2Simu: "",
     tamkoLaMwombaji: false,
+    mwombajiAmesainiFomuNgumu: false,
+    mwombajiAmewekaDoleGumba: false,
     tamkoMdhamini1: false,
+    mdhamini1AmesainiFomuNgumu: false,
+    mdhamini1AmewekaDoleGumba: false,
     tamkoMdhamini2: false,
+    mdhamini2AmesainiFomuNgumu: false,
+    mdhamini2AmewekaDoleGumba: false,
   });
 
   const steps = [
@@ -419,22 +425,30 @@ function PersonalLoan() {
                 <div className="tamko-content">
                   <div className="tamko-card">
                     <p><strong>TAMKO LA MWOMBAJI</strong></p>
-                    <p>Mimi nimeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu.</p>
+                    <p>Mimi <strong>{form.jinaKamiliLaMwombaji || "_________________________"}</strong> nimeomba mkopo wa Tsh <strong>{form.kiasiMkopo || "______________"}</strong> kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu.</p>
                     <p>Pia Kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine kama ilivyoanishwa kwenye sheria na miongozo inayotolewa na Benki Kuu Ya Tanzania pamoja na Tume ya Ulinzi wa Taarifa Binafsi.</p>
-                    <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                    <label className="checkbox-label"><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali Tamko la Mwombaji</label>
+                    <div className="tamko-checkbox-group">
+                      <label className="checkbox-label"><input type="checkbox" name="mwombajiAmesainiFomuNgumu" checked={form.mwombajiAmesainiFomuNgumu} onChange={handleChange} /> Je MWOMBAJI amesaini kwenye fomu ngumu ya mkopo?</label>
+                      <label className="checkbox-label"><input type="checkbox" name="mwombajiAmewekaDoleGumba" checked={form.mwombajiAmewekaDoleGumba} onChange={handleChange} /> Je MWOMBAJI ameweka dole gumba kwenye karatasi ngumu ya mkopo?</label>
+                    </div>
                   </div>
+
                   <div className="tamko-card">
                     <p><strong>TAMKO LA MDHAMINI 1</strong></p>
-                    <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
-                    <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                    <label className="checkbox-label"><input type="checkbox" name="tamkoMdhamini1" checked={form.tamkoMdhamini1} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 1</label>
+                    <p>Mimi <strong>{form.wdhamini1JinaKamili || "_________________________"}</strong> Uhusiano <strong>{form.wdhamini1UhusianoWenu || "________"}</strong> ninakiri kuwa na taarifa juu ya mkopo wa Tsh <strong>{form.kiasiMkopo || "___________"}</strong> uliyoombwa na <strong>{form.jinaKamiliLaMwombaji || "______________"}</strong> kutoka Orethan Microfinance. Dhamana tajwa hapo juu nazifahamu na nipo tayari zitolewe kama dhamana kwa mujibu wa masharti na taratibu zilizokubaliwa na mkopaji na mkopeshaji.</p>
+                    <div className="tamko-checkbox-group">
+                      <label className="checkbox-label"><input type="checkbox" name="mdhamini1AmesainiFomuNgumu" checked={form.mdhamini1AmesainiFomuNgumu} onChange={handleChange} /> Je MDHAMINI 1 amesaini kwenye fomu ngumu ya mkopo?</label>
+                      <label className="checkbox-label"><input type="checkbox" name="mdhamini1AmewekaDoleGumba" checked={form.mdhamini1AmewekaDoleGumba} onChange={handleChange} /> Je MDHAMINI 1 ameweka dole gumba kwenye karatasi ngumu ya mkopo?</label>
+                    </div>
                   </div>
+
                   <div className="tamko-card">
                     <p><strong>TAMKO LA MDHAMINI 2</strong></p>
-                    <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
-                    <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                    <label className="checkbox-label"><input type="checkbox" name="tamkoMdhamini2" checked={form.tamkoMdhamini2} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 2</label>
+                    <p>Mimi <strong>{form.wdhamini2JinaKamili || "_________________________"}</strong> Uhusiano <strong>{form.wdhamini2UhusianoWenu || "________"}</strong> ninakiri kuwa na taarifa juu ya mkopo wa Tsh <strong>{form.kiasiMkopo || "___________"}</strong> uliyoombwa na <strong>{form.jinaKamiliLaMwombaji || "______________"}</strong> kutoka Orethan Microfinance. Dhamana tajwa hapo juu nazifahamu na nipo tayari zitolewe kama dhamana kwa mujibu wa masharti na taratibu zilizokubaliwa na mkopaji na mkopeshaji.</p>
+                    <div className="tamko-checkbox-group">
+                      <label className="checkbox-label"><input type="checkbox" name="mdhamini2AmesainiFomuNgumu" checked={form.mdhamini2AmesainiFomuNgumu} onChange={handleChange} /> Je MDHAMINI 2 amesaini kwenye fomu ngumu ya mkopo?</label>
+                      <label className="checkbox-label"><input type="checkbox" name="mdhamini2AmewekaDoleGumba" checked={form.mdhamini2AmewekaDoleGumba} onChange={handleChange} /> Je MDHAMINI 2 ameweka dole gumba kwenye karatasi ngumu ya mkopo?</label>
+                    </div>
                   </div>
                   <div className="contact-info">
                     <p>NB: KWA CHANGAMOTO AMA MALALAMIKO USISITE KUTUPIGIA KUPITIA Tel No: +255 769337774 or +255 702 519 104.</p>
@@ -644,13 +658,15 @@ function PersonalLoan() {
           padding: 2px 6px;
           border-radius: 4px;
         }
-        .tamko-line {
-          margin: 16px 0;
-          padding: 8px 0;
-          border-bottom: 1px dashed #cbd5e1;
-          color: #94a3b8;
-          font-size: 12px;
-          letter-spacing: 1px;
+        .tamko-checkbox-group {
+          margin-top: 15px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          background: #f1f5f9;
+          padding: 16px;
+          border-radius: 8px;
+          border: 1px dashed #cbd5e1;
         }
         .checkbox-label {
           display: flex;
