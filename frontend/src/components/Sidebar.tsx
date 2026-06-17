@@ -92,9 +92,9 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         </div>
         <button className="sd-logo__menu" onClick={() => setIsCollapsed(!isCollapsed)} title={isCollapsed ? "Expand" : "Collapse"}>
           {isCollapsed ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
           ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
           )}
         </button>
       </div>
@@ -252,7 +252,7 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         .sd-logo__brand { display: flex; align-items: center; gap: 10px; }
         .sd--c .sd-logo__brand { display: none; }
         .sd-logo__icon {
-          width: 140px; height: 50px;
+          width: 220px; height: 100px;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
           overflow: hidden;
@@ -262,15 +262,16 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         .sd-logo__sub { font-size: 11px; color: #64748b; font-weight: 500; }
         
         .sd-logo__menu {
-          background: #f8fafc; border: 1px solid #e2e8f0;
-          cursor: pointer; padding: 6px;
-          border-radius: 8px;
+          background: #102a43; border: 1px solid #102a43;
+          cursor: pointer; padding: 8px;
+          border-radius: 10px;
           display: flex; align-items: center; justify-content: center;
           transition: all 0.2s;
-          color: #64748b;
+          color: #ffffff;
           margin-left: auto;
+          box-shadow: 0 4px 12px rgba(16, 42, 67, 0.15);
         }
-        .sd-logo__menu:hover { background: #f1f5f9; color: #1e293b; border-color: #cbd5e1; }
+        .sd-logo__menu:hover { background: #1e4e8c; color: #ffffff; transform: scale(1.05); }
         .sd--c .sd-logo { justify-content: center; padding: 0; }
         .sd--c .sd-logo__menu { margin: 0 auto; }
 

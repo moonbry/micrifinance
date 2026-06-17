@@ -51,7 +51,7 @@ function PersonalLoan() {
     jinaLaBiashara: "",
     ainaYaBiashara: "",
     mahaliBiasharaIlipo: "",
-    umefanyaBiasharaTanguLini: "",
+    umfanyaBiasharaTanguLini: "",
     jinaMmilikiEneoBiashara: "",
     nambaSimuMmilikiEneo: "",
     wastaniKipatoKwaMwezi: "",
@@ -82,16 +82,11 @@ function PersonalLoan() {
   });
 
   const steps = [
-    "SEHEMU 1: TAARIFA ZA MWOMBAJI",
-    "SEHEMU 2: TAARIFA ZA AJIRA",
-    "SEHEMU 3: TAARIFA ZA BIASHARA",
-    "SEHEMU 4: KIASI CHA MKOPO",
-    "SEHEMU 5: HISTORIA YA MIKOPO",
-    "SEHEMU 6: DHAMANA YA MKOPO",
-    "SEHEMU 7: WADHAMINI NO.1",
-    "SEHEMU 7: WADHAMINI NO.2",
-    "PICHA YA PASSPORT",
-    "TAMKO NA WASILISHA"
+    "1. TAARIFA ZA MWOMBAJI",
+    "2. KAZI NA BIASHARA",
+    "3. MKOPO NA HISTORIA",
+    "4. DHAMANA NA WADHAMINI",
+    "5. TAMKO NA WASILISHA"
   ];
 
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
@@ -190,7 +185,7 @@ function PersonalLoan() {
         <form onSubmit={handleSubmit}>
           <div className="form-scroll">
 
-            {/* SEHEMU 1: TAARIFA ZA MWOMBAJI */}
+            {/* STEP 1: TAARIFA ZA MWOMBAJI */}
             {currentStep === 0 && (
               <div className="form-section">
                 <div className="section-divider">SEHEMU 1: TAARIFA ZA MWOMBAJI</div>
@@ -250,9 +245,10 @@ function PersonalLoan() {
               </div>
             )}
 
-            {/* SEHEMU 2: TAARIFA ZA AJIRA */}
+            {/* STEP 2: KAZI NA BIASHARA */}
             {currentStep === 1 && (
               <div className="form-section">
+                {/* SEHEMU 2: AJIRA */}
                 <div className="section-divider">SEHEMU 2: TAARIFA ZA AJIRA</div>
                 <table className="form-table">
                   <tbody>
@@ -274,22 +270,17 @@ function PersonalLoan() {
                     </tr>
                   </tbody>
                 </table>
-              </div>
-            )}
 
-
-            {/* SEHEMU 3: TAARIFA ZA BIASHARA */}
-            {currentStep === 2 && (
-              <div className="form-section">
-                <div className="section-divider">SEHEMU 3: TAARIFA ZA BIASHARA</div>
+                {/* SEHEMU 3: BIASHARA */}
+                <div className="section-divider" style={{ marginTop: '40px' }}>SEHEMU 3: TAARIFA ZA BIASHARA</div>
                 <table className="form-table">
                   <tbody>
                     <tr><td colSpan={6}><strong>Jina la Biashara</strong></td><td colSpan={6}><strong>Aina ya Biashara</strong></td></tr>
                     <tr><td colSpan={6}><input type="text" name="jinaLaBiashara" value={form.jinaLaBiashara} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="ainaYaBiashara" value={form.ainaYaBiashara} onChange={handleChange} /></td></tr>
                     <tr><td colSpan={12}><strong>Mahali Biashara Ilipo</strong></td></tr>
                     <tr><td colSpan={12}><input type="text" name="mahaliBiasharaIlipo" value={form.mahaliBiasharaIlipo} onChange={handleChange} /></td></tr>
-                    <tr><td colSpan={6}><strong>Umefanya Biashara hii tangu lini</strong></td><td colSpan={6}><strong>Jina la mmiliki wa eneo la biashara</strong></td></tr>
-                    <tr><td colSpan={6}><input type="text" name="umefanyaBiasharaTanguLini" value={form.umefanyaBiasharaTanguLini} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="jinaMmilikiEneoBiashara" value={form.jinaMmilikiEneoBiashara} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={6}><strong>Umfanya Biashara hii tangu lini</strong></td><td colSpan={6}><strong>Jina la mmiliki wa eneo la biashara</strong></td></tr>
+                    <tr><td colSpan={6}><input type="text" name="umfanyaBiasharaTanguLini" value={form.umfanyaBiasharaTanguLini} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="jinaMmilikiEneoBiashara" value={form.jinaMmilikiEneoBiashara} onChange={handleChange} /></td></tr>
                     <tr><td colSpan={6}><strong>Namba zake za simu</strong></td><td colSpan={6}><strong>Wastani wa kipato kwa mwezi</strong></td></tr>
                     <tr><td colSpan={6}><input type="tel" name="nambaSimuMmilikiEneo" value={form.nambaSimuMmilikiEneo} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="wastaniKipatoKwaMwezi" value={form.wastaniKipatoKwaMwezi} onChange={handleChange} /></td></tr>
                     <tr><td colSpan={6}><strong>Muda wa mkataba wa eneo la biashara</strong></td><td colSpan={6}><strong>Wastani wa matumizi kwa mwezi</strong></td></tr>
@@ -299,13 +290,14 @@ function PersonalLoan() {
               </div>
             )}
 
-            {/* SEHEMU 4: KIASI CHA MKOPO */}
-            {currentStep === 3 && (
+            {/* STEP 3: MKOPO NA HISTORIA */}
+            {currentStep === 2 && (
               <div className="form-section">
-                <div className="section-divider">SEHEMU 4: KIASI CHA MKOPO</div>
+                {/* SEHEMU 4: KIASI */}
+                <div className="section-divider">SEHEMU 4: KIASI CHA MKOPO NA MALENGO</div>
                 <table className="form-table">
                   <tbody>
-                    <tr><td colSpan={6}><strong>Kiasi cha Mkopo</strong></td><td colSpan={6}><strong>Kwa maneno</strong></td></tr>
+                    <tr><td colSpan={6}><strong>Kiasi cha Mkopo (Tsh)</strong></td><td colSpan={6}><strong>Kwa maneno</strong></td></tr>
                     <tr><td colSpan={6}><input type="text" name="kiasiMkopo" value={form.kiasiMkopo} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="kwaManeno" value={form.kwaManeno} onChange={handleChange} /></td></tr>
                     <tr><td colSpan={6}><strong>Muda wa kulipa Mkopo</strong></td><td colSpan={6}><strong>Kwa tarakimu</strong></td></tr>
                     <tr><td colSpan={6}><input type="text" name="mudaKulipaMkopo" value={form.mudaKulipaMkopo} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="kwaTarakimu" value={form.kwaTarakimu} onChange={handleChange} /></td></tr>
@@ -317,16 +309,12 @@ function PersonalLoan() {
                     <tr><td colSpan={12}><input type="text" name="chanzoMapato" value={form.chanzoMapato} onChange={handleChange} /></td></tr>
                   </tbody>
                 </table>
-              </div>
-            )}
 
-            {/* SEHEMU 5: HISTORIA YA MIKOPO */}
-            {currentStep === 4 && (
-              <div className="form-section">
-                <div className="section-divider">SEHEMU 5: HISTORIA YA MIKOPO</div>
+                {/* SEHEMU 5: HISTORIA */}
+                <div className="section-divider" style={{ marginTop: '40px' }}>SEHEMU 5: HISTORIA YA MIKOPO</div>
                 <table className="form-table history-table">
                   <thead>
-                    <tr><th>Jina la Taasisi</th><th>Ulichukua Mkopo lini</th><th>Kiasi cha mkopo</th><th>Kiasi cha marejesho</th><th>Tarehe za marejesho</th><th>Kiasi kilichobaki</th></tr>
+                    <tr><th>Jina la Taasisi</th><th>Lini</th><th>Kiasi</th><th>Rejesho</th><th>Tarehe</th><th>Baki</th></tr>
                   </thead>
                   <tbody>
                     <tr><td><input type="text" name="historia1JinaTaasisi" value={form.historia1JinaTaasisi} onChange={handleChange} /></td><td><input type="text" name="historia1UlichukuaLini" value={form.historia1UlichukuaLini} onChange={handleChange} /></td><td><input type="text" name="historia1KiasiMkopo" value={form.historia1KiasiMkopo} onChange={handleChange} /></td><td><input type="text" name="historia1KiasiMarejesho" value={form.historia1KiasiMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia1TareheMarejesho" value={form.historia1TareheMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia1KiasiKilichobaki" value={form.historia1KiasiKilichobaki} onChange={handleChange} /></td></tr>
@@ -337,9 +325,10 @@ function PersonalLoan() {
               </div>
             )}
 
-            {/* SEHEMU 6: DHAMANA YA MKOPO */}
-            {currentStep === 5 && (
+            {/* STEP 4: DHAMANA NA WADHAMINI */}
+            {currentStep === 3 && (
               <div className="form-section">
+                {/* SEHEMU 6: DHAMANA */}
                 <div className="section-divider">SEHEMU 6: DHAMANA YA MKOPO</div>
                 <table className="form-table">
                   <tbody>
@@ -351,107 +340,100 @@ function PersonalLoan() {
                     <tr><td colSpan={12}><select name="dhamanaMuonekano" value={form.dhamanaMuonekano} onChange={handleChange}><option value="">Chagua</option><option>Nzuri sana</option><option>Nzuri</option><option>Kuridhisha</option><option>Inahitaji matengenezo</option></select></td></tr>
                   </tbody>
                 </table>
-              </div>
-            )}
 
-            {/* SEHEMU 7: WADHAMINI NO.1 */}
-            {currentStep === 6 && (
-              <div className="form-section">
-                <div className="section-divider">SEHEMU 7: TAARIFA ZA WADHAMINI NO.1</div>
-                <table className="form-table">
-                  <tbody>
-                    <tr><td colSpan={4}><strong>Jina kamili la Mdhamini</strong></td><td colSpan={4}><strong>Mahali Anapoishi</strong></td><td colSpan={4}><strong>Amepanga/ kwake</strong></td></tr>
-                    <tr><td colSpan={4}><input type="text" name="wdhamini1JinaKamili" value={form.wdhamini1JinaKamili} onChange={handleChange} /></td><td colSpan={4}><input type="text" name="wdhamini1MahaliAnapoishi" value={form.wdhamini1MahaliAnapoishi} onChange={handleChange} /></td><td colSpan={4}><select name="wdhamini1AmepangaKwake" value={form.wdhamini1AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></td></tr>
-                    <tr><td colSpan={4}><strong>Namba ya nyumba</strong></td><td colSpan={4}><strong>Kazi Anayofanya</strong></td><td colSpan={4}><strong>Uhusiano wenu</strong></td></tr>
-                    <tr>
-                      <td colSpan={4}><input type="text" name="wdhamini1NambaNyumba" value={form.wdhamini1NambaNyumba} onChange={handleChange} /></td>
-                      <td colSpan={4}><input type="text" name="wdhamini1KaziAnayofanya" value={form.wdhamini1KaziAnayofanya} onChange={handleChange} /></td>
-                      <td colSpan={4}><input type="text" name="wdhamini1UhusianoWenu" value={form.wdhamini1UhusianoWenu} onChange={handleChange} /></td>
-                    </tr>
-                    <tr><td colSpan={4}><strong>Mahali ilipo Ofisi yake</strong></td><td colSpan={4}><strong>Jina la kampuni/ biashara</strong></td><td colSpan={4}><strong>Simu</strong></td></tr>
-                    <tr>
-                      <td colSpan={4}><input type="text" name="wdhamini1MahaliOfisiYake" value={form.wdhamini1MahaliOfisiYake} onChange={handleChange} /></td>
-                      <td colSpan={4}><input type="text" name="wdhamini1JinaKampuniBiashara" value={form.wdhamini1JinaKampuniBiashara} onChange={handleChange} /></td>
-                      <td colSpan={4}><input type="tel" name="wdhamini1Simu" value={form.wdhamini1Simu} onChange={handleChange} /></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            )}
-
-            {/* SEHEMU 7: WADHAMINI NO.2 */}
-            {currentStep === 7 && (
-              <div className="form-section">
-                <div className="section-divider">SEHEMU 7: TAARIFA ZA WADHAMINI NO.2</div>
-                <table className="form-table">
-                  <tbody>
-                    <tr><td colSpan={4}><strong>Jina kamili la Mdhamini</strong></td><td colSpan={4}><strong>Mahali Anapoishi</strong></td><td colSpan={4}><strong>Amepanga/ kwake</strong></td></tr>
-                    <tr>
-                      <td colSpan={4}><input type="text" name="wdhamini2JinaKamili" value={form.wdhamini2JinaKamili} onChange={handleChange} /></td>
-                      <td colSpan={4}><input type="text" name="wdhamini2MahaliAnapoishi" value={form.wdhamini2MahaliAnapoishi} onChange={handleChange} /></td>
-                      <td colSpan={4}><select name="wdhamini2AmepangaKwake" value={form.wdhamini2AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></td>
-                    </tr>
-                    <tr><td colSpan={4}><strong>Namba ya nyumba</strong></td><td colSpan={4}><strong>Kazi Anayofanya</strong></td><td colSpan={4}><strong>Uhusiano wenu</strong></td></tr>
-                    <tr>
-                      <td colSpan={4}><input type="text" name="wdhamini2NambaNyumba" value={form.wdhamini2NambaNyumba} onChange={handleChange} /></td>
-                      <td colSpan={4}><input type="text" name="wdhamini2KaziAnayofanya" value={form.wdhamini2KaziAnayofanya} onChange={handleChange} /></td>
-                      <td colSpan={4}><input type="text" name="wdhamini2UhusianoWenu" value={form.wdhamini2UhusianoWenu} onChange={handleChange} /></td>
-                    </tr>
-                    <tr><td colSpan={4}><strong>Mahali ilipo Ofisi yake</strong></td><td colSpan={4}><strong>Jina la kampuni/ biashara</strong></td><td colSpan={4}><strong>Simu</strong></td></tr>
-                    <tr>
-                      <td colSpan={4}><input type="text" name="wdhamini2MahaliOfisiYake" value={form.wdhamini2MahaliOfisiYake} onChange={handleChange} /></td>
-                      <td colSpan={4}><input type="text" name="wdhamini2JinaKampuniBiashara" value={form.wdhamini2JinaKampuniBiashara} onChange={handleChange} /></td>
-                      <td colSpan={4}><input type="tel" name="wdhamini2Simu" value={form.wdhamini2Simu} onChange={handleChange} /></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            )}
-
-            {/* PICHA YA PASSPORT */}
-            {currentStep === 8 && (
-              <div className="tamko-container">
-                <div className="tamko-card">
-                  <p><strong>Mimi</strong> nimeomba mkopo wa <strong>Tsh {form.kiasiMkopo || "____"}</strong> kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu. Pia kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine.</p>
-                  <label className="checkbox-label"><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali tamko la mwombaji</label>
+                {/* SEHEMU 7: WADHAMINI */}
+                <div className="section-divider" style={{ marginTop: '40px' }}>SEHEMU 7: WADHAMINI (NO.1 & NO.2)</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  {/* Guarantor 1 */}
+                  <div style={{ border: '1px solid #e2e8f0', padding: '15px', borderRadius: '8px', background: '#f8fafc' }}>
+                    <p style={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>MDHAMINI NO. 1</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <label>Jina kamili<br /><input type="text" name="wdhamini1JinaKamili" value={form.wdhamini1JinaKamili} onChange={handleChange} /></label>
+                      <label>Mahali Anapoishi<br /><input type="text" name="wdhamini1MahaliAnapoishi" value={form.wdhamini1MahaliAnapoishi} onChange={handleChange} /></label>
+                      <label>Amepanga/Kwake<br /><select name="wdhamini1AmepangaKwake" value={form.wdhamini1AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></label>
+                      <label>Kazi / Uhusiano<br />
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                          <input type="text" name="wdhamini1KaziAnayofanya" placeholder="Kazi" value={form.wdhamini1KaziAnayofanya} onChange={handleChange} />
+                          <input type="text" name="wdhamini1UhusianoWenu" placeholder="Uhusiano" value={form.wdhamini1UhusianoWenu} onChange={handleChange} />
+                        </div>
+                      </label>
+                      <label>Simu<br /><input type="tel" name="wdhamini1Simu" value={form.wdhamini1Simu} onChange={handleChange} /></label>
+                    </div>
+                  </div>
+                  {/* Guarantor 2 */}
+                  <div style={{ border: '1px solid #e2e8f0', padding: '15px', borderRadius: '8px', background: '#f8fafc' }}>
+                    <p style={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>MDHAMINI NO. 2</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <label>Jina kamili<br /><input type="text" name="wdhamini2JinaKamili" value={form.wdhamini2JinaKamili} onChange={handleChange} /></label>
+                      <label>Mahali Anapoishi<br /><input type="text" name="wdhamini2MahaliAnapoishi" value={form.wdhamini2MahaliAnapoishi} onChange={handleChange} /></label>
+                      <label>Amepanga/Kwake<br /><select name="wdhamini2AmepangaKwake" value={form.wdhamini2AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></label>
+                      <label>Kazi / Uhusiano<br />
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                          <input type="text" name="wdhamini2KaziAnayofanya" placeholder="Kazi" value={form.wdhamini2KaziAnayofanya} onChange={handleChange} />
+                          <input type="text" name="wdhamini2UhusianoWenu" placeholder="Uhusiano" value={form.wdhamini2UhusianoWenu} onChange={handleChange} />
+                        </div>
+                      </label>
+                      <label>Simu<br /><input type="tel" name="wdhamini2Simu" value={form.wdhamini2Simu} onChange={handleChange} /></label>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* TAMKO NA WASILISHA */}
-            {currentStep === 9 && (
+            {/* STEP 5: TAMKO NA WASILISHA */}
+            {currentStep === 4 && (
               <div className="form-section">
-                <div className="section-divider">TAMKO NA WASILISHA</div>
+                <div className="section-divider">TAMKO, PASSPORT NA WASILISHA</div>
+
                 <div className="tamko-content">
-                  <div className="tamko-card">
-                    <p><strong>TAMKO LA MWOMBAJI</strong></p>
-                    <p>Mimi <strong>{form.jinaKamiliLaMwombaji || "_________________________"}</strong> nimeomba mkopo wa Tsh <strong>{form.kiasiMkopo || "______________"}</strong> kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu.</p>
-                    <p>Pia Kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine kama ilivyoanishwa kwenye sheria na miongozo inayotolewa na Benki Kuu Ya Tanzania pamoja na Tume ya Ulinzi wa Taarifa Binafsi.</p>
-                    <div className="tamko-checkbox-group">
-                      <label className="checkbox-label"><input type="checkbox" name="mwombajiAmesainiFomuNgumu" checked={form.mwombajiAmesainiFomuNgumu} onChange={handleChange} /> Je MWOMBAJI amesaini kwenye fomu ngumu ya mkopo?</label>
-                      <label className="checkbox-label"><input type="checkbox" name="mwombajiAmewekaDoleGumba" checked={form.mwombajiAmewekaDoleGumba} onChange={handleChange} /> Je MWOMBAJI ameweka dole gumba kwenye karatasi ngumu ya mkopo?</label>
+                  {/* Passport Upload First in this step */}
+                  <div className="tamko-card" style={{ borderLeftColor: '#10b981' }}>
+                    <p><strong>PAKIA PICHA YA PASSPORT</strong></p>
+                    <div className="passport-upload">
+                      <div className="passport-preview">
+                        {passportPhoto ? (
+                          <img src={URL.createObjectURL(passportPhoto)} alt="Preview" />
+                        ) : (
+                          <div className="preview-placeholder">View Photo</div>
+                        )}
+                      </div>
+                      <div className="upload-controls">
+                        <label className="upload-btn">
+                          CHAGUA PICHA
+                          <input type="file" hidden accept="image/*" onChange={(e) => setPassportPhoto(e.target.files?.[0] || null)} />
+                        </label>
+                        <p className="upload-note">Picha ya passport inahitajika kwa ajili ya utambulisho wako kwenye mfumo.</p>
+                      </div>
                     </div>
                   </div>
 
                   <div className="tamko-card">
-                    <p><strong>TAMKO LA MDHAMINI 1</strong></p>
-                    <p>Mimi <strong>{form.wdhamini1JinaKamili || "_________________________"}</strong> Uhusiano <strong>{form.wdhamini1UhusianoWenu || "________"}</strong> ninakiri kuwa na taarifa juu ya mkopo wa Tsh <strong>{form.kiasiMkopo || "___________"}</strong> uliyoombwa na <strong>{form.jinaKamiliLaMwombaji || "______________"}</strong> kutoka Orethan Microfinance. Dhamana tajwa hapo juu nazifahamu na nipo tayari zitolewe kama dhamana kwa mujibu wa masharti na taratibu zilizokubaliwa na mkopaji na mkopeshaji.</p>
+                    <p><strong>TAMKO LA MWOMBAJI</strong> (Mkopaji: {form.jinaKamiliLaMwombaji || "..."})</p>
+                    <p>Mimi nathibitisha kuwa taarifa zote nilizozitoa ni za kweli. Nakubali kutembelewa na Afisa kwa uhakiki na kutoa ridhaa ya taarifa zangu kuwekwa CRB.</p>
                     <div className="tamko-checkbox-group">
-                      <label className="checkbox-label"><input type="checkbox" name="mdhamini1AmesainiFomuNgumu" checked={form.mdhamini1AmesainiFomuNgumu} onChange={handleChange} /> Je MDHAMINI 1 amesaini kwenye fomu ngumu ya mkopo?</label>
-                      <label className="checkbox-label"><input type="checkbox" name="mdhamini1AmewekaDoleGumba" checked={form.mdhamini1AmewekaDoleGumba} onChange={handleChange} /> Je MDHAMINI 1 ameweka dole gumba kwenye karatasi ngumu ya mkopo?</label>
+                      <label className="checkbox-label"><input type="checkbox" name="mwombajiAmesainiFomuNgumu" checked={form.mwombajiAmesainiFomuNgumu} onChange={handleChange} /> Mwombaji amesaini fomu ngumu?</label>
+                      <label className="checkbox-label"><input type="checkbox" name="mwombajiAmewekaDoleGumba" checked={form.mwombajiAmewekaDoleGumba} onChange={handleChange} /> Mwombaji ameweka dole gumba?</label>
+                      <label className="checkbox-label" style={{ background: '#eff6ff', borderColor: '#3b82f6' }}><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Nimeisoma na nakubaliana na vigezo vyote</label>
                     </div>
                   </div>
 
-                  <div className="tamko-card">
-                    <p><strong>TAMKO LA MDHAMINI 2</strong></p>
-                    <p>Mimi <strong>{form.wdhamini2JinaKamili || "_________________________"}</strong> Uhusiano <strong>{form.wdhamini2UhusianoWenu || "________"}</strong> ninakiri kuwa na taarifa juu ya mkopo wa Tsh <strong>{form.kiasiMkopo || "___________"}</strong> uliyoombwa na <strong>{form.jinaKamiliLaMwombaji || "______________"}</strong> kutoka Orethan Microfinance. Dhamana tajwa hapo juu nazifahamu na nipo tayari zitolewe kama dhamana kwa mujibu wa masharti na taratibu zilizokubaliwa na mkopaji na mkopeshaji.</p>
-                    <div className="tamko-checkbox-group">
-                      <label className="checkbox-label"><input type="checkbox" name="mdhamini2AmesainiFomuNgumu" checked={form.mdhamini2AmesainiFomuNgumu} onChange={handleChange} /> Je MDHAMINI 2 amesaini kwenye fomu ngumu ya mkopo?</label>
-                      <label className="checkbox-label"><input type="checkbox" name="mdhamini2AmewekaDoleGumba" checked={form.mdhamini2AmewekaDoleGumba} onChange={handleChange} /> Je MDHAMINI 2 ameweka dole gumba kwenye karatasi ngumu ya mkopo?</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div className="tamko-card">
+                      <p><strong>TAMKO LA MDHAMINI 1</strong></p>
+                      <div className="tamko-checkbox-group">
+                        <label className="checkbox-label"><input type="checkbox" name="mdhamini1AmesainiFomuNgumu" checked={form.mdhamini1AmesainiFomuNgumu} onChange={handleChange} /> Mdhamini 1 amesaini?</label>
+                        <label className="checkbox-label"><input type="checkbox" name="mdhamini1AmewekaDoleGumba" checked={form.mdhamini1AmewekaDoleGumba} onChange={handleChange} /> Mdhamini 1 dole gumba?</label>
+                        <label className="checkbox-label" style={{ background: '#ecfdf5' }}><input type="checkbox" name="tamkoMdhamini1" checked={form.tamkoMdhamini1} onChange={handleChange} /> Nakubali udhamini huu</label>
+                      </div>
                     </div>
-                  </div>
-                  <div className="contact-info">
-                    <p>NB: KWA CHANGAMOTO AMA MALALAMIKO USISITE KUTUPIGIA KUPITIA Tel No: +255 769337774 or +255 702 519 104.</p>
+                    <div className="tamko-card">
+                      <p><strong>TAMKO LA MDHAMINI 2</strong></p>
+                      <div className="tamko-checkbox-group">
+                        <label className="checkbox-label"><input type="checkbox" name="mdhamini2AmesainiFomuNgumu" checked={form.mdhamini2AmesainiFomuNgumu} onChange={handleChange} /> Mdhamini 2 amesaini?</label>
+                        <label className="checkbox-label"><input type="checkbox" name="mdhamini2AmewekaDoleGumba" checked={form.mdhamini2AmewekaDoleGumba} onChange={handleChange} /> Mdhamini 2 dole gumba?</label>
+                        <label className="checkbox-label" style={{ background: '#ecfdf5' }}><input type="checkbox" name="tamkoMdhamini2" checked={form.tamkoMdhamini2} onChange={handleChange} /> Nakubali udhamini huu</label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -477,295 +459,69 @@ function PersonalLoan() {
         .page-container {
           background: #e8f0fe;
           padding: 16px;
-          margin-top: -24px; /* Pull up to sit flush with the Navbar */
+          margin-top: -24px;
           border-top-left-radius: 8px;
           border-top-right-radius: 8px;
-          font-family: 'Times New Roman', 'Arial', sans-serif;
+          font-family: 'Inter', sans-serif;
         }
         .form-container {
-          max-width: 1300px;
+          max-width: 1200px;
           width: 100%;
           margin: 0 auto;
           background: white;
-          border-radius: 8px;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-          overflow: hidden;
-        }
-        .form-portal-content {
-          display: flex;
-          align-items: center;
-          gap: 24px;
-        }
-        .fomu-no {
-          font-size: 14px;
-          font-weight: 600;
-          color: #0f172a;
-          white-space: nowrap;
-          display: flex;
-          align-items: center;
-        }
-        .fomu-no-input {
-          width: 130px;
-          padding: 6px 10px;
-          margin-left: 8px;
-          border: 1px solid #cbd5e1;
-          border-radius: 6px;
-          color: #0f172a;
-          font-weight: normal;
-          outline: none;
-        }
-        .fomu-no-input:focus {
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
-        .step-indicators {
-          display: flex;
-          gap: 8px;
-          align-items: center;
-        }
-        .step-btn {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: 2px solid #e2e8f0;
-          background: white;
-          color: #64748b;
-          cursor: pointer;
-          font-weight: bold;
-          font-size: 13px;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .step-btn.completed { background: #22c55e; color: white; border-color: #22c55e; }
-        .step-btn.active { background: #1a3a5c; color: white; border-color: #1a3a5c; box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.2); }
-        .step-title {
-          background: #e0e0e0;
-          padding: 8px 20px;
-          font-weight: bold;
-          font-size: 14px;
-          border-bottom: 2px solid #1a3a5c;
-        }
-        .form-scroll {
-          padding: 20px;
-          max-height: calc(100vh - 300px);
-          overflow-y: auto;
-        }
-        .section-divider {
-          background: #1a3a5c;
-          color: white;
-          padding: 8px 15px;
-          margin-bottom: 15px;
-          margin-top: 5px;
-          border-radius: 4px;
-          font-weight: bold;
-          font-size: 14px;
-        }
-        .form-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-bottom: 25px;
-        }
-        .form-table td, .form-table th {
-          border: 1px solid #ddd;
-          padding: 6px;
-          vertical-align: top;
-          font-size: 13px;
-        }
-        .form-table th { background: #f0f0f0; font-weight: bold; text-align: center; }
-        .form-table input, .form-table select, .form-table textarea {
-          width: 100%;
-          padding: 5px;
-          border: 1px solid #ccc;
-          border-radius: 2px;
-          font-family: inherit;
-          font-size: 12px;
-        }
-        .history-table th, .history-table td { padding: 4px; }
-        .history-table input { min-width: 80px; }
-        .passport-upload {
-          display: flex;
-          gap: 20px;
-          flex-wrap: wrap;
-          justify-content: center;
-          align-items: flex-start;
-        }
-        .passport-preview {
-          width: 150px;
-          height: 170px;
-          border: 2px solid #ccc;
-          background: #f9f9f9;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .passport-preview img { width: 100%; height: 100%; object-fit: cover; }
-        .preview-placeholder { text-align: center; color: #999; font-size: 11px; }
-        .upload-controls { flex: 1; min-width: 220px; }
-        .upload-btn {
-          display: inline-block;
-          background: #1a3a5c;
-          color: white;
-          padding: 8px 16px;
-          cursor: pointer;
-          border-radius: 2px;
-          margin-bottom: 8px;
-          font-size: 12px;
-        }
-        .upload-note {
-          margin-top: 10px;
-          padding: 8px;
-          background: #f5f5f5;
-          font-size: 11px;
-        }
-        .tamko-content { display: flex; flex-direction: column; gap: 24px; padding: 10px; }
-        .tamko-card {
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          padding: 24px;
           border-radius: 12px;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-          transition: all 0.3s ease;
-          border-left: 5px solid #2563eb;
-          position: relative;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.1);
           overflow: hidden;
         }
-        .tamko-card::before {
-          content: "";
-          position: absolute;
-          top: 0; left: 0; width: 100%; height: 100%;
-          background: linear-gradient(135deg, rgba(59,130,246,0.05) 0%, transparent 100%);
-          pointer-events: none;
+        .form-portal-content { display: flex; align-items: center; gap: 24px; }
+        .fomu-no { font-size: 14px; font-weight: 600; color: #0f172a; display: flex; align-items: center; }
+        .fomu-no-input { width: 120px; padding: 6px 10px; margin-left: 8px; border: 1px solid #cbd5e1; border-radius: 6px; }
+        .step-indicators { display: flex; gap: 10px; }
+        .step-btn {
+          width: 34px; height: 34px; border-radius: 50%; border: 2px solid #e2e8f0;
+          background: white; color: #64748b; cursor: pointer; font-weight: 700;
+          display: flex; align-items: center; justify-content: center; transition: all 0.2s;
         }
-        .tamko-card:hover {
-          box-shadow: 0 6px 16px rgba(0,0,0,0.06);
-          transform: translateY(-2px);
-          border-left-color: #1d4ed8;
+        .step-btn.completed { background: #10b981; color: white; border-color: #10b981; }
+        .step-btn.active { background: #102a43; color: white; border-color: #102a43; transform: scale(1.1); box-shadow: 0 4px 10px rgba(16, 42, 67, 0.2); }
+        
+        .step-title { background: #f8fafc; padding: 12px 24px; font-weight: 800; color: #1e293b; border-bottom: 2px solid #e2e8f0; }
+        .form-scroll { padding: 30px; max-height: calc(100vh - 280px); overflow-y: auto; }
+        
+        .section-divider {
+          background: #102a43; color: white; padding: 10px 18px; border-radius: 6px;
+          font-weight: 700; font-size: 14px; margin-bottom: 20px;
         }
-        .tamko-card p {
-          font-size: 14px;
-          line-height: 1.6;
-          color: #334155;
-          margin-bottom: 20px;
-          position: relative;
-          z-index: 1;
+        .form-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        .form-table td { border: 1px solid #e2e8f0; padding: 12px; vertical-align: top; }
+        .form-table strong { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-table input, .form-table select, .form-table textarea {
+          width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px;
+          font-size: 14px; margin-top: 6px; transition: border-color 0.2s;
         }
-        .tamko-card strong {
-          color: #0f172a;
-          font-weight: 700;
-          background: rgba(59, 130, 246, 0.1);
-          padding: 2px 6px;
-          border-radius: 4px;
-        }
-        .tamko-checkbox-group {
-          margin-top: 15px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          background: #f1f5f9;
-          padding: 16px;
-          border-radius: 8px;
-          border: 1px dashed #cbd5e1;
-        }
+        .form-table input:focus { border-color: #3b82f6; outline: none; }
+        
+        .history-table th { background: #f1f5f9; padding: 10px; font-size: 11px; text-align: left; }
+        .tamko-card { background: #fff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; border-left: 5px solid #3b82f6; }
+        .tamko-checkbox-group { display: flex; flexDirection: column; gap: 10px; margin-top: 15px; }
         .checkbox-label {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          cursor: pointer;
-          font-size: 14px;
-          font-weight: 600;
-          color: #1e293b;
-          background: white;
-          padding: 14px 18px;
-          border-radius: 8px;
-          border: 1px solid #cbd5e1;
-          transition: all 0.2s;
-          position: relative;
-          z-index: 1;
-          box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+          display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; font-weight: 600;
+          padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc;
         }
-        .checkbox-label:hover {
-          background: #f1f5f9;
-          border-color: #94a3b8;
-        }
-        .checkbox-label input[type="checkbox"] {
-          width: 20px;
-          height: 20px;
-          cursor: pointer;
-          accent-color: #2563eb;
-        }
-        .contact-info {
-          margin-top: 15px;
-          padding: 10px;
-          background: #fef3c7;
-          border-radius: 8px;
-          text-align: center;
-          font-size: 11px;
-          color: #92400e;
-        }
-        .nav-buttons {
-          display: flex;
-          gap: 15px;
-          padding: 15px 20px;
-          background: #ffffff;
-          border-top: 2px solid #1a3a5c;
-        }
-        .btn-prev {
-          flex: 1;
-          padding: 12px 20px;
-          border: none;
-          cursor: pointer;
-          font-weight: bold;
-          font-size: 15px;
-          border-radius: 8px;
-          background: #6c757d;
-          color: white;
-        }
-        .btn-next {
-          flex: 1;
-          padding: 12px 20px;
-          border: none;
-          cursor: pointer;
-          font-weight: bold;
-          font-size: 15px;
-          border-radius: 8px;
-          background: #28a745;
-          color: white;
-        }
-        .btn-submit {
-          flex: 1;
-          padding: 12px 20px;
-          border: none;
-          cursor: pointer;
-          font-weight: bold;
-          font-size: 15px;
-          border-radius: 8px;
-          background: #007bff;
-          color: white;
-        }
-        .btn-prev:hover, .btn-next:hover, .btn-submit:hover { opacity: 0.85; transform: translateY(-2px); }
-        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        
+        .passport-upload { display: flex; gap: 20px; align-items: center; margin-top: 10px; }
+        .passport-preview { width: 100px; height: 120px; border: 2px dashed #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .passport-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .upload-btn { background: #102a43; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
+
+        .nav-buttons { padding: 20px 30px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; gap: 20px; }
+        .btn-prev { flex: 1; padding: 14px; background: #94a3b8; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .btn-next { flex: 1; padding: 14px; background: #102a43; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .btn-submit { flex: 1; padding: 14px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        
         @media (max-width: 800px) {
-          .page-container { padding: 10px; margin-top: -24px; border-radius: 0; }
-          .form-portal-content { flex-direction: column; align-items: flex-start; gap: 10px; }
-          .form-scroll { padding: 12px; max-height: none; }
-          .form-table, .form-table tbody, .form-table tr, .form-table td, .form-table th {
-            display: block;
-            width: 100%;
-          }
-          .form-table tr {
-            margin-bottom: 12px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 12px;
-          }
-          .form-table td {
-            border: none;
-            padding: 4px 0;
-            margin-bottom: 8px;
-          }
-          .btn-prev, .btn-next, .btn-submit { padding: 8px; font-size: 12px; }
-          .nav-buttons { flex-direction: column; gap: 8px; }
+          .nav-buttons { flex-direction: column; }
+          .tamko-content > div { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>
