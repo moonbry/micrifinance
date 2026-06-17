@@ -244,178 +244,177 @@ function PersonalLoan() {
                 <div className="input-box"><input type="date" name="tareheYaKustaafu" placeholder=" " value={form.tareheYaKustaafu} onChange={handleChange} /><label>Tarehe ya kustaafu</label></div>
               </div>
             )}
-          </div>
+
+
+            {/* SEHEMU 3: TAARIFA ZA BIASHARA */}
+            {currentStep === 2 && (
+              <div className="form-section">
+                <div className="section-divider">SEHEMU 3: TAARIFA ZA BIASHARA</div>
+                <table className="form-table">
+                  <tbody>
+                    <tr><td colSpan={6}><strong>Jina la Biashara</strong></td><td colSpan={6}><strong>Aina ya Biashara</strong></td></tr>
+                    <tr><td colSpan={6}><input type="text" name="jinaBiashara" value={form.jinaBiashara} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="ainaBiashara" value={form.ainaBiashara} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={12}><strong>Mahali Biashara Ilipo</strong></td></tr>
+                    <tr><td colSpan={12}><input type="text" name="mahaliBiasharaIlipo" value={form.mahaliBiasharaIlipo} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={6}><strong>Umefanya Biashara hii tangu lini</strong></td><td colSpan={6}><strong>Jina la mmiliki wa eneo la biashara</strong></td></tr>
+                    <tr><td colSpan={6}><input type="text" name="umefanyaBiasharaTanguLini" value={form.umefanyaBiasharaTanguLini} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="jinaMmilikiEneoBiashara" value={form.jinaMmilikiEneoBiashara} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={6}><strong>Namba zake za simu</strong></td><td colSpan={6}><strong>Wastani wa kipato kwa mwezi</strong></td></tr>
+                    <tr><td colSpan={6}><input type="tel" name="nambaSimuMmilikiEneo" value={form.nambaSimuMmilikiEneo} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="wastaniKipatoKwaMwezi" value={form.wastaniKipatoKwaMwezi} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={6}><strong>Muda wa mkataba wa eneo la biashara</strong></td><td colSpan={6}><strong>Wastani wa matumizi kwa mwezi</strong></td></tr>
+                    <tr><td colSpan={6}><input type="text" name="mudaMkatabaEneoBiashara" value={form.mudaMkatabaEneoBiashara} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="wastaniMatumiziKwaMwezi" value={form.wastaniMatumiziKwaMwezi} onChange={handleChange} /></td></tr>
+                  </tbody>
+                </table>
+              </div>
             )}
 
-          {/* SEHEMU 3: TAARIFA ZA BIASHARA */}
-          {currentStep === 2 && (
-            <div className="form-section">
-              <div className="section-divider">SEHEMU 3: TAARIFA ZA BIASHARA</div>
-              <table className="form-table">
-                <tbody>
-                  <tr><td colSpan={6}><strong>Jina la Biashara</strong></td><td colSpan={6}><strong>Aina ya Biashara</strong></td></tr>
-                  <tr><td colSpan={6}><input type="text" name="jinaBiashara" value={form.jinaBiashara} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="ainaBiashara" value={form.ainaBiashara} onChange={handleChange} /></td></tr>
-                  <tr><td colSpan={12}><strong>Mahali Biashara Ilipo</strong></td></tr>
-                  <tr><td colSpan={12}><input type="text" name="mahaliBiasharaIlipo" value={form.mahaliBiasharaIlipo} onChange={handleChange} /></td></tr>
-                  <tr><td colSpan={6}><strong>Umefanya Biashara hii tangu lini</strong></td><td colSpan={6}><strong>Jina la mmiliki wa eneo la biashara</strong></td></tr>
-                  <tr><td colSpan={6}><input type="text" name="umefanyaBiasharaTanguLini" value={form.umefanyaBiasharaTanguLini} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="jinaMmilikiEneoBiashara" value={form.jinaMmilikiEneoBiashara} onChange={handleChange} /></td></tr>
-                  <tr><td colSpan={6}><strong>Namba zake za simu</strong></td><td colSpan={6}><strong>Wastani wa kipato kwa mwezi</strong></td></tr>
-                  <tr><td colSpan={6}><input type="tel" name="nambaSimuMmilikiEneo" value={form.nambaSimuMmilikiEneo} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="wastaniKipatoKwaMwezi" value={form.wastaniKipatoKwaMwezi} onChange={handleChange} /></td></tr>
-                  <tr><td colSpan={6}><strong>Muda wa mkataba wa eneo la biashara</strong></td><td colSpan={6}><strong>Wastani wa matumizi kwa mwezi</strong></td></tr>
-                  <tr><td colSpan={6}><input type="text" name="mudaMkatabaEneoBiashara" value={form.mudaMkatabaEneoBiashara} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="wastaniMatumiziKwaMwezi" value={form.wastaniMatumiziKwaMwezi} onChange={handleChange} /></td></tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* SEHEMU 4: KIASI CHA MKOPO */}
-          {currentStep === 3 && (
-            <div className="form-section">
-              <div className="section-divider">SEHEMU 4: KIASI CHA MKOPO</div>
-              <table className="form-table">
-                <tbody>
-                  <tr><td colSpan={6}><strong>Kiasi cha Mkopo</strong></td><td colSpan={6}><strong>Kwa maneno</strong></td></tr>
-                  <tr><td colSpan={6}><input type="text" name="kiasiMkopo" value={form.kiasiMkopo} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="kwaManeno" value={form.kwaManeno} onChange={handleChange} /></td></tr>
-                  <tr><td colSpan={6}><strong>Muda wa kulipa Mkopo</strong></td><td colSpan={6}><strong>Kwa tarakimu</strong></td></tr>
-                  <tr><td colSpan={6}><input type="text" name="mudaKulipaMkopo" value={form.mudaKulipaMkopo} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="kwaTarakimu" value={form.kwaTarakimu} onChange={handleChange} /></td></tr>
-                  <tr><td colSpan={12}><strong>Ni kiasi gani cha rejesho unaweza kulipa bila matatizo?</strong></td></tr>
-                  <tr><td colSpan={12}><input type="text" name="kiasiRejeshoBilaMatatizo" value={form.kiasiRejeshoBilaMatatizo} onChange={handleChange} /></td></tr>
-                  <tr><td colSpan={12}><strong>Malengo ya Mkopo</strong></td></tr>
-                  <tr><td colSpan={12}><textarea name="malengoMkopo" rows={3} value={form.malengoMkopo} onChange={handleChange}></textarea></td></tr>
-                  <tr><td colSpan={12}><strong>Chanzo cha Mapato</strong></td></tr>
-                  <tr><td colSpan={12}><input type="text" name="chanzoMapato" value={form.chanzoMapato} onChange={handleChange} /></td></tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* SEHEMU 5: HISTORIA YA MIKOPO */}
-          {currentStep === 4 && (
-            <div className="form-section">
-              <div className="section-divider">SEHEMU 5: HISTORIA YA MIKOPO</div>
-              <table className="form-table history-table">
-                <thead>
-                  <tr><th>Jina la Taasisi</th><th>Ulichukua Mkopo lini</th><th>Kiasi cha mkopo</th><th>Kiasi cha marejesho</th><th>Tarehe za marejesho</th><th>Kiasi kilichobaki</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><input type="text" name="historia1JinaTaasisi" value={form.historia1JinaTaasisi} onChange={handleChange} /></td><td><input type="text" name="historia1UlichukuaLini" value={form.historia1UlichukuaLini} onChange={handleChange} /></td><td><input type="text" name="historia1KiasiMkopo" value={form.historia1KiasiMkopo} onChange={handleChange} /></td><td><input type="text" name="historia1KiasiMarejesho" value={form.historia1KiasiMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia1TareheMarejesho" value={form.historia1TareheMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia1KiasiKilichobaki" value={form.historia1KiasiKilichobaki} onChange={handleChange} /></td></tr>
-                  <tr><td><input type="text" name="historia2JinaTaasisi" value={form.historia2JinaTaasisi} onChange={handleChange} /></td><td><input type="text" name="historia2UlichukuaLini" value={form.historia2UlichukuaLini} onChange={handleChange} /></td><td><input type="text" name="historia2KiasiMkopo" value={form.historia2KiasiMkopo} onChange={handleChange} /></td><td><input type="text" name="historia2KiasiMarejesho" value={form.historia2KiasiMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia2TareheMarejesho" value={form.historia2TareheMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia2KiasiKilichobaki" value={form.historia2KiasiKilichobaki} onChange={handleChange} /></td></tr>
-                  <tr><td><input type="text" name="historia3JinaTaasisi" value={form.historia3JinaTaasisi} onChange={handleChange} /></td><td><input type="text" name="historia3UlichukuaLini" value={form.historia3UlichukuaLini} onChange={handleChange} /></td><td><input type="text" name="historia3KiasiMkopo" value={form.historia3KiasiMkopo} onChange={handleChange} /></td><td><input type="text" name="historia3KiasiMarejesho" value={form.historia3KiasiMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia3TareheMarejesho" value={form.historia3TareheMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia3KiasiKilichobaki" value={form.historia3KiasiKilichobaki} onChange={handleChange} /></td></tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* SEHEMU 6: DHAMANA YA MKOPO */}
-          {currentStep === 5 && (
-            <div className="form-section">
-              <div className="section-divider">SEHEMU 6: DHAMANA YA MKOPO</div>
-              <table className="form-table">
-                <tbody>
-                  <tr><td colSpan={6}><strong>Aina ya dhamana</strong></td><td colSpan={6}><strong>Namba za usajili</strong></td></tr>
-                  <tr><td colSpan={6}><input type="text" name="dhamanaAina" value={form.dhamanaAina} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="dhamanaNambaUsajili" value={form.dhamanaNambaUsajili} onChange={handleChange} /></td></tr>
-                  <tr><td colSpan={6}><strong>Umiliki</strong></td><td colSpan={6}><strong>Thamani yake kwa sasa</strong></td></tr>
-                  <tr><td colSpan={6}><input type="text" name="dhamanaUmiliki" value={form.dhamanaUmiliki} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="dhamanaThamaniKwaSasa" value={form.dhamanaThamaniKwaSasa} onChange={handleChange} /></td></tr>
-                  <tr><td colSpan={12}><strong>Muonekano wa dhamana</strong></td></tr>
-                  <tr><td colSpan={12}><select name="dhamanaMuonekano" value={form.dhamanaMuonekano} onChange={handleChange}><option value="">Chagua</option><option>Nzuri sana</option><option>Nzuri</option><option>Kuridhisha</option><option>Inahitaji matengenezo</option></select></td></tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* SEHEMU 7: WADHAMINI NO.1 */}
-          {currentStep === 6 && (
-            <div className="form-section">
-              <div className="section-divider">SEHEMU 7: TAARIFA ZA WADHAMINI NO.1</div>
-              <table className="form-table">
-                <tbody>
-                  <tr><td colSpan={4}><strong>Jina kamili la Mdhamini</strong></td><td colSpan={4}><strong>Mahali Anapoishi</strong></td><td colSpan={4}><strong>Amepanga/ kwake</strong></td></tr>
-                  <tr><td colSpan={4}><input type="text" name="wdhamini1JinaKamili" value={form.wdhamini1JinaKamili} onChange={handleChange} /></td><td colSpan={4}><input type="text" name="wdhamini1MahaliAnapoishi" value={form.wdhamini1MahaliAnapoishi} onChange={handleChange} /></td><td colSpan={4}><select name="wdhamini1AmepangaKwake" value={form.wdhamini1AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></td></tr>
-                  <tr><td colSpan={4}><strong>Namba ya nyumba</strong></td><td colSpan={4}><strong>Kazi Anayofanya</strong></td><td colSpan={4}><strong>Uhusiano wenu</strong></td></tr>
-                  <tr>
-                    <td colSpan={4}><input type="text" name="wdhamini1NambaNyumba" value={form.wdhamini1NambaNyumba} onChange={handleChange} /></td>
-                    <td colSpan={4}><input type="text" name="wdhamini1KaziAnayofanya" value={form.wdhamini1KaziAnayofanya} onChange={handleChange} /></td>
-                    <td colSpan={4}><input type="text" name="wdhamini1UhusianoWenu" value={form.wdhamini1UhusianoWenu} onChange={handleChange} /></td>
-                  </tr>
-                  <tr><td colSpan={4}><strong>Mahali ilipo Ofisi yake</strong></td><td colSpan={4}><strong>Jina la kampuni/ biashara</strong></td><td colSpan={4}><strong>Simu</strong></td></tr>
-                  <tr>
-                    <td colSpan={4}><input type="text" name="wdhamini1MahaliOfisiYake" value={form.wdhamini1MahaliOfisiYake} onChange={handleChange} /></td>
-                    <td colSpan={4}><input type="text" name="wdhamini1JinaKampuniBiashara" value={form.wdhamini1JinaKampuniBiashara} onChange={handleChange} /></td>
-                    <td colSpan={4}><input type="tel" name="wdhamini1Simu" value={form.wdhamini1Simu} onChange={handleChange} /></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* SEHEMU 7: WADHAMINI NO.2 */}
-          {currentStep === 7 && (
-            <div className="form-section">
-              <div className="section-divider">SEHEMU 7: TAARIFA ZA WADHAMINI NO.2</div>
-              <table className="form-table">
-                <tbody>
-                  <tr><td colSpan={4}><strong>Jina kamili la Mdhamini</strong></td><td colSpan={4}><strong>Mahali Anapoishi</strong></td><td colSpan={4}><strong>Amepanga/ kwake</strong></td></tr>
-                  <tr>
-                    <td colSpan={4}><input type="text" name="wdhamini2JinaKamili" value={form.wdhamini2JinaKamili} onChange={handleChange} /></td>
-                    <td colSpan={4}><input type="text" name="wdhamini2MahaliAnapoishi" value={form.wdhamini2MahaliAnapoishi} onChange={handleChange} /></td>
-                    <td colSpan={4}><select name="wdhamini2AmepangaKwake" value={form.wdhamini2AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></td>
-                  </tr>
-                  <tr><td colSpan={4}><strong>Namba ya nyumba</strong></td><td colSpan={4}><strong>Kazi Anayofanya</strong></td><td colSpan={4}><strong>Uhusiano wenu</strong></td></tr>
-                  <tr>
-                    <td colSpan={4}><input type="text" name="wdhamini2NambaNyumba" value={form.wdhamini2NambaNyumba} onChange={handleChange} /></td>
-                    <td colSpan={4}><input type="text" name="wdhamini2KaziAnayofanya" value={form.wdhamini2KaziAnayofanya} onChange={handleChange} /></td>
-                    <td colSpan={4}><input type="text" name="wdhamini2UhusianoWenu" value={form.wdhamini2UhusianoWenu} onChange={handleChange} /></td>
-                  </tr>
-                  <tr><td colSpan={4}><strong>Mahali ilipo Ofisi yake</strong></td><td colSpan={4}><strong>Jina la kampuni/ biashara</strong></td><td colSpan={4}><strong>Simu</strong></td></tr>
-                  <tr>
-                    <td colSpan={4}><input type="text" name="wdhamini2MahaliOfisiYake" value={form.wdhamini2MahaliOfisiYake} onChange={handleChange} /></td>
-                    <td colSpan={4}><input type="text" name="wdhamini2JinaKampuniBiashara" value={form.wdhamini2JinaKampuniBiashara} onChange={handleChange} /></td>
-                    <td colSpan={4}><input type="tel" name="wdhamini2Simu" value={form.wdhamini2Simu} onChange={handleChange} /></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* PICHA YA PASSPORT */}
-          {currentStep === 8 && (
-            <div className="tamko-container">
-              <div className="tamko-card">
-                <p><strong>Mimi</strong> nimeomba mkopo wa <strong>Tsh {form.kiasiMkopo || "____"}</strong> kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu. Pia kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine.</p>
-                <label><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali tamko la mwombaji</label>
+            {/* SEHEMU 4: KIASI CHA MKOPO */}
+            {currentStep === 3 && (
+              <div className="form-section">
+                <div className="section-divider">SEHEMU 4: KIASI CHA MKOPO</div>
+                <table className="form-table">
+                  <tbody>
+                    <tr><td colSpan={6}><strong>Kiasi cha Mkopo</strong></td><td colSpan={6}><strong>Kwa maneno</strong></td></tr>
+                    <tr><td colSpan={6}><input type="text" name="kiasiMkopo" value={form.kiasiMkopo} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="kwaManeno" value={form.kwaManeno} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={6}><strong>Muda wa kulipa Mkopo</strong></td><td colSpan={6}><strong>Kwa tarakimu</strong></td></tr>
+                    <tr><td colSpan={6}><input type="text" name="mudaKulipaMkopo" value={form.mudaKulipaMkopo} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="kwaTarakimu" value={form.kwaTarakimu} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={12}><strong>Ni kiasi gani cha rejesho unaweza kulipa bila matatizo?</strong></td></tr>
+                    <tr><td colSpan={12}><input type="text" name="kiasiRejeshoBilaMatatizo" value={form.kiasiRejeshoBilaMatatizo} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={12}><strong>Malengo ya Mkopo</strong></td></tr>
+                    <tr><td colSpan={12}><textarea name="malengoMkopo" rows={3} value={form.malengoMkopo} onChange={handleChange}></textarea></td></tr>
+                    <tr><td colSpan={12}><strong>Chanzo cha Mapato</strong></td></tr>
+                    <tr><td colSpan={12}><input type="text" name="chanzoMapato" value={form.chanzoMapato} onChange={handleChange} /></td></tr>
+                  </tbody>
+                </table>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* TAMKO NA WASILISHA */}
-          {currentStep === 9 && (
-            <div className="form-section">
-              <div className="section-divider">TAMKO NA WASILISHA</div>
-              <div className="tamko-content">
+            {/* SEHEMU 5: HISTORIA YA MIKOPO */}
+            {currentStep === 4 && (
+              <div className="form-section">
+                <div className="section-divider">SEHEMU 5: HISTORIA YA MIKOPO</div>
+                <table className="form-table history-table">
+                  <thead>
+                    <tr><th>Jina la Taasisi</th><th>Ulichukua Mkopo lini</th><th>Kiasi cha mkopo</th><th>Kiasi cha marejesho</th><th>Tarehe za marejesho</th><th>Kiasi kilichobaki</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><input type="text" name="historia1JinaTaasisi" value={form.historia1JinaTaasisi} onChange={handleChange} /></td><td><input type="text" name="historia1UlichukuaLini" value={form.historia1UlichukuaLini} onChange={handleChange} /></td><td><input type="text" name="historia1KiasiMkopo" value={form.historia1KiasiMkopo} onChange={handleChange} /></td><td><input type="text" name="historia1KiasiMarejesho" value={form.historia1KiasiMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia1TareheMarejesho" value={form.historia1TareheMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia1KiasiKilichobaki" value={form.historia1KiasiKilichobaki} onChange={handleChange} /></td></tr>
+                    <tr><td><input type="text" name="historia2JinaTaasisi" value={form.historia2JinaTaasisi} onChange={handleChange} /></td><td><input type="text" name="historia2UlichukuaLini" value={form.historia2UlichukuaLini} onChange={handleChange} /></td><td><input type="text" name="historia2KiasiMkopo" value={form.historia2KiasiMkopo} onChange={handleChange} /></td><td><input type="text" name="historia2KiasiMarejesho" value={form.historia2KiasiMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia2TareheMarejesho" value={form.historia2TareheMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia2KiasiKilichobaki" value={form.historia2KiasiKilichobaki} onChange={handleChange} /></td></tr>
+                    <tr><td><input type="text" name="historia3JinaTaasisi" value={form.historia3JinaTaasisi} onChange={handleChange} /></td><td><input type="text" name="historia3UlichukuaLini" value={form.historia3UlichukuaLini} onChange={handleChange} /></td><td><input type="text" name="historia3KiasiMkopo" value={form.historia3KiasiMkopo} onChange={handleChange} /></td><td><input type="text" name="historia3KiasiMarejesho" value={form.historia3KiasiMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia3TareheMarejesho" value={form.historia3TareheMarejesho} onChange={handleChange} /></td><td><input type="text" name="historia3KiasiKilichobaki" value={form.historia3KiasiKilichobaki} onChange={handleChange} /></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* SEHEMU 6: DHAMANA YA MKOPO */}
+            {currentStep === 5 && (
+              <div className="form-section">
+                <div className="section-divider">SEHEMU 6: DHAMANA YA MKOPO</div>
+                <table className="form-table">
+                  <tbody>
+                    <tr><td colSpan={6}><strong>Aina ya dhamana</strong></td><td colSpan={6}><strong>Namba za usajili</strong></td></tr>
+                    <tr><td colSpan={6}><input type="text" name="dhamanaAina" value={form.dhamanaAina} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="dhamanaNambaUsajili" value={form.dhamanaNambaUsajili} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={6}><strong>Umiliki</strong></td><td colSpan={6}><strong>Thamani yake kwa sasa</strong></td></tr>
+                    <tr><td colSpan={6}><input type="text" name="dhamanaUmiliki" value={form.dhamanaUmiliki} onChange={handleChange} /></td><td colSpan={6}><input type="text" name="dhamanaThamaniKwaSasa" value={form.dhamanaThamaniKwaSasa} onChange={handleChange} /></td></tr>
+                    <tr><td colSpan={12}><strong>Muonekano wa dhamana</strong></td></tr>
+                    <tr><td colSpan={12}><select name="dhamanaMuonekano" value={form.dhamanaMuonekano} onChange={handleChange}><option value="">Chagua</option><option>Nzuri sana</option><option>Nzuri</option><option>Kuridhisha</option><option>Inahitaji matengenezo</option></select></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* SEHEMU 7: WADHAMINI NO.1 */}
+            {currentStep === 6 && (
+              <div className="form-section">
+                <div className="section-divider">SEHEMU 7: TAARIFA ZA WADHAMINI NO.1</div>
+                <table className="form-table">
+                  <tbody>
+                    <tr><td colSpan={4}><strong>Jina kamili la Mdhamini</strong></td><td colSpan={4}><strong>Mahali Anapoishi</strong></td><td colSpan={4}><strong>Amepanga/ kwake</strong></td></tr>
+                    <tr><td colSpan={4}><input type="text" name="wdhamini1JinaKamili" value={form.wdhamini1JinaKamili} onChange={handleChange} /></td><td colSpan={4}><input type="text" name="wdhamini1MahaliAnapoishi" value={form.wdhamini1MahaliAnapoishi} onChange={handleChange} /></td><td colSpan={4}><select name="wdhamini1AmepangaKwake" value={form.wdhamini1AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></td></tr>
+                    <tr><td colSpan={4}><strong>Namba ya nyumba</strong></td><td colSpan={4}><strong>Kazi Anayofanya</strong></td><td colSpan={4}><strong>Uhusiano wenu</strong></td></tr>
+                    <tr>
+                      <td colSpan={4}><input type="text" name="wdhamini1NambaNyumba" value={form.wdhamini1NambaNyumba} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini1KaziAnayofanya" value={form.wdhamini1KaziAnayofanya} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini1UhusianoWenu" value={form.wdhamini1UhusianoWenu} onChange={handleChange} /></td>
+                    </tr>
+                    <tr><td colSpan={4}><strong>Mahali ilipo Ofisi yake</strong></td><td colSpan={4}><strong>Jina la kampuni/ biashara</strong></td><td colSpan={4}><strong>Simu</strong></td></tr>
+                    <tr>
+                      <td colSpan={4}><input type="text" name="wdhamini1MahaliOfisiYake" value={form.wdhamini1MahaliOfisiYake} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini1JinaKampuniBiashara" value={form.wdhamini1JinaKampuniBiashara} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="tel" name="wdhamini1Simu" value={form.wdhamini1Simu} onChange={handleChange} /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* SEHEMU 7: WADHAMINI NO.2 */}
+            {currentStep === 7 && (
+              <div className="form-section">
+                <div className="section-divider">SEHEMU 7: TAARIFA ZA WADHAMINI NO.2</div>
+                <table className="form-table">
+                  <tbody>
+                    <tr><td colSpan={4}><strong>Jina kamili la Mdhamini</strong></td><td colSpan={4}><strong>Mahali Anapoishi</strong></td><td colSpan={4}><strong>Amepanga/ kwake</strong></td></tr>
+                    <tr>
+                      <td colSpan={4}><input type="text" name="wdhamini2JinaKamili" value={form.wdhamini2JinaKamili} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini2MahaliAnapoishi" value={form.wdhamini2MahaliAnapoishi} onChange={handleChange} /></td>
+                      <td colSpan={4}><select name="wdhamini2AmepangaKwake" value={form.wdhamini2AmepangaKwake} onChange={handleChange}><option value="">Chagua</option><option>Amepanga</option><option>Kwake</option></select></td>
+                    </tr>
+                    <tr><td colSpan={4}><strong>Namba ya nyumba</strong></td><td colSpan={4}><strong>Kazi Anayofanya</strong></td><td colSpan={4}><strong>Uhusiano wenu</strong></td></tr>
+                    <tr>
+                      <td colSpan={4}><input type="text" name="wdhamini2NambaNyumba" value={form.wdhamini2NambaNyumba} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini2KaziAnayofanya" value={form.wdhamini2KaziAnayofanya} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini2UhusianoWenu" value={form.wdhamini2UhusianoWenu} onChange={handleChange} /></td>
+                    </tr>
+                    <tr><td colSpan={4}><strong>Mahali ilipo Ofisi yake</strong></td><td colSpan={4}><strong>Jina la kampuni/ biashara</strong></td><td colSpan={4}><strong>Simu</strong></td></tr>
+                    <tr>
+                      <td colSpan={4}><input type="text" name="wdhamini2MahaliOfisiYake" value={form.wdhamini2MahaliOfisiYake} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="text" name="wdhamini2JinaKampuniBiashara" value={form.wdhamini2JinaKampuniBiashara} onChange={handleChange} /></td>
+                      <td colSpan={4}><input type="tel" name="wdhamini2Simu" value={form.wdhamini2Simu} onChange={handleChange} /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* PICHA YA PASSPORT */}
+            {currentStep === 8 && (
+              <div className="tamko-container">
                 <div className="tamko-card">
-                  <p><strong>TAMKO LA MWOMBAJI</strong></p>
-                  <p>Mimi nimeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu.</p>
-                  <p>Pia Kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine kama ilivyoanishwa kwenye sheria na miongozo inayotolewa na Benki Kuu Ya Tanzania pamoja na Tume ya Ulinzi wa Taarifa Binafsi.</p>
-                  <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                  <label><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali Tamko la Mwombaji</label>
-                </div>
-                <div className="tamko-card">
-                  <p><strong>TAMKO LA MDHAMINI 1</strong></p>
-                  <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
-                  <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                  <label><input type="checkbox" name="tamkoMdhamini1" checked={form.tamkoMdhamini1} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 1</label>
-                </div>
-                <div className="tamko-card">
-                  <p><strong>TAMKO LA MDHAMINI 2</strong></p>
-                  <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
-                  <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
-                  <label><input type="checkbox" name="tamkoMdhamini2" checked={form.tamkoMdhamini2} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 2</label>
-                </div>
-                <div className="contact-info">
-                  <p>NB: KWA CHANGAMOTO AMA MALALAMIKO USISITE KUTUPIGIA KUPITIA Tel No: +255 769337774 or +255 702 519 104.</p>
+                  <p><strong>Mimi</strong> nimeomba mkopo wa <strong>Tsh {form.kiasiMkopo || "____"}</strong> kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu. Pia kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine.</p>
+                  <label><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali tamko la mwombaji</label>
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* TAMKO NA WASILISHA */}
+            {currentStep === 9 && (
+              <div className="form-section">
+                <div className="section-divider">TAMKO NA WASILISHA</div>
+                <div className="tamko-content">
+                  <div className="tamko-card">
+                    <p><strong>TAMKO LA MWOMBAJI</strong></p>
+                    <p>Mimi nimeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Nakubali kutembelewa na Afisa mikopo sehemu ya biashara yangu na nyumbani kwangu na kupata taarifa muhimu kutoka kwa watu wengine kwa ajili ya uhakiki wa taarifa zangu.</p>
+                    <p>Pia Kwa kujaza fomu hii natoa ridhaa kwa mkopeshaji kutoa taarifa zangu kwenye Taasisi za Kuchakata Taarifa za Wakopaji (CRB) na wadau wengine kama ilivyoanishwa kwenye sheria na miongozo inayotolewa na Benki Kuu Ya Tanzania pamoja na Tume ya Ulinzi wa Taarifa Binafsi.</p>
+                    <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
+                    <label><input type="checkbox" name="tamkoLaMwombaji" checked={form.tamkoLaMwombaji} onChange={handleChange} /> Ninakubali Tamko la Mwombaji</label>
+                  </div>
+                  <div className="tamko-card">
+                    <p><strong>TAMKO LA MDHAMINI 1</strong></p>
+                    <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
+                    <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
+                    <label><input type="checkbox" name="tamkoMdhamini1" checked={form.tamkoMdhamini1} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 1</label>
+                  </div>
+                  <div className="tamko-card">
+                    <p><strong>TAMKO LA MDHAMINI 2</strong></p>
+                    <p>Mimi nakubali kumdhamini aliyeomba mkopo wa Tsh kutoka Orethan Microfinance. Nakiri kwamba taarifa zote nilizozitoa hapo juu ni sahihi kadiri ya ufahamu wangu. Pia natambua kuwa nitawajibika kulipa mkopo huu kama ikitokea mwombaji ameshindwa kulipa kwa wakati sawa sawa na mkataba wa mkopo huu.</p>
+                    <div className="tamko-line">SAHIHI _______________ TAREHE _______________ DOLE GUMBA _______________</div>
+                    <label><input type="checkbox" name="tamkoMdhamini2" checked={form.tamkoMdhamini2} onChange={handleChange} /> Ninakubali Tamko la Mdhamini 2</label>
+                  </div>
+                  <div className="contact-info">
+                    <p>NB: KWA CHANGAMOTO AMA MALALAMIKO USISITE KUTUPIGIA KUPITIA Tel No: +255 769337774 or +255 702 519 104.</p>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
 
@@ -437,7 +436,6 @@ function PersonalLoan() {
           <p>© 2026 Orethan Microfinance. Haki zote zimehifadhiwa.</p>
         </div>
       </div>
-    </div>
 
       <style>{`
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -664,7 +662,7 @@ function PersonalLoan() {
           .btn-prev, .btn-next, .btn-submit { padding: 8px 12px; font-size: 13px; }
         }
       `}</style>
-    </div >
+    </div>
   );
 }
 
