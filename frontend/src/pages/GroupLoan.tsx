@@ -385,12 +385,16 @@ function GroupLoan() {
         .page-container {
           background: #e8f0fe;
           padding: 16px;
+          margin-top: -24px; /* Pull up to sit flush with the Navbar */
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
           font-family: 'Times New Roman', 'Arial', sans-serif;
         }
 
         .form-container {
           max-width: 1300px;
           width: 100%;
+          margin: 0 auto;
           background: white;
           border-radius: 8px;
           box-shadow: 0 4px 15px rgba(0,0,0,0.05);
@@ -616,10 +620,25 @@ function GroupLoan() {
         button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
         @media (max-width: 800px) {
-          .page-container { padding: 10px; }
-          .form-scroll { padding: 12px; max-height: 50vh; }
-          .form-table td, .form-table th { padding: 3px; font-size: 11px; }
+          .page-container { padding: 10px; margin-top: -24px; border-radius: 0; }
+          .form-portal-content { flex-direction: column; align-items: flex-start; gap: 10px; }
+          .form-scroll { padding: 12px; max-height: none; }
+          .form-table, .form-table tbody, .form-table tr, .form-table td, .form-table th {
+            display: block;
+            width: 100%;
+          }
+          .form-table tr {
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 12px;
+          }
+          .form-table td {
+            border: none;
+            padding: 4px 0;
+            margin-bottom: 8px;
+          }
           .btn-prev, .btn-next, .btn-submit { padding: 8px; font-size: 12px; }
+          .nav-buttons { flex-direction: column; gap: 8px; }
         }
       `}</style>
     </div>
