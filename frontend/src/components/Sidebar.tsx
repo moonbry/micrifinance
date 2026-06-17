@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import type { FC } from "react";
+import logo from "../assets/logo.jpg";
 
 interface User {
   id: number;
@@ -86,12 +87,12 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
       <div className="sd-logo">
         <div className="sd-logo__brand">
           <div className="sd-logo__icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+            <img src={logo} alt="Orethan" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '4px' }} />
           </div>
           {!isCollapsed && (
             <div className="sd-logo__text">
-              <span className="sd-logo__title">Microfinance</span>
-              <span className="sd-logo__sub">System</span>
+              <span className="sd-logo__title">Orethan</span>
+              <span className="sd-logo__sub">Microfinance</span>
             </div>
           )}
         </div>
@@ -257,11 +258,12 @@ const Sidebar: FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
         .sd-logo__brand { display: flex; align-items: center; gap: 10px; }
         .sd--c .sd-logo__brand { display: none; }
         .sd-logo__icon {
-          width: 36px; height: 36px;
+          width: 40px; height: 40px;
           background: #f1f5f9;
-          borderRadius: 8px;
+          border-radius: 8px;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
+          overflow: hidden;
         }
         .sd-logo__text { display: flex; flex-direction: column; }
         .sd-logo__title { font-size: 15px; font-weight: 800; color: #1e293b; line-height: 1.1; }
