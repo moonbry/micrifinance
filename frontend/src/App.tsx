@@ -72,7 +72,7 @@ function MicrofinanceCalculator() {
   const calculateLoan = () => {
     let monthlyRate = interestRate / 100;
     let monthly = 0;
-    
+
     if (interestType === "Declining Balance") {
       monthlyRate = interestRate / 100;
       if (monthlyRate > 0) {
@@ -84,11 +84,11 @@ function MicrofinanceCalculator() {
       const totalInterestFlat = loanAmount * (interestRate / 100) * loanPeriod;
       monthly = (loanAmount + totalInterestFlat) / loanPeriod;
     }
-    
+
     const totalLoanPayment = monthly * loanPeriod;
     const interest = totalLoanPayment - loanAmount;
     const fee = (loanAmount * processingFee) / 100;
-    
+
     setMonthlyPayment(monthly);
     setTotalPayment(totalLoanPayment + fee);
     setTotalInterest(interest);
@@ -115,14 +115,14 @@ function MicrofinanceCalculator() {
           <h1>MICROFINANCE CALCULATOR</h1>
         </div>
       </div>
-      
+
       <div className="calc-form">
         <div className="form-grid">
           <div className="field-group">
             <label>Loan Amount (TZS)</label>
-            <input 
-              type="text" 
-              value={formatMoney(loanAmount)} 
+            <input
+              type="text"
+              value={formatMoney(loanAmount)}
               onChange={(e) => {
                 const val = e.target.value.replace(/[^0-9]/g, '');
                 setLoanAmount(Number(val) || 0);
@@ -132,9 +132,9 @@ function MicrofinanceCalculator() {
 
           <div className="field-group">
             <label>Loan Period</label>
-            <input 
-              type="number" 
-              value={loanPeriod} 
+            <input
+              type="number"
+              value={loanPeriod}
               onChange={(e) => setLoanPeriod(Number(e.target.value))}
             />
           </div>
@@ -159,29 +159,29 @@ function MicrofinanceCalculator() {
 
           <div className="field-group">
             <label>Interest Rate (% per month)</label>
-            <input 
-              type="number" 
+            <input
+              type="number"
               step="0.1"
-              value={interestRate} 
+              value={interestRate}
               onChange={(e) => setInterestRate(Number(e.target.value))}
             />
           </div>
 
           <div className="field-group">
             <label>Processing Fee (%)</label>
-            <input 
-              type="number" 
+            <input
+              type="number"
               step="0.5"
-              value={processingFee} 
+              value={processingFee}
               onChange={(e) => setProcessingFee(Number(e.target.value))}
             />
           </div>
 
           <div className="field-group">
             <label>Start Date</label>
-            <input 
-              type="date" 
-              value={startDate} 
+            <input
+              type="date"
+              value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
@@ -226,14 +226,14 @@ function Home() {
         {/* ========== LOGO SECTION - CLASS ZAKE ZIPO WAZI ========== */}
         {/* Badilisha class hizi hapa kama unataka kubadilisha style ya logo */}
         <div className="custom-logo-wrapper">
-          <img 
-            src="/logo.png" 
-            alt="Company Logo" 
-            className="custom-logo-image" 
+          <img
+            src="/logo.png"
+            alt="Company Logo"
+            className="custom-logo-image"
           />
         </div>
         {/* ========== MWISHO WA LOGO SECTION ========== */}
-        
+
         <div className="nav-links">
           <Link to="/login" className="login-btn">Login</Link>
           <Link to="/register" className="register-btn">Get Started</Link>
@@ -606,21 +606,24 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 // MAIN LAYOUT
 // =========================
 function MainLayout({ children }: { children: React.ReactNode }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar />
-      <div style={{ 
-        flex: 1, 
-        marginLeft: "238px",
-        display: "flex", 
+      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <div style={{
+        flex: 1,
+        marginLeft: isCollapsed ? "80px" : "260px",
+        display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
-        backgroundColor: "#f1f5f9"
+        backgroundColor: "#f1f5f9",
+        transition: "margin-left 0.3s ease"
       }}>
         <Navbar />
-        <div style={{ 
-          flex: 1, 
-          padding: "24px 24px 24px 24px",
+        <div style={{
+          flex: 1,
+          padding: "24px",
           overflowY: "auto"
         }}>
           {children}
@@ -645,12 +648,38 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* ========== FORMS - FULL PAGE (NO SIDEBAR) ========== */}
-        <Route path="/personal-loan" element={<PersonalLoan />} />
-        <Route path="/group-loan" element={<GroupLoan />} />
-        <Route path="/employee-loan" element={<EmployeeLoan />} />
-
         {/* ========== PROTECTED ROUTES - WITH SIDEBAR ========== */}
+        <Route
+          path="/personal-loan"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <PersonalLoan />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/group-loan"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <GroupLoan />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-loan"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <EmployeeLoan />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/dashboard"
           element={
