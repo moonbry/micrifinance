@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('loans', function (Blueprint $table) {
-            // Ondoa 'after' kabisa ili iwe mwishoni
-            $table->timestamp('completed_at')->nullable();
+            //
         });
     }
 
@@ -23,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('loans', function (Blueprint $table) {
-            $table->dropColumn('completed_at');
+            //
         });
     }
 };

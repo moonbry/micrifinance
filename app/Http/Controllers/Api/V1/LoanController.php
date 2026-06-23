@@ -8,6 +8,7 @@ use App\Models\Loan;
 use App\Models\Repayment;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class LoanController extends Controller
 {
@@ -77,58 +78,84 @@ class LoanController extends Controller
         return Loan::findOrFail($id);
     }
 
-    // APPROVE LOAN (moves to next level)
+    // APPROVE LOAN (moves to next level) - ILIYOREKEBISHWA
     public function approve(Request $request, $id)
     {
-        $loan = Loan::findOrFail($id);
-        
-        if ($loan->status == 'manager_review') {
-            $loan->status = 'gm_review';
-        } elseif ($loan->status == 'gm_review') {
-            $loan->status = 'md_review';
-        } elseif ($loan->status == 'md_review') {
-            $loan->status = 'approved';
-            $loan->approved_at = now();
+        try {
+            $loan = Loan::findOrFail($id);
             
-            // Set payment status for approved loan
-            $loan->payment_status = 'pending';
-            $loan->remaining_balance = $loan->amount;
-            $loan->total_paid = 0;
+            if ($loan->status == 'manager_review') {
+                $loan->status = 'gm_review';
+            } elseif ($loan->status == 'gm_review') {
+                $loan->status = 'md_review';
+            } elseif ($loan->status == 'md_review') {
+                $loan->status = 'approved';
+                $loan->approved_at = now();
+                
+                // Set payment status for approved loan
+                $loan->payment_status = 'pending';
+                $loan->remaining_balance = $loan->amount;
+                $loan->total_paid = 0;
+            } else {
+                return response()->json([
+                    'message' => 'Loan cannot be approved at this stage',
+                    'current_status' => $loan->status
+                ], 400);
+            }
+
+            // ✅ COMMENT OUT - approved_by column haipo kwenye database
+            // $loan->approved_by = $request->user()?->name ?? 'System';
+            
+            $loan->save();
+
+            return response()->json([
+                'message' => 'Loan approved successfully',
+                'loan' => $loan,
+                'new_status' => $loan->status
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Approve error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Failed to approve loan',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $loan->approved_by = $request->user()?->name ?? 'System';
-        $loan->save();
-
-        return response()->json([
-            'message' => 'Loan approved successfully',
-            'loan' => $loan
-        ]);
     }
 
-    // REJECT LOAN (returns to previous level)
+    // REJECT LOAN (returns to previous level) - ILIYOREKEBISHWA
     public function reject(Request $request, $id)
     {
-        $request->validate([
-            'reason' => 'required|string|min:3'
-        ]);
+        try {
+            $request->validate([
+                'reason' => 'required|string|min:3'
+            ]);
 
-        $loan = Loan::findOrFail($id);
+            $loan = Loan::findOrFail($id);
 
-        if ($loan->status == 'manager_review') {
-            $loan->status = 'loan_officer';
-        } elseif ($loan->status == 'gm_review') {
-            $loan->status = 'manager_review';
-        } elseif ($loan->status == 'md_review') {
-            $loan->status = 'gm_review';
+            if ($loan->status == 'manager_review') {
+                $loan->status = 'loan_officer';
+            } elseif ($loan->status == 'gm_review') {
+                $loan->status = 'manager_review';
+            } elseif ($loan->status == 'md_review') {
+                $loan->status = 'gm_review';
+            }
+
+            $loan->rejection_reason = $request->reason;
+            $loan->save();
+
+            return response()->json([
+                'message' => 'Loan rejected successfully',
+                'loan' => $loan
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Reject error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Failed to reject loan',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $loan->rejection_reason = $request->reason;
-        $loan->save();
-
-        return response()->json([
-            'message' => 'Loan rejected successfully',
-            'loan' => $loan
-        ]);
     }
 
 
@@ -159,7 +186,6 @@ class LoanController extends Controller
             })
             ->get();
         
-        // Round numbers to remove decimals
         foreach ($loans as $loan) {
             $loan->amount = round($loan->amount);
             $loan->total_paid = round($loan->total_paid ?? 0);
@@ -177,7 +203,6 @@ class LoanController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
         
-        // Round numbers to remove decimals
         foreach ($loans as $loan) {
             $loan->amount = round($loan->amount);
             $loan->total_paid = round($loan->total_paid ?? $loan->amount);
@@ -214,7 +239,7 @@ class LoanController extends Controller
         }
     }
 
-    // RECORD A REPAYMENT - FIXED DECIMAL ISSUE
+    // RECORD A REPAYMENT
     public function recordRepayment(Request $request, $id)
     {
         try {
@@ -228,7 +253,6 @@ class LoanController extends Controller
 
             $loan = Loan::findOrFail($id);
             
-            // FIX: Round amount to remove decimals
             $amount = round($request->amount);
             $currentPaid = round($loan->total_paid ?? 0);
             $remaining = round($loan->remaining_balance ?? ($loan->amount - $currentPaid));
@@ -252,7 +276,6 @@ class LoanController extends Controller
                 'recorded_by' => auth()->id(),
             ]);
 
-            // FIX: Round all calculations
             $loan->total_paid = round(($loan->total_paid ?? 0) + $amount);
             $loan->remaining_balance = round($loan->amount - $loan->total_paid);
             
@@ -280,7 +303,7 @@ class LoanController extends Controller
         }
     }
 
-    // GET REPAYMENT SUMMARY - FIXED DECIMAL ISSUE
+    // GET REPAYMENT SUMMARY
     public function repaymentSummary()
     {
         try {
@@ -317,20 +340,31 @@ class LoanController extends Controller
         }
     }
 
-
+    // ========== UPLOAD PASSPORT PHOTO ==========
     public function uploadPassport(Request $request)
-{
-    $request->validate([
-        'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        'applicant_name' => 'nullable|string'
-    ]);
-    
-    $file = $request->file('photo');
-    $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9]/', '_', $request->applicant_name ?? 'applicant') . '.' . $file->getClientOriginalExtension();
-    $path = $file->storeAs('passports', $filename, 'public');
-    
-    return response()->json([
-        'photo_url' => Storage::url($path)
-    ]);
-}
+    {
+        try {
+            $request->validate([
+                'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+                'applicant_name' => 'nullable|string'
+            ]);
+            
+            $file = $request->file('photo');
+            $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9]/', '_', $request->applicant_name ?? 'applicant') . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('passports', $filename, 'public');
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Passport uploaded successfully',
+                'photo_url' => Storage::url($path)
+            ]);
+        } catch (\Exception $e) {
+            Log::error('uploadPassport error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to upload passport',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

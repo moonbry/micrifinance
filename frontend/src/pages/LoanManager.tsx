@@ -39,22 +39,27 @@ const LoanManager = () => {
   };
 
   const approveLoan = (id: number) => {
-    if (window.confirm("Approve this loan and send to General Manager?")) {
-      const token = localStorage.getItem("token");
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      
-      axios
-        .post(`http://127.0.0.1:8000/api/v1/loans/${id}/approve`, {}, { headers })
-        .then(() => {
-          alert("Loan approved and sent to General Manager");
-          fetchLoans();
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("Failed to approve loan");
-        });
-    }
-  };
+  if (window.confirm("Approve this loan and send to General Manager?")) {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    
+    axios
+      .post(`http://127.0.0.1:8000/api/v1/loans/${id}/approve`, {}, { headers })
+      .then((response) => {
+        console.log("Approve response:", response.data);
+        alert("✅ Loan approved and sent to General Manager");
+        fetchLoans();
+      })
+      .catch((err) => {
+        console.error("Approve error:", err);
+        console.error("Error response:", err.response?.data);
+        
+        // Onyesha error halisi kutoka backend
+        const errorMessage = err.response?.data?.message || err.response?.data?.error || "Failed to approve loan";
+        alert(`❌ ${errorMessage}`);
+      });
+  }
+};
 
   const openRejectModal = (loan: Loan) => {
     setSelectedLoan(loan);

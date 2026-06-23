@@ -24,6 +24,7 @@ const ManagingDirector = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [errorDetails, setErrorDetails] = useState("");
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
@@ -36,6 +37,7 @@ const ManagingDirector = () => {
 
   const fetchLoans = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(
         "http://127.0.0.1:8000/api/v1/loans/md",
         { headers: getAuthHeaders() }
@@ -55,20 +57,43 @@ const ManagingDirector = () => {
 
   const confirmApprove = async () => {
     if (!selectedLoan) return;
+    
     try {
-      await axios.post(
+      const response = await axios.post(
         `http://127.0.0.1:8000/api/v1/loans/${selectedLoan.id}/approve`,
         {},
         { headers: getAuthHeaders() }
       );
+      
+      console.log("✅ SUCCESS:", response.data);
+      
       setShowApproveModal(false);
       setModalMessage("Loan Fully Approved Successfully");
+      setErrorDetails("");
       setShowSuccessModal(true);
       fetchLoans();
-    } catch (err) {
-      console.log(err);
-      setModalMessage("Failed to approve loan");
+      
+    } catch (err: any) {
+      console.error("❌ ERROR:", err);
+      
+      let errorMsg = "Failed to approve loan";
+      let details = "";
+      
+      if (err.response) {
+        errorMsg = err.response.data?.message || err.response.data?.error || `HTTP ${err.response.status}`;
+        details = JSON.stringify(err.response.data, null, 2);
+      } else if (err.request) {
+        errorMsg = "No response from server";
+        details = "Backend server is not responding. Make sure it's running on port 8000.";
+      } else {
+        errorMsg = err.message;
+        details = err.stack || err.message;
+      }
+      
+      setModalMessage(`❌ ${errorMsg}`);
+      setErrorDetails(details);
       setShowErrorModal(true);
+      setShowApproveModal(false);
     }
   };
 
@@ -81,23 +106,45 @@ const ManagingDirector = () => {
   const submitRejection = async () => {
     if (!rejectReason.trim()) {
       setModalMessage("Please provide rejection reason");
+      setErrorDetails("");
       setShowErrorModal(true);
       return;
     }
 
     try {
-      await axios.post(
+      const response = await axios.post(
         `http://127.0.0.1:8000/api/v1/loans/${selectedLoan?.id}/reject`,
         { reason: rejectReason },
         { headers: getAuthHeaders() }
       );
+      
+      console.log("✅ Reject success:", response.data);
+      
       setShowRejectModal(false);
       setModalMessage("Loan rejected and returned to General Manager");
+      setErrorDetails("");
       setShowSuccessModal(true);
       fetchLoans();
-    } catch (err) {
-      console.log(err);
-      setModalMessage("Failed to reject loan");
+      
+    } catch (err: any) {
+      console.error("❌ Reject error:", err);
+      
+      let errorMsg = "Failed to reject loan";
+      let details = "";
+      
+      if (err.response) {
+        errorMsg = err.response.data?.message || err.response.data?.error || `HTTP ${err.response.status}`;
+        details = JSON.stringify(err.response.data, null, 2);
+      } else if (err.request) {
+        errorMsg = "No response from server";
+        details = "Backend server is not responding";
+      } else {
+        errorMsg = err.message;
+        details = err.stack || err.message;
+      }
+      
+      setModalMessage(`❌ ${errorMsg}`);
+      setErrorDetails(details);
       setShowErrorModal(true);
     }
   };
@@ -159,7 +206,7 @@ const ManagingDirector = () => {
           </div>
         ) : (
           <div className="table-wrapper">
-            <table>
+            <table className="loans-table">
               <thead>
                 <tr>
                   <th>#</th>
@@ -173,8 +220,8 @@ const ManagingDirector = () => {
               <tbody>
                 {loans.map((loan, index) => (
                   <tr key={loan.id}>
-                    <td>{index + 1}</td>
-                    <td>
+                    <td className="col-number">{index + 1}</td>
+                    <td className="client-cell">
                       <div className="client-box">
                         <strong>{loan.name}</strong>
                         <button className="details-btn" onClick={() => viewDetails(loan)}>
@@ -183,13 +230,13 @@ const ManagingDirector = () => {
                       </div>
                     </td>
                     <td className="amount">TZS {Number(loan.amount).toLocaleString()}</td>
-                    <td>
+                    <td className="type-cell">
                       <span className="loan-type">{loan.type}</span>
                     </td>
-                    <td>
+                    <td className="status-cell">
                       <span className="status md">Director Review</span>
                     </td>
-                    <td>
+                    <td className="actions-cell">
                       <div className="action-buttons">
                         <button className="approve-btn" onClick={() => openApproveModal(loan)}>
                           Approve
@@ -216,8 +263,9 @@ const ManagingDirector = () => {
             <div className="modal-info">
               <p><strong>Client:</strong> {selectedLoan.name}</p>
               <p><strong>Amount:</strong> TZS {Number(selectedLoan.amount).toLocaleString()}</p>
+              <p><strong>Current Status:</strong> {selectedLoan.status}</p>
             </div>
-            <p className="warning-text">This action will mark the loan as Fully Approved.</p>
+            <p className="warning-text">⚠️ This action will mark the loan as Fully Approved.</p>
             <div className="modal-actions">
               <button className="cancel-btn" onClick={() => setShowApproveModal(false)}>
                 Cancel
@@ -243,6 +291,7 @@ const ManagingDirector = () => {
               placeholder="Enter rejection reason..."
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
+              rows={4}
             />
             <div className="modal-actions">
               <button className="cancel-btn" onClick={() => setShowRejectModal(false)}>
@@ -260,7 +309,7 @@ const ManagingDirector = () => {
       {showSuccessModal && (
         <div className="modal-overlay" onClick={() => setShowSuccessModal(false)}>
           <div className="modal success-modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Success</h2>
+            <h2>✅ Success</h2>
             <p>{modalMessage}</p>
             <div className="modal-actions">
               <button className="success-close-btn" onClick={() => setShowSuccessModal(false)}>
@@ -271,12 +320,20 @@ const ManagingDirector = () => {
         </div>
       )}
 
-      {/* ERROR MODAL */}
+      {/* ERROR MODAL - WITH FULL DETAILS */}
       {showErrorModal && (
         <div className="modal-overlay" onClick={() => setShowErrorModal(false)}>
           <div className="modal error-modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Error</h2>
-            <p>{modalMessage}</p>
+            <h2>❌ Error</h2>
+            <div className="error-content">
+              <p className="error-main">{modalMessage}</p>
+              {errorDetails && (
+                <div className="error-stack">
+                  <strong>Technical Details:</strong>
+                  <pre>{errorDetails}</pre>
+                </div>
+              )}
+            </div>
             <div className="modal-actions">
               <button className="error-close-btn" onClick={() => setShowErrorModal(false)}>
                 Close
@@ -300,7 +357,6 @@ const ManagingDirector = () => {
               </button>
             </div>
 
-            {/* BASIC DETAILS */}
             <div className="details-section">
               <h3>Applicant Information</h3>
               <div className="details-grid">
@@ -333,7 +389,6 @@ const ManagingDirector = () => {
               </div>
             </div>
 
-            {/* FULL FORM DATA */}
             {selectedLoan.details && (
               <div className="details-section">
                 <h3>Complete Application Data</h3>
@@ -350,7 +405,6 @@ const ManagingDirector = () => {
               </div>
             )}
 
-            {/* REJECTION REASON */}
             {selectedLoan.rejection_reason && (
               <div className="reason-box">
                 <h3>Rejection Reason</h3>
@@ -410,7 +464,6 @@ const ManagingDirector = () => {
           cursor: pointer;
           font-weight: 500;
           font-size: 13px;
-          transition: background 0.2s;
         }
 
         .refresh-btn:hover {
@@ -465,12 +518,12 @@ const ManagingDirector = () => {
           overflow-x: auto;
         }
 
-        table {
+        .loans-table {
           width: 100%;
           border-collapse: collapse;
         }
 
-        th {
+        .loans-table th {
           background: #f8fafc;
           color: #334155;
           padding: 14px 12px;
@@ -480,15 +533,24 @@ const ManagingDirector = () => {
           border-bottom: 1px solid #e2e8f0;
         }
 
-        td {
+        .loans-table td {
           padding: 14px 12px;
           border-bottom: 1px solid #f1f5f9;
           font-size: 14px;
           color: #1e293b;
         }
 
-        tr:hover {
+        .loans-table tr:hover {
           background: #fafcff;
+        }
+
+        .col-number {
+          width: 50px;
+          color: #64748b;
+        }
+
+        .client-cell {
+          min-width: 180px;
         }
 
         .client-box {
@@ -517,6 +579,10 @@ const ManagingDirector = () => {
           font-weight: 600;
         }
 
+        .type-cell {
+          min-width: 120px;
+        }
+
         .loan-type {
           background: #e2e8f0;
           padding: 4px 12px;
@@ -525,6 +591,10 @@ const ManagingDirector = () => {
           font-weight: 500;
           color: #475569;
           display: inline-block;
+        }
+
+        .status-cell {
+          min-width: 140px;
         }
 
         .status {
@@ -540,9 +610,14 @@ const ManagingDirector = () => {
           color: #6d28d9;
         }
 
+        .actions-cell {
+          min-width: 140px;
+        }
+
         .action-buttons {
           display: flex;
           gap: 8px;
+          flex-wrap: wrap;
         }
 
         .approve-btn {
@@ -591,7 +666,6 @@ const ManagingDirector = () => {
           font-size: 14px;
         }
 
-        /* MODALS */
         .modal-overlay {
           position: fixed;
           inset: 0;
@@ -612,7 +686,7 @@ const ManagingDirector = () => {
         }
 
         .approve-modal, .success-modal, .error-modal {
-          width: 450px;
+          width: 500px;
         }
 
         .details-modal {
@@ -742,6 +816,41 @@ const ManagingDirector = () => {
           border-radius: 10px;
           cursor: pointer;
           font-weight: 500;
+        }
+
+        .error-content {
+          max-height: 300px;
+          overflow-y: auto;
+        }
+
+        .error-main {
+          color: #dc2626;
+          font-weight: 600;
+          margin-bottom: 15px;
+        }
+
+        .error-stack {
+          margin-top: 15px;
+          padding: 12px;
+          background: #fef2f2;
+          border-radius: 8px;
+          border-left: 3px solid #dc2626;
+        }
+
+        .error-stack strong {
+          display: block;
+          color: #991b1b;
+          font-size: 12px;
+          margin-bottom: 8px;
+        }
+
+        .error-stack pre {
+          color: #7f1d1d;
+          font-size: 11px;
+          white-space: pre-wrap;
+          word-break: break-all;
+          font-family: monospace;
+          margin: 0;
         }
 
         .details-header {
@@ -892,8 +1001,12 @@ const ManagingDirector = () => {
           .stats-card h2 {
             font-size: 28px;
           }
-          th, td {
+          .loans-table th,
+          .loans-table td {
             padding: 10px 8px;
+          }
+          .error-stack pre {
+            font-size: 9px;
           }
         }
       `}</style>

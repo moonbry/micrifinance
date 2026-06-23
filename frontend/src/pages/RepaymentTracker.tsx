@@ -57,28 +57,13 @@ const RepaymentTracker = () => {
   const [selectedLoanForRepayment, setSelectedLoanForRepayment] = useState<Loan | null>(null);
   const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active');
 
-  // Load completed loans from localStorage when page opens
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = async () => {
     setLoading(true);
-    
-    // Load completed loans from localStorage
-    const savedCompleted = localStorage.getItem("completedLoans");
-    if (savedCompleted) {
-      try {
-        const parsed = JSON.parse(savedCompleted);
-        setCompletedLoans(parsed);
-        console.log("Loaded completed loans:", parsed.length);
-      } catch (e) {
-        console.error("Error loading:", e);
-      }
-    }
-    
-    // Fetch active loans from backend
-    await fetchActiveLoans();
+    await Promise.all([fetchActiveLoans(), fetchCompletedLoans()]);
   };
 
   const fetchActiveLoans = async () => {
@@ -92,32 +77,11 @@ const RepaymentTracker = () => {
       ]);
       
       const allLoans = loansRes.data || [];
-      
       const active: Loan[] = [];
       
       for (const loan of allLoans) {
-        // Round to remove decimals
         const roundedBalance = Math.round(loan.remaining_balance);
-        
-        if (roundedBalance <= 0) {
-          // Add to completed loans
-          const alreadyCompleted = completedLoans.some(cl => cl.id === loan.id);
-          if (!alreadyCompleted) {
-            const completedLoan = { 
-              ...loan, 
-              remaining_balance: 0,
-              total_paid: loan.amount,
-              payment_status: 'completed',
-              completed_at: new Date().toISOString()
-            };
-            setCompletedLoans(prev => {
-              const updated = [completedLoan, ...prev];
-              localStorage.setItem("completedLoans", JSON.stringify(updated));
-              return updated;
-            });
-          }
-        } else {
-          // Round all numbers for active loans
+        if (roundedBalance > 0) {
           active.push({
             ...loan,
             amount: Math.round(loan.amount),
@@ -129,11 +93,60 @@ const RepaymentTracker = () => {
       
       setActiveLoans(active);
       setSummary(summaryRes.data);
-      
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching active loans:", error);
+    }
+  };
+
+  const fetchCompletedLoans = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      const res = await axios.get("http://127.0.0.1:8000/api/v1/loans/completed", { headers });
+      const completed = res.data || [];
+      
+      const formattedCompleted = completed.map((loan: any) => ({
+        ...loan,
+        amount: Math.round(loan.amount),
+        total_paid: Math.round(loan.total_paid || loan.amount),
+        remaining_balance: 0,
+        payment_status: 'completed'
+      }));
+      
+      setCompletedLoans(formattedCompleted);
+    } catch (error) {
+      console.error("Error fetching completed loans:", error);
+      await fetchCompletedFromActive();
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCompletedFromActive = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      const res = await axios.get("http://127.0.0.1:8000/api/v1/loans/active", { headers });
+      const allLoans = res.data || [];
+      
+      const completed = allLoans.filter((loan: any) => 
+        Math.round(loan.remaining_balance) <= 0 || loan.payment_status === 'completed'
+      );
+      
+      const formattedCompleted = completed.map((loan: any) => ({
+        ...loan,
+        amount: Math.round(loan.amount),
+        total_paid: Math.round(loan.total_paid || loan.amount),
+        remaining_balance: 0,
+        payment_status: 'completed',
+        completed_at: loan.completed_at || new Date().toISOString()
+      }));
+      
+      setCompletedLoans(formattedCompleted);
+    } catch (error) {
+      console.error("Error in fallback fetch:", error);
     }
   };
 
@@ -186,43 +199,7 @@ const RepaymentTracker = () => {
       
       alert(`Malipo ya TZS ${formatNumber(amount)} yamewekwa`);
       setShowRepaymentModal(false);
-      
-      const currentBalance = Math.round(selectedLoanForRepayment?.remaining_balance || 0);
-      const newBalance = currentBalance - amount;
-      
-      if (newBalance <= 0) {
-        // Move to completed loans
-        const completedLoan = {
-          ...selectedLoanForRepayment!,
-          remaining_balance: 0,
-          total_paid: Math.round((selectedLoanForRepayment!.total_paid || 0) + amount),
-          payment_status: 'completed',
-          completed_at: new Date().toISOString()
-        };
-        
-        setCompletedLoans(prev => {
-          const exists = prev.some(l => l.id === completedLoan.id);
-          if (!exists) {
-            const updated = [completedLoan, ...prev];
-            localStorage.setItem("completedLoans", JSON.stringify(updated));
-            return updated;
-          }
-          return prev;
-        });
-        
-        setActiveLoans(prev => prev.filter(l => l.id !== selectedLoanForRepayment?.id));
-      } else {
-        // Update active loan
-        setActiveLoans(prev => prev.map(loan => 
-          loan.id === selectedLoanForRepayment?.id 
-            ? { ...loan, remaining_balance: newBalance, total_paid: Math.round((loan.total_paid || 0) + amount) }
-            : loan
-        ));
-      }
-      
-      // Refresh data
-      await fetchActiveLoans();
-      
+      await loadData();
     } catch (error: any) {
       alert(error.response?.data?.error || "Imeshindwa kurekodi malipo");
     }
@@ -313,8 +290,19 @@ const RepaymentTracker = () => {
             <div className="empty-state"><p>No active loans found</p></div>
           ) : (
             <div className="table-wrapper">
-              <table>
-                <thead><tr><th>#</th><th>Borrower</th><th>Loan Amount</th><th>Paid</th><th>Remaining</th><th>Progress</th><th>Status</th><th>Actions</th></tr></thead>
+              <table className="loans-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Borrower</th>
+                    <th>Loan Amount</th>
+                    <th>Paid</th>
+                    <th>Remaining</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {activeLoans.map((loan, idx) => {
                     const progress = loan.amount > 0 ? (loan.total_paid / loan.amount) * 100 : 0;
@@ -325,9 +313,17 @@ const RepaymentTracker = () => {
                         <td>TZS {formatNumber(loan.amount)}</td>
                         <td className="text-green">TZS {formatNumber(loan.total_paid || 0)}</td>
                         <td className="text-orange">TZS {formatNumber(loan.remaining_balance)}</td>
-                        <td className="progress-cell"><div className="progress-bar"><div className="progress-fill" style={{ width: `${Math.min(progress, 100)}%` }}></div><span>{Math.round(progress)}%</span></div></td>
+                        <td className="progress-cell">
+                          <div className="progress-bar">
+                            <div className="progress-fill" style={{ width: `${Math.min(progress, 100)}%` }}></div>
+                            <span>{Math.round(progress)}%</span>
+                          </div>
+                        </td>
                         <td><span className={`status ${loan.payment_status || 'pending'}`}>{getStatusBadge(loan.payment_status || 'pending')}</span></td>
-                        <td className="actions-cell"><button className="btn-history" onClick={() => viewRepayments(loan)}>History</button><button className="btn-pay" onClick={() => openRepaymentModal(loan)}>Pay</button></td>
+                        <td className="actions-cell">
+                          <button className="btn-history" onClick={() => viewRepayments(loan)}>History</button>
+                          <button className="btn-pay" onClick={() => openRepaymentModal(loan)}>Pay</button>
+                        </td>
                       </tr>
                     );
                   })}
@@ -345,8 +341,18 @@ const RepaymentTracker = () => {
             <div className="empty-state"><p>No completed loans found yet</p></div>
           ) : (
             <div className="table-wrapper">
-              <table>
-                <thead><tr><th>#</th><th>Borrower</th><th>Loan Amount</th><th>Total Paid</th><th>Completion Date</th><th>Status</th><th>Actions</th></tr></thead>
+              <table className="loans-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Borrower</th>
+                    <th>Loan Amount</th>
+                    <th>Total Paid</th>
+                    <th>Completion Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {completedLoans.map((loan, idx) => (
                     <tr key={loan.id}>
@@ -356,7 +362,9 @@ const RepaymentTracker = () => {
                       <td className="text-green">TZS {formatNumber(loan.total_paid || loan.amount)}</td>
                       <td>{loan.completed_at ? new Date(loan.completed_at).toLocaleDateString() : '-'}</td>
                       <td><span className="status completed">Completed</span></td>
-                      <td className="actions-cell"><button className="btn-history" onClick={() => viewRepayments(loan)}>View Full History</button></td>
+                      <td className="actions-cell">
+                        <button className="btn-history" onClick={() => viewRepayments(loan)}>View Full History</button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -370,7 +378,10 @@ const RepaymentTracker = () => {
       {selectedLoan && (
         <div className="modal-overlay" onClick={() => setSelectedLoan(null)}>
           <div className="modal modal-large" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header"><h2>Repayment History - {selectedLoan.name}</h2><button className="modal-close" onClick={() => setSelectedLoan(null)}>×</button></div>
+            <div className="modal-header">
+              <h2>Repayment History - {selectedLoan.name}</h2>
+              <button className="modal-close" onClick={() => setSelectedLoan(null)}>×</button>
+            </div>
             <div className="loan-summary">
               <div><strong>Total Loan:</strong> TZS {formatNumber(selectedLoan.amount)}</div>
               <div><strong>Total Paid:</strong> TZS {formatNumber(selectedLoan.total_paid || 0)}</div>
@@ -380,16 +391,25 @@ const RepaymentTracker = () => {
             {repayments.length === 0 ? <div className="empty-state-small">No repayments recorded yet</div> : (
               <div className="table-wrapper">
                 <table className="repayment-table">
-                  <thead><tr><th>Date</th><th>Amount</th><th>Method</th><th>Receipt</th></tr></thead>
+                  <thead>
+                    <tr><th>Date</th><th>Amount</th><th>Method</th><th>Receipt</th></tr>
+                  </thead>
                   <tbody>
                     {repayments.map((r) => (
-                      <tr key={r.id}><td>{new Date(r.payment_date).toLocaleDateString()}</td><td>TZS {formatNumber(r.amount)}</td><td>{r.payment_method}</td><td>{r.receipt_number}</td></tr>
+                      <tr key={r.id}>
+                        <td>{new Date(r.payment_date).toLocaleDateString()}</td>
+                        <td>TZS {formatNumber(r.amount)}</td>
+                        <td>{r.payment_method}</td>
+                        <td>{r.receipt_number}</td>
+                      </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
             )}
-            <div className="modal-footer"><button className="btn-secondary" onClick={() => setSelectedLoan(null)}>Close</button></div>
+            <div className="modal-footer">
+              <button className="btn-secondary" onClick={() => setSelectedLoan(null)}>Close</button>
+            </div>
           </div>
         </div>
       )}
@@ -408,7 +428,10 @@ const RepaymentTracker = () => {
             <div className="form-group"><label>Payment Method</label><select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}><option value="cash">Cash</option><option value="bank_transfer">Bank Transfer</option><option value="mobile_money">Mobile Money</option></select></div>
             <div className="form-group"><label>Transaction ID (Optional)</label><input type="text" placeholder="Transaction reference" value={transactionId} onChange={(e) => setTransactionId(e.target.value)} /></div>
             <div className="form-group"><label>Notes</label><textarea rows={2} placeholder="Additional notes" value={notes} onChange={(e) => setNotes(e.target.value)} /></div>
-            <div className="modal-footer"><button className="btn-secondary" onClick={() => setShowRepaymentModal(false)}>Cancel</button><button className="btn-primary" onClick={submitRepayment}>Record Payment</button></div>
+            <div className="modal-footer">
+              <button className="btn-secondary" onClick={() => setShowRepaymentModal(false)}>Cancel</button>
+              <button className="btn-primary" onClick={submitRepayment}>Record Payment</button>
+            </div>
           </div>
         </div>
       )}
@@ -436,10 +459,10 @@ const RepaymentTracker = () => {
         .tab-btn.active { color: #10b981; border-bottom: 2px solid #10b981; margin-bottom: -2px; }
         .table-card { background: white; border-radius: 16px; padding: 15px; border: 1px solid #e2e8f0; overflow-x: auto; }
         .table-wrapper { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th, td { padding: 10px 8px; text-align: left; font-size: 13px; }
-        th { background: #f8fafc; font-weight: 600; }
-        td { border-bottom: 1px solid #f1f5f9; }
+        .loans-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        .loans-table th, .loans-table td { padding: 10px 8px; text-align: left; font-size: 13px; }
+        .loans-table th { background: #f8fafc; font-weight: 600; }
+        .loans-table td { border-bottom: 1px solid #f1f5f9; }
         .progress-cell { width: 100px; }
         .progress-bar { background: #e2e8f0; border-radius: 20px; height: 6px; width: 80px; position: relative; display: inline-block; }
         .progress-fill { background: #10b981; height: 6px; border-radius: 20px; }
